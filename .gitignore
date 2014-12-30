@@ -1,0 +1,6 @@
+flask/
+db_repository/
+*.pyc
+app/static/js/
+*~
+\#*

@@ -1,0 +1,61 @@
+<style>
+  mark {
+  background-color: yellow;
+  font-size: 18px;
+  text-decoration: underline;
+  }
+
+  .convo {
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px:
+  width: 100%;
+  }
+
+</style>
+
+<div class="row">
+  <div class="col-md-2">
+    <div ng-controller="AuthCtrl">
+      <div ng-click="logOut()"> LOGOUT </div>
+    </div>
+    <div ng-click="authTwitter()"> AUTHORIZE TWITTER </div>
+    <div ng-click="getPosts()"> GET TWITTER POSTS </div>
+    <div ng-click="getEntities()"> GET ENTITIES </div>
+  </div>
+  <div class="col-md-4">
+    <div ng-repeat="post in posts"> 
+      <div ng-include="'tweet.html'"></div>
+    </div>
+  </div>
+
+
+  <div class="col-md-2">
+    <h1>Tweets</h1>
+    <div ng-repeat="tweet in tweetsWithSearchTerm" > 
+      <p>{{ tweet.text }}</p> 
+      <div>
+	<span ng-click="favoritePost( tweet.id_str )">favorite</span>
+      </div>
+      <div> 
+	<input ng-model="currentResponse">
+	<button ntype="submit" class="btn btn-default" ng-click="replyToPost( tweet, currentResponse )"> 
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <h1>CONVOS</h1>
+
+    <div class="convo" ng-repeat="convo in conversations" > 
+      <div ng-repeat="blah in convo">
+	{{ blah.text }}
+
+	<input ng-model="currentResponse">
+	<button ntype="submit" class="btn btn-default" ng-click="replyToPost( blah, currentResponse )"> 
+      </div>
+    </div>
+  </div>
+</div>
+

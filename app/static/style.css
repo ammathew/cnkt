@@ -1,0 +1,18 @@
+body {
+padding: 50px;
+}
+
+.snippet {
+color: red;
+cursor: pointer;
+}
+
+.snippet:hover {
+text-decoration: underline;
+
+}
+
+.highlight {
+background-color: yellow;
+color: black;
+}
