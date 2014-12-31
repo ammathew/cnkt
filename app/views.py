@@ -196,11 +196,25 @@ def mentions():
     for item in tweets:
         if item['in_reply_to_status_id_str']:
             convos.append( item )
- 
-    convo_superset = create_superset( convos )
+     
+    convo_list_with_timestamps = []
+    for tweet in convos:
+        with_timestamp = add_timestamp( tweet )
+        convo_list_with_timestamps.append( with_timestamp )
+
+    convo_list_with_timestamps = sorted( convo_list_with_timestamps, key=lambda aa:aa["timestamp"], reverse=True )
+    convo_superset = create_superset( convo_list_with_timestamps )
    
     data = json.dumps( convo_superset )
     return data
+
+def add_timestamp( tweet ):
+    temp = parser.parse( tweet["created_at"] )
+    temp = temp.timetuple()
+    timestamp = time.mktime( temp )
+    tweet['timestamp'] = timestamp
+    return tweet
+    
 
 def create_superset( convos ):
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
@@ -212,7 +226,7 @@ def create_superset( convos ):
     i = 0
     for item in convos:
         i = i + 1 
-        if i > 2 : # stop-cap to prevent rate limiting
+        if i > 10 : # stop-cap to prevent rate limiting
             break
         convo = []
         convo.append( item )
