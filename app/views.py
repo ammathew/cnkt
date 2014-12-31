@@ -245,6 +245,7 @@ def create_superset( convos ):
             else:
                 break
 
+    #remove duplicates ( introduced because getting 'root' tweets from both mentions_timeline and user_timeline )
     convo_superset_2 = []
     for item in convo_superset:
         if item not in convo_superset_2:
@@ -255,12 +256,8 @@ def create_superset( convos ):
     for convo in convo_superset_2:
         convo_with_timestamps = []
         for item in convo:
-            item_2 = item.copy()
-            temp = parser.parse( item["created_at"] )
-            temp = temp.timetuple()
-            timestamp = time.mktime( temp )
-            item_2['timestamp'] = timestamp
-            convo_with_timestamps.append( item_2 )
+            tweetWithTimestamp = add_timestamp( item ) 
+            convo_with_timestamps.append( tweetWithTimestamp )
         convo_superset_3.append( convo_with_timestamps )
 
     convo_superset_4 = sorted( convo_superset_3, key=lambda convo:convo[-1]["timestamp"], reverse=True )
