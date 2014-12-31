@@ -49,6 +49,7 @@
     <h1>CONVOS</h1>
 
     <div class="convo" ng-repeat="convo in conversations" > 
+      {{ $index }} ||
       <div ng-repeat="blah in convo">
 	{{ blah.text }}
 

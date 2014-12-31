@@ -1,33 +1,30 @@
 #!/usr/bin/env python
+import sys
+sys.path.insert(0, "/home2/thezeith/opt/python27/lib/python2.7/site-packages/" )
+
 from datetime import datetime
 from flask import Flask, request, jsonify, render_template
 
 from flask import make_response
 from functools import wraps, update_wrapper
 from datetime import datetime
+from dateutil import parser
+import time
 
 import flask
-
-import sys
-sys.path.insert(0, "/home2/thezeith/opt/python27/lib/python2.7/site-packages/" )
 
 import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import requests
-import csv 
 
-import base64
 import json
 import httplib
 import urllib
 
 from application_only_auth import Client
 
-import pickle
-
-from analyze_sentiment import *
 import traceback
 
 import urllib
@@ -45,8 +42,6 @@ from app.models import User, Todo, TwitterAuth
 
 import json
 
-import nltk
-import time
 
 
 @app.route('/')
@@ -170,13 +165,17 @@ def twitterApi():
 def twitterApiEndpoints(tweepy_endpoint):
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
+
     try:
         blah = getattr( twitterAPI, tweepy_endpoint )
         data = blah( **req )
         data = json.dumps( data )
         return data
-    except:
-        return "{ 'status': 500 }"
+    except Exception as e:
+        message = str( e )
+        return message
+
+######## CONSTRUCT CONVERSATIONS ############
 
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
@@ -209,24 +208,50 @@ def create_superset( convos ):
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     convo_superset = []
-    convos.reverse()
+   
     i = 0
     for item in convos:
-        if i<10:
-            convo = []
-            convo.append( item )
-            in_reply_to_status_id_str = item['in_reply_to_status_id_str']
-            while in_reply_to_status_id_str:
-                status = TWITTER_API.get_status( in_reply_to_status_id_str )
-                convo.insert( 0, status )
+        i = i + 1 
+        if i > 2 : # stop-cap to prevent rate limiting
+            break
+        convo = []
+        convo.append( item )
+        in_reply_to_status_id_str = item['in_reply_to_status_id_str']
+            
+        while in_reply_to_status_id_str:
+            status = TWITTER_API.get_status( in_reply_to_status_id_str )
+            convo.insert( 0, status )
+            try:
                 in_reply_to_status_id_str = status['in_reply_to_status_id_str']
-            i=i+1
-            if len( convo_superset ) < 10 :
-               # convo = convo.reverse()
+            except:
+                convo_superset.append( convo )
+                break
+            if len( convo ) < 5 :
                 convo_superset.append( convo )
             else:
                 break
-    return convo_superset
+
+    convo_superset_2 = []
+    for item in convo_superset:
+        if item not in convo_superset_2:
+            convo_superset_2.append( item )
+
+    #add timestamp to each object; sort by timestamp
+    convo_superset_3 = []
+    for convo in convo_superset_2:
+        convo_with_timestamps = []
+        for item in convo:
+            item_2 = item.copy()
+            temp = parser.parse( item["created_at"] )
+            temp = temp.timetuple()
+            timestamp = time.mktime( temp )
+            item_2['timestamp'] = timestamp
+            convo_with_timestamps.append( item_2 )
+        convo_superset_3.append( convo_with_timestamps )
+
+    convo_superset_4 = sorted( convo_superset_3, key=lambda convo:convo[-1]["timestamp"], reverse=True )
+
+    return convo_superset_4
 
 @app.errorhandler(500)
 def internal_error(exception):

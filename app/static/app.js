@@ -34,7 +34,10 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     /* calls to tweepy/twitter API */
 
     $scope.searchTwitter = function ( searchTerm ) {
-	data = { q : searchTerm };
+	data = { 
+	    q : searchTerm, 
+	    count:100
+	};
         return $http({ 
             method: 'POST',
 	    data: data,
@@ -323,4 +326,3 @@ aa.run(function($rootScope, $templateCache) {
       $templateCache.removeAll();
    });
 });
-
