@@ -1,1 +1,8 @@
-<div>{{ post.text }} </div>
+<div class="tweet row">
+  <div class="col-xs-4">
+    <img class="profile-img" src="{{tweet.user.profile_image_url}}">
+  </div>
+  <div class="col-xs-8">
+    <div>{{ tweet.text }} </div>
+  </div>
+</div>

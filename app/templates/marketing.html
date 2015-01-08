@@ -1,39 +1,38 @@
 <!DOCTYPE html>
 <head>
-    <base href="/static/marketing.html"/>
+  <base href="/static/marketing.html"/>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+  <script src="{{ url_for('static', filename='js/angular-route.js') }}"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></script>
+  <script src="{{ url_for('static', filename='js/viz.js') }}"></script>
+  <script src="{{ url_for('static', filename='d3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='rickshaw.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='rickshaw.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ui-bootstrap.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/nvd3/nv.d3.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap-daterangepicker/moment.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/nvd3/bower_components/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-daterangepicker/daterangepicker-bs3.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/nvd3/nv.d3.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/nvd3/nv.d3.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}" />
+  <script type="text/javascript"
+	  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDFqxIX6GAsQA6jH6Q3WZltxNr5TbbvLY">
+  </script>
 </head>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-<script src="{{ url_for('static', filename='js/angular-route.js') }}"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"></script>
-<script src="{{ url_for('static', filename='js/viz.js') }}"></script>
-<script src="{{ url_for('static', filename='d3.min.js') }}"></script>
-<script src="{{ url_for('static', filename='rickshaw.min.js') }}"></script>
-<script src="{{ url_for('static', filename='rickshaw.min.js') }}"></script>
-<script src="{{ url_for('static', filename='app.js') }}"></script>
-<script src="{{ url_for('static', filename='js/ui-bootstrap.js') }}"></script>
-<script src="{{ url_for('static', filename='js/nvd3/nv.d3.js') }}"></script>
-<script src="{{ url_for('static', filename='bootstrap-daterangepicker/moment.js') }}"></script>
-<script src="{{ url_for('static', filename='bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ url_for('static', filename='js/nvd3/bower_components/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js') }}"></script>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap-daterangepicker/daterangepicker-bs3.css') }}" />
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/nvd3/nv.d3.css') }}" />
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/nvd3/nv.d3.css') }}" />
-<script type="text/javascript"
-	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDFqxIX6GAsQA6jH6Q3WZltxNr5TbbvLY">
-</script>
-
+<body>
 {% raw %}
 <div ng-app="myServiceModule">
-<a href="/#/login"> LOGIN </a><br/>
-<a href="/#/register"> REGISTER </a>
-sfasd
-<div ng-view></div>
+
+  <div ng-view></div>
 </div>
 {% endraw %}
-
+</body>
 

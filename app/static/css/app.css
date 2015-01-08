@@ -1,0 +1,42 @@
+mark {
+  background-color: yellow;
+  font-size: 18px;
+  text-decoration: underline; }
+
+.convo {
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%; }
+
+.navbar {
+  background-color: #4099a9; }
+
+body {
+  padding: 10px; }
+
+.cnkt-col {
+  height: 100%;
+  margin-right: 10px;
+  width: 300px;
+  overflow: scroll;
+  position: fixed;
+  float: left;
+  background-color: white;
+  left: 20px; }
+
+.offset-1 {
+  left: 330px; }
+
+.offset-2 {
+  left: 640px; }
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #A53838; }
+
+.tweet {
+  border-bottom: 1px solid black; }
