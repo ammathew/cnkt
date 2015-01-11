@@ -1,22 +1,23 @@
+$cnkt_color: #A53838;
+$cnkt_color_2: rgb(64, 153, 169); 
+
 mark {
     background-color: yellow;
     font-size: 18px;
     text-decoration: underline;
 }
+
 .convo {
-    border: 1px solid black;
-    border-radius: 3px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 100%;
+    padding-bottom: 20px;
+    border-bottom: 1px solid $cnkt_color;
 }
 
 .navbar {
-background-color: rgb(64, 153, 169);
+    background-color: $cnkt_color_2;
 }
 
 body {
-  padding: 10px;
+ // padding: 10px;
 }
 
 .cnkt-col {
@@ -28,6 +29,7 @@ body {
     float:left;
     background-color: white;
     left: 20px;
+    padding: 0 10px 0 10px;
 }
 
 
@@ -39,14 +41,104 @@ left: 330px;
 left: 640px;
 }
 
+.convo-col {
+    width: 355px;
+}
+
 
 #app {
     width: 100%;
     height: 100%;
     position: fixed;
-    background-color: #A53838;
+    background-color: $cnkt_color;
 }
 
-.tweet {
-    border-bottom: 1px solid black;
+.tweet, .convo-tweet {
+    padding: 10px;
+    padding-left: 0;
+  //  border-bottom: 1px solid black;
+    .avatar-col {
+	width: 58px;
+	float: left;
+    }
+    .avatar {
+	width: 48px;
+	height: 48px;
+	border-radius: 5px;
+    }
+    .body-col {
+	width: 250px;
+	word-wrap: break-word;
+	padding-left: 58px;
+    }
+    .reply {
+	width: 100%;
+	font-size: 12px;
+	margin-top: 10px;
+	input {
+	    width: 125px;
+	    height: 18px;
+	}
+	
+	button { 
+	    width: 50px;
+	    height: 18px;
+	    padding: 0 0;
+	    font-size: 10px;
+	    background-color: $cnkt_color;
+	}
+    }
+}
+
+.convo-tweet:first-of-type {
+    margin-top: 10px;
+}
+.convo-tweet {
+    padding: 10px;
+    font-size: 10px;
+    line-height: 1.1;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 220px;
+
+    .avatar-col {
+	width: 29px;
+	float: left;
+    }
+    .avatar {
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+    }
+    .body-col {
+	width: 200px;
+	word-wrap: break-word;
+	padding-left: 29px;
+    }
+    .reply {
+	width: 100%;
+	font-size: 10px;
+	margin-top: 10px;
+	input {
+	    width: 75px;
+	    height: 18px;
+	}
+	
+	button { 
+	    width: 25px;
+	    height: 18px;
+	    padding: 0 0;
+	    font-size: 10px;
+	    background-color: $cnkt_color_2;
+	}
+    }
+}
+
+.convo-tweet.left {
+    margin-left:100px
+}
+
+.tweet-unit {
+    padding-bottom: 10px;
 }

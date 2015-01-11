@@ -156,6 +156,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     })
 */
 
+    $scope.twitterUser = {}
     $scope.getPosts = function () {
           $http({ 
               method: 'POST',
@@ -167,7 +168,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         }).success( function( data, status ) {
 	    if ( status == 200 ){
 		$scope.posts = data;
-		console.log( status ); 
+		$scope.twitterUser = data[0].user
 	    }
         })
     }
