@@ -149,11 +149,26 @@ left: 640px;
     font-size: 16px;
 }
 
-#loading-conversations {
+#loading-conversations, #loading-tweets {
     width: 100%;
     text-align: center;
     padding-top: 20px;
     font-size: 20px;
     -webkit-animation-iteration-count: infinite;
     -moz-animation-iteration-count: infinite;
+}
+
+#view_new_convos {
+    width: 340px;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+    background-color: $cnkt_color_2;
+    color: white;
+    margin: -10px;
+    cursor: pointer;
+    cursor: hand;
+    margin-left: -10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
 }

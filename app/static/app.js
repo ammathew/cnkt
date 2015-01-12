@@ -57,6 +57,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }
 
     $scope.replyToPost = function( tweet, response ) {
+	$scope.refreshConvos = true;
 	options = {   
 	    method: 'POST',
 	    url: "/api/twitter/update_status",
@@ -65,7 +66,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		in_reply_to_status_id : tweet.id_str 
 	    }
 	}
-//	twitter( options );
+	twitter( options );
     }
 
     /* construct conversations from multiple api endpoints */
@@ -74,16 +75,16 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	options = {   method: 'POST',
 		      url: "/api/twitter/convos"
 		  }
+	$scope.refreshConvos = false;
 	$scope.loading_conversations = true;
-	return twitter( options );
+	twitter( options ).success( function( data ) {
+	    $scope.conversations =  data;
+	    console.log( $scope.conversations );
+	    $scope.loading_conversations = false;	
+	})
     }
-
-    $scope.getConvos().success( function( data ) {
-	$scope.conversations =  data;
-	console.log( $scope.conversations );
-	$scope.loading_conversations = false;	
-    });
-
+    
+    $scope.getConvos();
 
     /* extract special words/phrases from post text */
 
@@ -136,8 +137,10 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.$watch( 'selectedText', function( newValue ) {
 	$( "button" ).click( function() {
 	    $scope.$apply( function(){
+		$scope.loading_tweets = true;
 		$scope.searchTwitter( newValue ).success( function( data ){
 		    $scope.tweetsWithSearchTerm = data.statuses;
+		    $scope.loading_tweets = false;
 		}); 
 	    })
 	})
@@ -343,6 +346,21 @@ aa.directive( 'animateOnSend', function() {
 		elem.addClass( "bounceOutRight" )
 		console.log( "reply to post" )
 		elem.parent(".tweet-unit").css( "height", "0" );
+		scope.$apply;
+
+		/* in case replying to a tweet in an existing conversationalready replied to ... unlikely
+		   _.each( scope.conversations, function( convo ) { 
+		   _.each( convo, function( twt, index) { 
+		   console.log( twt )
+		   
+		   if ( twt.id_str == scope.tweet.id_str ) {
+		   console.log( "this is index" );
+		   console.log( index );
+		   }
+		   });   
+		   });
+		*/
+
 	    });		 
 	}
     }

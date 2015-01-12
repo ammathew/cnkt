@@ -1,0 +1,16 @@
+<div class="convo-tweet" ng-class="{left: tweet.user.id_str == twitterUser.id_str}">
+  <div class="avatar-col">
+    <img class="profile-img avatar" src="{{tweet.user.profile_image_url}}">
+  </div>
+  <div class="body-col">
+    <div>{{ tweet.text }} </div>
+    <span ng-click="reply=!reply" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+    <div class="reply" ng-show="reply">
+      <input ng-model="currentResponse">
+      <button type="submit" class="btn btn-default" ng-click="replyToPost( tweet, currentResponse )">reply</button>
+    </div>
+  </div>
+</div>
+
