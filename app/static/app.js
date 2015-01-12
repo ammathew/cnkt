@@ -36,7 +36,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.searchTwitter = function ( searchTerm ) {
 	data = { 
 	    q : searchTerm, 
-	    count:100
+	    count:100,
+	    lang: 'en'
+	    
 	};
         return $http({ 
             method: 'POST',
@@ -63,7 +65,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		in_reply_to_status_id : tweet.id_str 
 	    }
 	}
-	twitter( options );
+//	twitter( options );
     }
 
     /* construct conversations from multiple api endpoints */
@@ -72,12 +74,14 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	options = {   method: 'POST',
 		      url: "/api/twitter/convos"
 		  }
+	$scope.loading_conversations = true;
 	return twitter( options );
     }
 
     $scope.getConvos().success( function( data ) {
 	$scope.conversations =  data;
 	console.log( $scope.conversations );
+	$scope.loading_conversations = false;	
     });
 
 
@@ -167,7 +171,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
               method: 'POST',
 	      data: { count: 100, 
 		      exclude_replies: true, 
-		      incude_rts: false
+		      include_rts: false
 		    },
 	      url:"/api/twitter/user_timeline",
         }).success( function( data, status ) {
@@ -300,6 +304,7 @@ aa.service( 'twitter', function( $http ){
     }
 });
 
+/*
 aa.directive( 'search-term', function() {
     return {
 	restrict: 'C',
@@ -313,6 +318,7 @@ aa.directive( 'search-term', function() {
 	}
     }
 });
+*/
 
 aa.directive( 'reservation', function() {
     return {
@@ -323,6 +329,22 @@ aa.directive( 'reservation', function() {
 		scope.end = end.toISOString();
             });
 	}	
+    }
+})
+
+aa.directive( 'animateOnSend', function() {
+    return {
+	scope: true,
+	link: function( scope,elem, attr ) {
+	    scope.replied = false;
+	    elem.find( 'button' ).on( 'click', function() {
+		scope.replyToPost( scope.tweet, scope.currentResponse );
+		elem.addClass( "animated" );
+		elem.addClass( "bounceOutRight" )
+		console.log( "reply to post" )
+		elem.parent(".tweet-unit").css( "height", "0" );
+	    });		 
+	}
     }
 })
 

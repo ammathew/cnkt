@@ -148,3 +148,12 @@ left: 640px;
   #  background-color: $cnkt_color_3;
     font-size: 16px;
 }
+
+#loading-conversations {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 20px;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+}
