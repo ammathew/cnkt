@@ -105,3 +105,7 @@ mark {
 
 .tweet-unit {
   padding-bottom: 10px; }
+
+.search-term {
+  #  background-color: yellow;
+  font-size: 16px; }

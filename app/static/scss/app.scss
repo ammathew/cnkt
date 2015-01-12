@@ -1,5 +1,6 @@
 $cnkt_color: #A53838;
 $cnkt_color_2: rgb(64, 153, 169); 
+$cnkt_color_3: yellow;
 
 mark {
     background-color: yellow;
@@ -141,4 +142,9 @@ left: 640px;
 
 .tweet-unit {
     padding-bottom: 10px;
+}
+
+.search-term {
+  #  background-color: $cnkt_color_3;
+    font-size: 16px;
 }

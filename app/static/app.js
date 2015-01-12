@@ -106,18 +106,23 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.getHighlightedText = function() {
 	$('html').mouseup(function (e){
 	    var text = "";
-	    if (window.getSelection && window.getSelection().type == "Range" ) {
-		$scope.$apply( function() {
-		    $("mark").contents().unwrap();
-		    $("mark").remove();
-		    $scope.selectedText = window.getSelection().toString();
-		    var selection = window.getSelection();
-		    var range = selection.getRangeAt(0);
-		    var cssclass = $(selection.anchorNode.parentNode).attr("class");
-		    var newNode = document.createElement("mark");
-		    range.surroundContents(newNode);
-		})
-
+	    if (window.getSelection ) {
+		var testString = window.getSelection()+'';
+		if ( testString.length > 0 ) {
+		    $scope.$apply( function() {
+			$(".search-term").contents().unwrap();
+			$(".search-term").remove();
+			$scope.selectedText = window.getSelection().toString();
+			var selection = window.getSelection();
+			console.log( selection );
+			var range = selection.getRangeAt(0);
+			var newNode = document.createElement("button");
+			newNode.classList.add( "search-term")
+			newNode.classList.add( "btn" );
+			newNode.classList.add( "btn-primary" );
+			range.surroundContents(newNode);
+		    })
+		}
 	    } else if (document.selection && document.selection.type != "Control") {
 		$scope.searchText = document.selection.createRange().text;
 	    }
@@ -125,7 +130,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }	
 
     $scope.$watch( 'selectedText', function( newValue ) {
-	$( "mark" ).click( function() {
+	$( "button" ).click( function() {
 	    $scope.$apply( function(){
 		$scope.searchTwitter( newValue ).success( function( data ){
 		    $scope.tweetsWithSearchTerm = data.statuses;
@@ -295,9 +300,9 @@ aa.service( 'twitter', function( $http ){
     }
 });
 
-aa.directive( 'mark', function() {
+aa.directive( 'search-term', function() {
     return {
-	restrict: 'E',
+	restrict: 'C',
 	link: function( scope, elem, attrs ) {
 	    console.log( 'mark...yo' );
 	    elem.bind( "click", function() {
