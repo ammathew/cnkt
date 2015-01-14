@@ -1,10 +1,11 @@
-$cnkt_color: #A53838;
+$cnkt_color: #002039;
 $cnkt_color_2: black;
-$cnkt_color_3: yellow;
+$cnkt_color_3: #51a6df;
+$cnkt_color_4: #73A771;
 
 .convo {
     padding-bottom: 20px;
-     border-bottom: 1px solid $cnkt_color_2;	
+     border-bottom: 1px solid #ccc;	
 }
 
 .navbar {
@@ -29,19 +30,13 @@ body {
     padding: 0 10px 0 10px;
 }
 
-
 .offset-1 {
-left: 330px;
+    left: 330px;
 }
 
 .offset-2 {
-left: 640px;
+    left: 640px;
 }
-
-.convo-col {
-    width: 355px;
-}
-
 
 #app {
     width: 100%;
@@ -53,7 +48,6 @@ left: 640px;
 .tweet, .convo-tweet {
     padding: 10px;
     padding-left: 0;
-  //  border-bottom: 1px solid black;
     .avatar-col {
 	width: 58px;
 	float: left;
@@ -87,57 +81,55 @@ left: 640px;
     }
 }
 
+.convo-tweet {
+    border: 3px solid  $cnkt_color_3;
+    background-color: $cnkt_color_3;
+    margin: 3px;
+    padding: 3px;
+    border-radius: 10px;
+    position:relative;
+}
+
+.convo-tweet {
+    position: relative;
+    margin: 0;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -webkit-box-shadow: 0px 0 3px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 0 3px rgba(0,0,0,0.25);
+    box-shadow: 0px 0 3px rgba(0,0,0,0.25); 
+}
+.convo-tweet:after {
+    position: absolute;
+    display: block;
+    content: "";  
+    border-color: $cnkt_color_3 transparent transparent transparent;
+    border-style: solid;
+    border-width: 10px;
+    height:0;
+    width:0;
+    position:absolute;
+    bottom:-19px;
+    left:1em;
+}
 .convo-tweet:first-of-type {
     margin-top: 10px;
 }
-.convo-tweet {
-    padding: 10px;
-    font-size: 10px;
-    line-height: 1.1;
-    border: 1px solid black;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    width: 220px;
 
-    .avatar-col {
-	width: 29px;
-	float: left;
-    }
-    .avatar {
-	width: 24px;
-	height: 24px;
-	border-radius: 3px;
-    }
-    .body-col {
-	width: 200px;
-	word-wrap: break-word;
-	padding-left: 29px;
-    }
-    .reply {
-	width: 100%;
-	font-size: 10px;
-	margin-top: 10px;
-	input {
-	    width: 75px;
-	    height: 18px;
-	}
-	
-	button { 
-	    width: 25px;
-	    height: 18px;
-	    padding: 0 0;
-	    font-size: 10px;
-	    background-color: $cnkt_color_2;
-	}
-    }
+.convo-tweet.user_tweet {
+    border: 3px solid  $cnkt_color_4;
+    background-color: $cnkt_color_4;
 }
-
-.convo-tweet.left {
-    margin-left:100px
+.convo-tweet.user_tweet:after {
+    border-color: $cnkt_color_4 transparent transparent transparent;
+    bottom:-19px;
+    left: auto;
+    right:1em;
 }
 
 .tweet-unit {
-    padding-bottom: 10px;
+    padding-bottom: 25px;
+    padding-top: 15px;
 }
 
 .search-term {

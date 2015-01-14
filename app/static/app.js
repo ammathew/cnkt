@@ -150,26 +150,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     })
 
     $scope.getHighlightedText();
-
-/* 
-    $scope.$watch( 'posts', function( newValue ) {
-	$scope.allPosts = '';
-
-	if( newValue ) {
-	    for( i=0; i< $scope.posts.length; i++ ) {
-		console.log( $scope.posts );
-		$scope.allPosts = $scope.allPosts + '. ' + $scope.posts[i].text;
-	    }
-	    console.log( 'get entities' );
-	    $scope.getEntities( $scope.allPosts ).success( function(data) {
-		$scope.entities = data;	
-	    });
-	}
-	console.log( $scope.allPosts );
-	
-    })
-*/
-
     $scope.twitterUser = {}
     $scope.getPosts = function () {
           $http({ 
@@ -182,6 +162,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         }).success( function( data, status ) {
 	    if ( status == 200 ){
 		$scope.posts = data;
+		console.log( $scope.posts );
 		$scope.twitterUser = data[0].user
 	    }
         })
@@ -309,22 +290,6 @@ aa.service( 'twitter', function( $http ){
     }
 });
 
-/*
-aa.directive( 'search-term', function() {
-    return {
-	restrict: 'C',
-	link: function( scope, elem, attrs ) {
-	    console.log( 'mark...yo' );
-	    elem.bind( "click", function() {
-		scope.searchTwitter( newValue ).success( function( data ){
-		    scope.tweetsWithSearchTerm = data.statuses;
-		}); 
-	    });
-	}
-    }
-});
-*/
-
 aa.directive( 'reservation', function() {
     return {
 	restrict: 'A',
@@ -374,3 +339,20 @@ aa.run(function($rootScope, $templateCache) {
       $templateCache.removeAll();
    });
 });
+
+
+aa.directive('autolinker', function () {
+    return {
+	restrict: 'A',
+	scope: {
+	    text: '='
+	},
+	link: function (scope, element, attrs) {
+	    scope.$watch("text", function (new_value) {
+		if (new_value != undefined) {
+		    element.html(Autolinker.link(new_value, {email: false, twitter: false}));
+		}
+	    })
+	}
+    }
+})
