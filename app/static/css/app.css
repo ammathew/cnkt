@@ -1,14 +1,11 @@
-mark {
-  background-color: yellow;
-  font-size: 18px;
-  text-decoration: underline; }
-
 .convo {
   padding-bottom: 20px;
-  border-bottom: 1px solid #a53838; }
+  border-bottom: 1px solid black; }
 
 .navbar {
-  background-color: #4099a9; }
+  background-color: black;
+  border: 0px solid transparent;
+  border-radius: 0px; }
 
 .cnkt-col {
   height: 100%;
@@ -98,7 +95,7 @@ mark {
       height: 18px;
       padding: 0 0;
       font-size: 10px;
-      background-color: #4099a9; }
+      background-color: black; }
 
 .convo-tweet.left {
   margin-left: 100px; }
@@ -123,7 +120,7 @@ mark {
   text-align: center;
   padding-top: 20px;
   font-size: 20px;
-  background-color: #4099a9;
+  background-color: black;
   color: white;
   margin: -10px;
   cursor: pointer;

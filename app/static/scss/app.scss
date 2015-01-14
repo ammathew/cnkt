@@ -1,20 +1,16 @@
 $cnkt_color: #A53838;
-$cnkt_color_2: rgb(64, 153, 169); 
+$cnkt_color_2: black;
 $cnkt_color_3: yellow;
-
-mark {
-    background-color: yellow;
-    font-size: 18px;
-    text-decoration: underline;
-}
 
 .convo {
     padding-bottom: 20px;
-    border-bottom: 1px solid $cnkt_color;
+     border-bottom: 1px solid $cnkt_color_2;	
 }
 
 .navbar {
     background-color: $cnkt_color_2;
+    border: 0px solid transparent;
+    border-radius: 0px;   
 }
 
 body {

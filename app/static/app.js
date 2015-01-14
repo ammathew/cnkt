@@ -112,24 +112,26 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	$('html').mouseup(function (e){
 	    var text = "";
 	    if (window.getSelection ) {
-		var testString = window.getSelection()+'';
-		if ( testString.length > 0 ) {
-		    $scope.$apply( function() {
-			$(".search-term").contents().unwrap();
-			$(".search-term").remove();
-			$scope.selectedText = window.getSelection().toString();
-			var selection = window.getSelection();
-			console.log( selection );
-			var range = selection.getRangeAt(0);
-			var newNode = document.createElement("button");
-			newNode.classList.add( "search-term")
-			newNode.classList.add( "btn" );
-			newNode.classList.add( "btn-primary" );
-			range.surroundContents(newNode);
-		    })
+		if ( $( window.getSelection().focusNode.parentNode ).parents(".cnkt-col").is("#user_tweets") ) {
+		    var testString = window.getSelection()+'';
+		    if ( testString.length > 0 ) {
+			$scope.$apply( function() {
+			    $(".search-term").contents().unwrap();
+			    $(".search-term").remove();
+			    $scope.selectedText = window.getSelection().toString();
+			    var selection = window.getSelection();
+			    console.log( selection );
+			    var range = selection.getRangeAt(0);
+			    var newNode = document.createElement("button");
+			    newNode.classList.add( "search-term")
+			    newNode.classList.add( "btn" );
+			    newNode.classList.add( "btn-primary" );
+			    range.surroundContents(newNode);
+			})
+		    }
+		} else if (document.selection && document.selection.type != "Control") {
+		    $scope.searchText = document.selection.createRange().text;
 		}
-	    } else if (document.selection && document.selection.type != "Control") {
-		$scope.searchText = document.selection.createRange().text;
 	    }
 	});
     }	
