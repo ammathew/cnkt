@@ -35,7 +35,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 
     $scope.searchTwitter = function ( searchTerm ) {
 	data = { 
-	    q : searchTerm, 
+	    q : "\"" + searchTerm + "\"", 
 	    count:100,
 	    lang: 'en'
 	    

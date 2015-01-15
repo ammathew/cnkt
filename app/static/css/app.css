@@ -67,6 +67,7 @@
   position: relative; }
 
 .convo-tweet {
+  margin-bottom: 25px;
   position: relative;
   margin: 0;
   -moz-border-radius: 10px;
@@ -88,8 +89,8 @@
   bottom: -19px;
   left: 1em; }
 
-.convo-tweet:first-of-type {
-  margin-top: 10px; }
+.convo-tweet {
+  margin-top: 20px; }
 
 .convo-tweet.user_tweet {
   border: 3px solid #73a771;
@@ -102,12 +103,13 @@
   right: 1em; }
 
 .tweet-unit {
-  padding-bottom: 25px;
-  padding-top: 15px; }
+  padding-bottom: 40px; }
 
 .search-term {
-  #  background-color: #51a6df;
-  font-size: 16px; }
+  font-size: 14px; }
+
+.search-term.btn {
+  padding: 2px; }
 
 #loading-conversations, #loading-tweets {
   width: 100%;
