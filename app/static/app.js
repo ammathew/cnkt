@@ -1,4 +1,4 @@
-aa = angular.module('myServiceModule', ['ui.bootstrap', 'nvd3ChartDirectives', 'ngRoute' ]);
+aa = angular.module('myServiceModule', [ 'nvd3ChartDirectives', 'ngRoute' ]);
 
 aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', function ($interpolateProvider, $routeProvider, $locationProvider ) {
 
@@ -47,13 +47,16 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         })
     }
 
-    $scope.favoritePost = function( id_str ) {
+    $scope.favoritePost = function( tweet ) {
 	options = {   
 	    method: 'POST',
 	    url: "/api/twitter/create_favorite",
-	    data: { id : id_str }
+	    data: { id : tweet.id_str }
 	}
-	twitter( options );
+	twitter( options ).success( function() {
+	    tweet.favorite_count = tweet.favorite_count + 1
+	    tweet.user_favorited = true;
+	});
     }
 
     $scope.replyToPost = function( tweet, response ) {

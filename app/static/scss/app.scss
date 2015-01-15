@@ -2,6 +2,7 @@ $cnkt_color: #002039;
 $cnkt_color_2: black;
 $cnkt_color_3: #51a6df;
 $cnkt_color_4: #73A771;
+$dark_gray: #575757;
 
 .convo {
     padding-bottom: 20px;
@@ -9,7 +10,7 @@ $cnkt_color_4: #73A771;
 }
 
 .navbar {
-    background-color: $cnkt_color_2;
+    background-color: $cnkt_color_3; 
     border: 0px solid transparent;
     border-radius: 0px;   
 }
@@ -19,7 +20,7 @@ body {
 }
 
 .cnkt-col {
-    height: 100%;
+    height: 90%;
     margin-right: 10px;
     width: 300px;
     overflow:scroll;
@@ -162,4 +163,17 @@ body {
     margin-left: -10px;
     padding-bottom: 10px;
     margin-bottom: 10px;
+}
+
+.twitter-name {
+    font-weight: bold;
+    font-size: 11px;
+}
+.twitter-screen-name {
+    color: $dark_gray;
+    font-size: 10px;
+}
+
+.favorited {
+    color: #B29600;
 }

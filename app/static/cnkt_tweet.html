@@ -3,7 +3,12 @@
     <img class="profile-img avatar" src="{{tweet.user.profile_image_url}}">
   </div>
   <div class="body-col">
-    <div autolinker text="tweet.text"></div>
+    <span class="twitter-name">{{ tweet.user.name}}</span><span class="twitter-screen-name">@{{tweet.user.screen_name}}</span>
+    <div autolinker text="tweet.text">
+    </div>
+    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span><span class="tweet-stat"> {{ tweet.retweet_count }}</span>
+    <span ng-class="{ favorited: favorited }">
+      <span class="glyphicon glyphicon-star" ng-click="favoritePost( tweet )" aria-hidden="true"></span> {{ tweet.favorite_count }}</span>
     <div class="reply">
       <input ng-model="currentResponse">
       <button type="submit" class="btn btn-default">reply</button>
