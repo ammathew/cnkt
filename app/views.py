@@ -184,41 +184,33 @@ def mentions():
 
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     mentions = TWITTER_API.mentions_timeline()
-    
-    timeline = []
-    mentionsItems = []
-
-    for item in mentions:
-        if item['in_reply_to_status_id_str']:
-            mentionsItems.append( item )
-
     tweets = TWITTER_API.user_timeline();
-    for item in tweets:
-        if item['in_reply_to_status_id_str']:
-            timeline.append( item )
 
-    convos = timeline + mentions
-            
-    convo_list_with_timestamps = []
-    for tweet in convos:
-        with_timestamp = add_timestamp( tweet )
-        convo_list_with_timestamps.append( with_timestamp )
-        
-    convo_list_with_timestamps = sorted( convo_list_with_timestamps, key=lambda aa:aa["timestamp"], reverse=True )
-    convos = convo_list_with_timestamps
+    convosAll = tweets + mentions
+    convosAll = [  x for x in convosAll if x['in_reply_to_status_id_str'] is not None ]
+    #  convos = map ( add_timestamp, convosAll )
+    convos = []
+    for item in convosAll:
+        itemWithTimestamp = add_timestamp( item ) 
+        convos.append( itemWithTimestamp )
+                    
+    convos = sorted( convos, key=lambda aa:aa["timestamp"], reverse=True )
+
     ccc = []
 
+    ids = [ x['id_str'] for x in convos ]
     while len( convos ) > 0:
         convo = []
         bb = convos.pop(0)
+        ids.pop(0)
         convo.append( bb )
         endOfConvo = False
         while not endOfConvo:
-            ids = [ x['id_str'] for x in convos ]
             try:
                 i = ids.index( bb['in_reply_to_status_id_str'] )
                 convo.append( convos[i] )
                 bb = convos.pop(i)
+                ids.pop(i)
             except: 
                 ccc.append( convo )
                 endOfConvo = True
@@ -229,6 +221,8 @@ def mentions():
     ddd = add_root_convo( eee )
 
     data = json.dumps( ddd )
+
+
     return data
 
 def add_timestamp( tweet ):
