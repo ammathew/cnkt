@@ -41,7 +41,7 @@ from app import app, db, login_manager, BASE_URL
 from app.models import User, Todo, TwitterAuth
 
 import json
-
+import copy
 
 
 @app.route('/')
@@ -176,7 +176,6 @@ def twitterApiEndpoints(tweepy_endpoint):
         return message
 
 ######## CONSTRUCT CONVERSATIONS ############
-
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
@@ -186,26 +185,46 @@ def mentions():
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     mentions = TWITTER_API.mentions_timeline()
     
-    convos = []
+    timeline = []
+    mentionsItems = []
 
     for item in mentions:
         if item['in_reply_to_status_id_str']:
-            convos.append( item )
-    
+            mentionsItems.append( item )
+
     tweets = TWITTER_API.user_timeline();
     for item in tweets:
         if item['in_reply_to_status_id_str']:
-            convos.append( item )
-     
+            timeline.append( item )
+
+    convos = timeline + mentions
+            
     convo_list_with_timestamps = []
     for tweet in convos:
         with_timestamp = add_timestamp( tweet )
         convo_list_with_timestamps.append( with_timestamp )
-
+        
     convo_list_with_timestamps = sorted( convo_list_with_timestamps, key=lambda aa:aa["timestamp"], reverse=True )
-    convo_superset = create_superset( convo_list_with_timestamps )
-   
-    data = json.dumps( convo_superset )
+    convos = convo_list_with_timestamps
+
+    ccc = []
+    while len( convos ) > 0:
+        convo = []
+        bb = convos.pop(0)
+        convo.append( bb )
+        for i, item in enumerate( list( convo_list_with_timestamps ) ):
+            if bb['in_reply_to_status_id_str'] == item['id_str']:
+                convo.append( item )
+                bb = convos.pop(i)
+        ccc.append( convo )
+    
+    eee = []
+    for item in ccc:
+        eee.append( item[::-1] )
+    
+    ddd = add_root_convo( eee )
+
+    data = json.dumps( ddd )
     return data
 
 def add_timestamp( tweet ):
@@ -214,55 +233,20 @@ def add_timestamp( tweet ):
     timestamp = time.mktime( temp )
     tweet['timestamp'] = timestamp
     return tweet
-    
 
-def create_superset( convos ):
+def add_root_convo( convos ):
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
-    convo_superset = []
-   
-    i = 0
-    for item in convos:
-        i = i + 1 
-        if i > 10 : # stop-cap to prevent rate limiting
-            break
-        convo = []
-        convo.append( item )
-        in_reply_to_status_id_str = item['in_reply_to_status_id_str']
-            
-        while in_reply_to_status_id_str:
+    for i, item in enumerate( list(convos) ):
+        in_reply_to_status_id_str = item[0]['in_reply_to_status_id_str']
+        try:
             status = TWITTER_API.get_status( in_reply_to_status_id_str )
-            convo.insert( 0, status )
-            try:
-                in_reply_to_status_id_str = status['in_reply_to_status_id_str']
-            except:
-                convo_superset.append( convo )
-                break
-            if len( convo ) < 5 :
-                convo_superset.append( convo )
-            else:
-                break
-
-    #remove duplicates ( introduced because getting 'root' tweets from both mentions_timeline and user_timeline )
-    convo_superset_2 = []
-    for item in convo_superset:
-        if item not in convo_superset_2:
-            convo_superset_2.append( item )
-
-    #add timestamp to each object; sort by timestamp
-    convo_superset_3 = []
-    for convo in convo_superset_2:
-        convo_with_timestamps = []
-        for item in convo:
-            tweetWithTimestamp = add_timestamp( item ) 
-            convo_with_timestamps.append( tweetWithTimestamp )
-        convo_superset_3.append( convo_with_timestamps )
-
-    convo_superset_4 = sorted( convo_superset_3, key=lambda convo:convo[-1]["timestamp"], reverse=True )
-
-    return convo_superset_4
+            convos[i].insert( 0, status )
+        except:
+            pass
+    return convos
 
 @app.errorhandler(500)
 def internal_error(exception):
