@@ -206,18 +206,22 @@ def mentions():
         
     convo_list_with_timestamps = sorted( convo_list_with_timestamps, key=lambda aa:aa["timestamp"], reverse=True )
     convos = convo_list_with_timestamps
-
     ccc = []
+
     while len( convos ) > 0:
         convo = []
         bb = convos.pop(0)
         convo.append( bb )
-        for i, item in enumerate( list( convo_list_with_timestamps ) ):
-            if bb['in_reply_to_status_id_str'] == item['id_str']:
-                convo.append( item )
+        endOfConvo = False
+        while not endOfConvo:
+            ids = [ x['id_str'] for x in convos ]
+            try:
+                i = ids.index( bb['in_reply_to_status_id_str'] )
+                convo.append( convos[i] )
                 bb = convos.pop(i)
-        ccc.append( convo )
-    
+            except: 
+                ccc.append( convo )
+                endOfConvo = True
     eee = []
     for item in ccc:
         eee.append( item[::-1] )
