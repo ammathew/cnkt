@@ -48,7 +48,7 @@
 	      <input ng-model="newTweet">
 	      <div class="compose-controls">
 		<div class="compose-controls-inner">
-		  <span ng-class"{ red: count < 0 }">{{ 140 - count }} </span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default compose-button">tweet</button>
+		  <span ng-class"{ red: count < 0 }">{{ count }} </span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default compose-button">tweet</button>
 		</div>
 	      </div>
 	    </div>

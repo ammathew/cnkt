@@ -291,6 +291,7 @@ aa.directive( 'countChars', function() {
 	restrict: 'A',
 	scope: true,
 	link: function( scope, elem, attrs ) {
+	    scope.count = 140
 	    model = elem.find( 'input' ).attr('ng-model')
 	    scope.$watch( model, function(newValue) {
 		if (newValue) {
@@ -303,10 +304,11 @@ aa.directive( 'countChars', function() {
 			    var aa = matchUrls[i].length 
 			    scope.count = scope.count - aa
 			}
-			scope.count = scope.count + (matchUrls.length * 23)
+			scope.count =  scope.count + (matchUrls.length * 23)
 			
 		    }
 		}
+		scope.count = 140 - scope.count
 	    })
         }
     }	
@@ -383,7 +385,7 @@ aa.directive( 'cnktCol', function() {
 		    var controlsHeight = elem.find(".col-controls").height()
 		    console.log( controlsHeight )
 		    var currentColBodyHeight = elem.find(".col-body").height()
-		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight + 10 )
+		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight - 20 )
 		}
 	    })
 

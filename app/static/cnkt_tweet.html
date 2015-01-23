@@ -9,9 +9,9 @@
     <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span><span class="tweet-stat"> {{ tweet.retweet_count }}</span>
     <span ng-class="{ favorited: favorited }">
       <span class="glyphicon glyphicon-star" ng-click="favoritePost( tweet )" aria-hidden="true"></span> {{ tweet.favorite_count }}</span>
-    <div class="reply">
+    <div class="reply" count-chars >
       <input ng-model="currentResponse">
-      <button type="submit" class="btn btn-default">reply</button>
+      <button type="submit" class="btn btn-default">reply</button> {{ count }}
     </div>
   </div>
 </div>

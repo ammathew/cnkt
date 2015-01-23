@@ -82,10 +82,10 @@ a {
     font-size: 12px;
     margin-top: 10px; }
     .tweet .reply input, .convo-tweet .reply input {
-      width: 125px;
+      width: 120px;
       height: 18px; }
     .tweet .reply button, .convo-tweet .reply button {
-      width: 50px;
+      width: 40px;
       height: 18px;
       padding: 0 0;
       font-size: 10px;
