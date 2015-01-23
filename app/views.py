@@ -176,6 +176,7 @@ def twitterApiEndpoints(tweepy_endpoint):
         return message
 
 ######## CONSTRUCT CONVERSATIONS ############
+
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
@@ -189,6 +190,7 @@ def mentions():
     convosAll = tweets + mentions
     convosAll = [  x for x in convosAll if x['in_reply_to_status_id_str'] is not None ]
     #  convos = map ( add_timestamp, convosAll )
+
     convos = []
     for item in convosAll:
         itemWithTimestamp = add_timestamp( item ) 
@@ -196,34 +198,44 @@ def mentions():
                     
     convos = sorted( convos, key=lambda aa:aa["timestamp"], reverse=True )
 
-    ccc = []
 
-    ids = [ x['id_str'] for x in convos ]
-    while len( convos ) > 0:
-        convo = []
-        bb = convos.pop(0)
-        ids.pop(0)
-        convo.append( bb )
-        endOfConvo = False
-        while not endOfConvo:
-            try:
-                i = ids.index( bb['in_reply_to_status_id_str'] )
-                convo.append( convos[i] )
-                bb = convos.pop(i)
-                ids.pop(i)
-            except: 
-                ccc.append( convo )
-                endOfConvo = True
+   # replyIdDict = build_dict( convos, key='in_reply_to_status_id_str' )
+    idDict = build_dict( convos, key='id_str' )
+        
+    ccc = []    
+    while len(idDict ) > 0 :
+        for item in convos:
+            if ( item["id_str"] in idDict.keys() ):
+                convo = []
+                aa = idDict.pop( item["id_str"] )
+                convo.append( aa )
+                eoc = False 
+                while not eoc:
+                    inReplyToStatusIdStr= aa['in_reply_to_status_id_str'] 
+                    if ( inReplyToStatusIdStr in idDict.keys() ):
+                        aa = idDict.pop( inReplyToStatusIdStr )
+                        convo.append( aa )
+                    else:
+                       # try:
+                       #     aa = TWITTER_API.get_status( convo[-1]['in_reply_to_status_id_str'] ) 
+                       #     convo.append( aa )
+                      #  except:
+                     #       pass
+                        ccc.append( convo )
+                        eoc = True
+
     eee = []
     for item in ccc:
         eee.append( item[::-1] )
     
-    ddd = add_root_convo( eee )
+    eee = add_root_convos( eee )
 
-    data = json.dumps( ddd )
-
+    data = json.dumps( eee )
 
     return data
+
+def build_dict(seq, key):
+    return dict((d[key], dict(d, index=i)) for (i, d) in enumerate(seq))
 
 def add_timestamp( tweet ):
     temp = parser.parse( tweet["created_at"] )
@@ -232,18 +244,24 @@ def add_timestamp( tweet ):
     tweet['timestamp'] = timestamp
     return tweet
 
-def add_root_convo( convos ):
+def add_root_convos( convos ):
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
+
+    status_ids = []
     for i, item in enumerate( list(convos) ):
-        in_reply_to_status_id_str = item[0]['in_reply_to_status_id_str']
+        status_ids.append( item[0]['in_reply_to_status_id_str'] )
+        
+    statuses = TWITTER_API.statuses_lookup( status_ids, map_=True )
+            
+    for i, item in enumerate( list(convos) ):
         try:
-            status = TWITTER_API.get_status( in_reply_to_status_id_str )
-            convos[i].insert( 0, status )
-        except:
+            convos[i].insert(0, statuses["id"][  item[0]['in_reply_to_status_id_str'] ] )
+        except: 
             pass
+
     return convos
 
 @app.errorhandler(500)
