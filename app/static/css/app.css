@@ -24,12 +24,19 @@ a {
   margin-bottom: 30px; }
 
 .cnkt-col {
-  height: 90%;
   margin-right: 10px;
   width: 300px;
-  overflow: scroll;
   position: fixed;
   float: left;
+  left: 20px;
+  margin-right: 10px;
+  float: left;
+  height: 90%; }
+
+.col-body {
+  height: 90%;
+  width: 300px;
+  overflow: scroll;
   background-color: white;
   left: 20px;
   padding: 0 10px 0 10px; }
@@ -159,3 +166,23 @@ a {
 
 .favorited {
   color: #B29600; }
+
+#compose {
+  padding: 5px; }
+  #compose input {
+    width: 100%; }
+  #compose .compose-controls {
+    width: 100%; }
+  #compose .red {
+    color: red; }
+
+.col-header {
+  background-color: white;
+  height: 75px;
+  padding: 10px;
+  border-bottom: 1px solid #d2e2e3; }
+
+.compose-button {
+  width: 50px;
+  padding: 3px;
+  font-size: 10px; }

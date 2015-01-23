@@ -38,26 +38,44 @@
 -->
 
     <div id="columnns">
-        <div id="user_tweets" class="cnkt-col">
+        <div id="user_tweets" class="cnkt-col">	 
+	  <div count-chars class="col-header" id="compose">
+	    <input ng-model="newTweet">
+	    <div class="compose-controls">
+	      <span class="right" ng-class"{ red: count < 0 }">{{ 140 - count }}</span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default right compose-button">tweet</button>
+	    </div>
+	  </div> 
+	  <div highlight-search class="col-body">
             <div class="tweet-unit" ng-repeat="tweet in posts"> 
-                <div ng-include="'tweet.html'"></div>
+              <div ng-include="'tweet.html'"></div>
             </div>
+	  </div>
         </div>
         <div class="cnkt-col offset-1">
+	  <div class="col-header">
+	    Search Text {{ searchText }}
+	  </div>
+	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
             <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
-                <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
+              <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
             </div>
+	  </div>
         </div>
 
         <div class="cnkt-col offset-2 convo-col">
+	  <div class="col-header">
+	    Conversations
+	  </div>
+	  <div class="col-body">
             <div ng-show="loading_conversations" id="loading-conversations" class="animated pulse">loading conversations</div>
             <div ng-show="refreshConvos" id="view_new_convos" class="animated bounceInLeft" ng-click="getConvos()">new conversations. click here to view.</div>
             <div class="convo tweet-unit" ng-repeat="convo in conversations" > 
-                <div ng-repeat="tweet in convo">
-	            <div ng-include="'convo_tweet.html'"></div>
-                </div>
+              <div ng-repeat="tweet in convo">
+	        <div ng-include="'convo_tweet.html'"></div>
+              </div>
             </div>
+	  </div>
         </div>
     </div>
 </div>

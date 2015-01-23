@@ -32,7 +32,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.resetData;
 
     /* calls to tweepy/twitter API */
-
     $scope.searchTwitter = function ( searchTerm ) {
 	data = { 
 	    q : "\"" + searchTerm + "\"", 
@@ -45,6 +44,17 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    data: data,
 	    url:"/api/twitter/search",
         })
+    }
+    
+    $scope.postStatus = function( newTweet ){
+	options = {   
+	    method: 'POST',
+	    url: "/api/twitter/update_status",
+	    data: { status : newTweet }
+	}
+	twitter( options ).success( function( data ) {
+	    console.log( data )
+	});
     }
 
     $scope.favoritePost = function( tweet ) {
@@ -109,38 +119,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         })
     }
 
-    /* search from highlighted text */
-
-    $scope.getHighlightedText = function() {
-	$('html').mouseup(function (e){
-	    var text = "";
-	    if (window.getSelection ) {
-		if ( $( window.getSelection().focusNode.parentNode ).parents(".cnkt-col").is("#user_tweets") ) {
-		    var testString = window.getSelection()+'';
-		    if ( testString.length > 0 ) {
-			$scope.$apply( function() {
-			    $(".search-term").contents().unwrap();
-			    $(".search-term").remove();
-			    $scope.selectedText = window.getSelection().toString();
-			    var selection = window.getSelection();
-			    console.log( selection );
-			    var range = selection.getRangeAt(0);
-			    var newNode = document.createElement("button");
-			    newNode.classList.add( "search-term")
-			    newNode.classList.add( "btn" );
-			    newNode.classList.add( "btn-primary" );
-			    range.surroundContents(newNode);
-			})
-		    }
-		} else if (document.selection && document.selection.type != "Control") {
-		    $scope.searchText = document.selection.createRange().text;
-		}
-	    }
-	});
-    }	
-
     $scope.$watch( 'selectedText', function( newValue ) {
-	$( "button" ).click( function() {
+	$( ".col-body button" ).click( function() {
 	    $scope.$apply( function(){
 		$scope.loading_tweets = true;
 		$scope.searchTwitter( newValue ).success( function( data ){
@@ -152,7 +132,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	
     })
 
-    $scope.getHighlightedText();
+   // $scope.getHighlightedText();
     $scope.twitterUser = {}
     $scope.getPosts = function () {
           $http({ 
@@ -207,6 +187,8 @@ aa.factory('searchTwitterFactory', function($http) {
 	});    
     }
 });
+
+
 
 
 aa.directive( 'sentchart', function() {
@@ -305,6 +287,32 @@ aa.directive( 'reservation', function() {
     }
 })
 
+aa.directive( 'countChars', function() {
+    return {
+	restrict: 'A',
+	scope: true,
+	link: function( scope, elem, attrs ) {
+	    model = elem.find( 'input' ).attr('ng-model')
+	    scope.$watch( model, function(newValue) {
+		if (newValue) {
+		    scope.count = newValue.length
+		    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+		    var matchUrls = newValue.match( urlRegex )
+		    if ( matchUrls ) {
+			console.log( matchUrls )
+			for( i=0; i<matchUrls.length; i++ ) {
+			    var aa = matchUrls[i].length 
+			    scope.count = scope.count - aa
+			}
+			scope.count = scope.count + (matchUrls.length * 23)
+			
+		    }
+		}
+	    })
+        }
+    }	
+})
+
 aa.directive( 'animateOnSend', function() {
     return {
 	scope: true,
@@ -357,5 +365,42 @@ aa.directive('autolinker', function () {
 		}
 	    })
 	}
+    }
+})
+
+
+aa.directive( 'highlightSearch', function() {
+    var linker = function( scope, elem, attr ) {
+	console.log( scope )
+	elem.mouseup(function (e){
+	    var text = "";
+	    if (window.getSelection ) {
+		if ( $( window.getSelection().focusNode.parentNode ).parents(".col-body") ) {
+		    var testString = window.getSelection()+'';
+		    if ( testString.length > 0 ) {
+			scope.$apply( function() {
+			    $(".search-term").contents().unwrap();
+			    $(".search-term").remove();
+			    scope.selectedText = window.getSelection().toString();
+			    var selection = window.getSelection();
+			    console.log( selection );
+			    var range = selection.getRangeAt(0);
+			    var newNode = document.createElement("button");
+			    newNode.classList.add( "search-term")
+			    newNode.classList.add( "btn" );
+			    newNode.classList.add( "btn-primary" );
+			    range.surroundContents(newNode);
+			})
+		    }
+		} else if (document.selection && document.selection.type != "Control") {
+		    scope.searchText = document.selection.createRange().text;
+		    scope.$apply()
+		}
+	    }
+	});
+    }
+    return {
+	restrict: 'A',
+	link: linker
     }
 })
