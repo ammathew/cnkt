@@ -38,13 +38,21 @@
 -->
 
     <div id="columnns">
-        <div id="user_tweets" class="cnkt-col">	 
-	  <div count-chars class="col-header" id="compose">
-	    <input ng-model="newTweet">
-	    <div class="compose-controls">
-	      <span class="right" ng-class"{ red: count < 0 }">{{ 140 - count }}</span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default right compose-button">tweet</button>
+        <div id="user_tweets" class="cnkt-col" cnkt-col>	 
+	  <div count-chars class="col-top">
+	    <div class="col-header">
+	    Your Timeline 
+	    <span class="toggle-control right toggle-compose">compose<i class="glyphicon glyphicon-chevron-down compose-toggle-icon"></i></span>
 	    </div>
-	  </div> 
+	    <div count-chars id="compose" class="col-controls" ng-show="showControls">
+	      <input ng-model="newTweet">
+	      <div class="compose-controls">
+		<div class="compose-controls-inner">
+		  <span ng-class"{ red: count < 0 }">{{ 140 - count }} </span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default compose-button">tweet</button>
+		</div>
+	      </div>
+	    </div>
+	  </div>
 	  <div highlight-search class="col-body">
             <div class="tweet-unit" ng-repeat="tweet in posts"> 
               <div ng-include="'tweet.html'"></div>
@@ -52,8 +60,10 @@
 	  </div>
         </div>
         <div class="cnkt-col offset-1">
-	  <div class="col-header">
-	    Search Text {{ searchText }}
+	  <div class="col-top">
+	    <div class="col-header">
+	      Search Results
+	    </div>
 	  </div>
 	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
@@ -64,8 +74,10 @@
         </div>
 
         <div class="cnkt-col offset-2 convo-col">
-	  <div class="col-header">
-	    Conversations
+	  <div class="col-top">
+	    <div class="col-header">
+	      Conversations
+	    </div>
 	  </div>
 	  <div class="col-body">
             <div ng-show="loading_conversations" id="loading-conversations" class="animated pulse">loading conversations</div>

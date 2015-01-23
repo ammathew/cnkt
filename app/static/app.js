@@ -23,7 +23,6 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter ) {
     
     $scope.showResponseInput = false;
-    
     $scope.resetData = function() {
 	$scope.conversations = []
 	$scope.posts = []
@@ -368,6 +367,34 @@ aa.directive('autolinker', function () {
     }
 })
 
+aa.directive( 'cnktCol', function() {
+    return {
+	restrict: 'A',
+	link: function( scope, elem, attr ) {
+	    scope.showControls = false;
+	    elem.find(".toggle-control").on( 'click', function() {
+		scope.showControls = !scope.showControls
+		scope.$apply()
+		console.log( scope.showControls )
+	    })
+	    scope.$watch( 'showControls', function( newValue ) {
+		elem.find( ".col-body").height( '100%')
+		if ( newValue == true ){
+		    var controlsHeight = elem.find(".col-controls").height()
+		    console.log( controlsHeight )
+		    var currentColBodyHeight = elem.find(".col-body").height()
+		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight + 10 )
+		}
+	    })
+
+	   // scope.$watch( 'showCompose', function() {
+//		if ( showCompose == true ) {
+//		    console.log( elem.find( 'col-controls').height() )
+//		}
+	    //})
+	}
+    }
+});
 
 aa.directive( 'highlightSearch', function() {
     var linker = function( scope, elem, attr ) {

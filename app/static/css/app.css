@@ -31,15 +31,25 @@ a {
   left: 20px;
   margin-right: 10px;
   float: left;
-  height: 90%; }
+  height: 80%; }
+
+.col-body:before {
+  content: '';
+  float: left;
+  height: 100%; }
 
 .col-body {
-  height: 90%;
+  height: 100%;
   width: 300px;
   overflow: scroll;
   background-color: white;
   left: 20px;
   padding: 0 10px 0 10px; }
+
+.col-body:after {
+  content: '';
+  display: block;
+  clear: both; }
 
 .offset-1 {
   left: 330px; }
@@ -87,7 +97,8 @@ a {
   margin: 3px;
   padding: 3px;
   border-radius: 10px;
-  position: relative; }
+  position: relative;
+  min-height: 60px; }
 
 .convo-tweet {
   margin-bottom: 25px;
@@ -168,7 +179,7 @@ a {
   color: #B29600; }
 
 #compose {
-  padding: 5px; }
+  height: 75px; }
   #compose input {
     width: 100%; }
   #compose .compose-controls {
@@ -176,13 +187,40 @@ a {
   #compose .red {
     color: red; }
 
-.col-header {
+.col-top {
   background-color: white;
-  height: 75px;
   padding: 10px;
   border-bottom: 1px solid #d2e2e3; }
+
+.col-header {
+  height: 20px;
+  position: relative; }
 
 .compose-button {
   width: 50px;
   padding: 3px;
   font-size: 10px; }
+
+.compose-open-col-body {
+  height: 70%; }
+
+.col-controls {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px; }
+
+.right {
+  position: absolute;
+  right: 3px;
+  bottom: 3px; }
+
+.toggle-compose {
+  font-size: 10px; }
+  .toggle-compose glyphicon-chevron-down {
+    font-size: 10px; }
+
+.compose-controls-inner {
+  width: 90px;
+  margin-left: 180px;
+  padding: 3px; }
