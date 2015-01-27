@@ -234,7 +234,7 @@ aa.directive( 'sentchart', function() {
     }
 })
 
-aa.controller('AuthCtrl', ['$scope', '$http', '$location',  function ($scope, $http, $location ) {
+aa.controller('AuthCtrl', ['$scope', '$http', '$location', '$window',  function ($scope, $http, $location, $window ) {
     
     $scope.signup = function(){ 
         var data = {}
@@ -248,6 +248,8 @@ aa.controller('AuthCtrl', ['$scope', '$http', '$location',  function ($scope, $h
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
             console.log( data );  
+            $window.location.href = "/";
+
         });
     };
 
