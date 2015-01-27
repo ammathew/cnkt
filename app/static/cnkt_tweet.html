@@ -6,11 +6,11 @@
     <span class="twitter-name">{{ tweet.user.name}}</span><span class="twitter-screen-name">@{{tweet.user.screen_name}}</span>
     <div autolinker text="tweet.text">
     </div>
-    <span tweet-stat="retweet" ng-class="{ 'stat-action-taken': actionTaken == true }">
+    <span class="tweet-stat" tweet-stat="retweet" ng-class="{ 'stat-action-taken': actionTaken == true }">
         <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
         <span class="tweet-stat"> {{ statcount }}</span>
     </span>
-    <span tweet-stat="favorite" ng-class="{ 'stat-action-taken': actionTaken == true }">
+    <span class="tweet-stat" tweet-stat="favorite" ng-class="{ 'stat-action-taken': actionTaken == true }">
       <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{ statcount }}
     </span>
     <div class="reply" count-chars>

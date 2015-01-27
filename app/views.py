@@ -116,13 +116,17 @@ TWITTER_API = None
 
 @app.route("/api/authtwitter",  methods = ['POST', 'GET'] )
 def send_token():
+
+
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
+
+    #raise Exception( auth.request_token )
+
     try: 
 		#get the request tokens
         redirect_url= auth.get_authorization_url()
-        auth_twitter_session['request_token']= (auth.request_token.key,
-                                   auth.request_token.secret)
+        auth_twitter_session['request_token'] = auth.request_token
     except tweepy.TweepError:
         print 'Error! Failed to get request token'
 
@@ -137,32 +141,39 @@ def get_verification():
     time.sleep(5) #wait for dictionary to be populated?
     token = auth_twitter_session['request_token']
     verifier= request.args['oauth_verifier']
-
     del auth_twitter_session['request_token']
+
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
-    auth.set_request_token(token[0], token[1])
+    auth.request_token = token
 
-    try:
-        auth.get_access_token(verifier)
-    except tweepy.TweepError:
-        print 'Error! Failed to get access token.'
-        
-    twitter_auth = TwitterAuth( auth.access_token.key, auth.access_token.secret, g.user.id )
+    auth.get_access_token(verifier)
+
+    try: #delete existing twitter auth, if exists
+        twitter_auths  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).all() 
+        for item in twitter_auths:
+            db.session.delete( item )
+            db.session.commit()
+    except:
+        pass
+
+    twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id )
+
     db.session.add( twitter_auth )
     db.session.commit()
     return redirect( BASE_URL + '/#/dashboard')
-   # return flask.render_template('index.html')
  
 def twitterApi():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
+  #  raise Exception( len( twitter_auth ) )
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     return TWITTER_API
 
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
+   # raise Exception( 'yo' )
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
 

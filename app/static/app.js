@@ -22,6 +22,8 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 
 aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter ) {
     
+    $scope.posts = [];
+    $scope.conversations = [];
     $scope.showResponseInput = false;
     $scope.resetData = function() {
 	$scope.conversations = []
