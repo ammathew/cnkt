@@ -27,7 +27,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	$scope.conversations = []
 	$scope.posts = []
     }
-    
+    $scope.count = 140;
+
     $scope.resetData;
 
     /* calls to tweepy/twitter API */
@@ -46,6 +47,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }
     
     $scope.postStatus = function( newTweet ){
+        $scope.refreshTimeline = true;
 	options = {   
 	    method: 'POST',
 	    url: "/api/twitter/update_status",
@@ -53,6 +55,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	}
 	twitter( options ).success( function( data ) {
 	    console.log( data )
+            newTweet = "";
 	});
     }
 
@@ -62,10 +65,16 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    url: "/api/twitter/create_favorite",
 	    data: { id : tweet.id_str }
 	}
-	twitter( options ).success( function() {
-	    tweet.favorite_count = tweet.favorite_count + 1
-	    tweet.user_favorited = true;
-	});
+	return twitter( options )
+    }
+
+    $scope.retweetPost = function( tweet ) {
+	options = {   
+	    method: 'POST',
+	    url: "/api/twitter/retweet",
+	    data: { id : tweet.id_str }
+	}
+	return twitter( options )
     }
 
     $scope.replyToPost = function( tweet, response ) {
@@ -148,6 +157,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		$scope.twitterUser = data[0].user
 	    }
         })
+        $scope.refreshTimeline = false;
+        $scope.$apply();
     }
 
     $scope.getPosts();
@@ -292,7 +303,7 @@ aa.directive( 'countChars', function() {
 	scope: true,
 	link: function( scope, elem, attrs ) {
 	    scope.count = 140
-	    model = elem.find( 'input' ).attr('ng-model')
+	    model = elem.find( 'input, textarea' ).attr('ng-model')
 	    scope.$watch( model, function(newValue) {
 		if (newValue) {
 		    scope.count = newValue.length
@@ -304,8 +315,7 @@ aa.directive( 'countChars', function() {
 			    var aa = matchUrls[i].length 
 			    scope.count = scope.count - aa
 			}
-			scope.count =  scope.count + (matchUrls.length * 23)
-			
+			scope.count =  scope.count + (matchUrls.length * 23)	
 		    }
 		}
 		scope.count = 140 - scope.count
@@ -319,13 +329,12 @@ aa.directive( 'animateOnSend', function() {
 	scope: true,
 	link: function( scope,elem, attr ) {
 	    scope.replied = false;
-	    elem.find( 'button' ).on( 'click', function() {
-		scope.replyToPost( scope.tweet, scope.currentResponse );
+	    elem.find( 'button' ).on( 'click', function() {           
 		elem.addClass( "animated" );
 		elem.addClass( "bounceOutRight" )
 		console.log( "reply to post" )
 		elem.parent(".tweet-unit").css( "height", "0" );
-		scope.$apply;
+		scope.$apply();
 
 		/* in case replying to a tweet in an existing conversationalready replied to ... unlikely
 		   _.each( scope.conversations, function( convo ) { 
@@ -385,7 +394,7 @@ aa.directive( 'cnktCol', function() {
 		    var controlsHeight = elem.find(".col-controls").height()
 		    console.log( controlsHeight )
 		    var currentColBodyHeight = elem.find(".col-body").height()
-		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight - 20 )
+		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight - 40 )
 		}
 	    })
 
@@ -397,6 +406,33 @@ aa.directive( 'cnktCol', function() {
 	}
     }
 });
+
+aa.directive( 'tweetStat', function() {
+    return {
+        scope: true,
+        link: function( scope, elem, attrs ) {
+            scope.actionTaken = false;
+            var statMap = { 
+                retweet: { 
+                    f: scope.retweetPost,
+                    countParam: 'retweet_count'
+                },
+                favorite: {
+                    f: scope.favoritePost,
+                    countParam: 'favorite_count'
+                }
+            }
+            scope.statcount = scope.tweet[ statMap[attrs.tweetStat]['countParam'] ];
+            elem.on( 'click', function() {
+                var f =  statMap[attrs.tweetStat]['f']
+                f( scope.tweet ).success( function() {
+                    scope.statcount = scope.statcount + 1;
+                    scope.actionTaken = true
+                })               
+            })
+        }
+    }
+}) 
 
 aa.directive( 'highlightSearch', function() {
     var linker = function( scope, elem, attr ) {

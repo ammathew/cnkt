@@ -4,8 +4,12 @@
   </div>
   <div class="body-col">
     <div autolinker text="tweet.text"></div>
-    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span><span class="tweet-stat"> {{ tweet.retweet_count }}</span>
-    <span class="glyphicon glyphicon-star" aria-hidden="true"></span><span class="tweet-stat"> {{ tweet.favorite_count }}</span>
+    <span tweet-stat="retweet" ng-class="{ 'stat-action-taken': actionTaken == true }">
+        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span><span class="tweet-stat"> {{ statcount }}</span>
+    </span>
+    <span tweet-stat="favorite" ng-class="{ 'stat-action-taken': actionTaken == true }">
+        <span class="glyphicon glyphicon-star" aria-hidden="true"></span><span class="tweet-stat"> {{ statcount }}</span>
+    </span>
     <span ng-click="reply=!reply" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
     <div class="reply" ng-show="reply" count-chars>
       <input ng-model="currentResponse">

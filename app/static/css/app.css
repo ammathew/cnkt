@@ -137,7 +137,7 @@ a {
   right: 1em; }
 
 .tweet-unit {
-  padding-bottom: 40px; }
+  padding-bottom: 10px; }
 
 .search-term {
   font-size: 14px; }
@@ -153,12 +153,10 @@ a {
   -webkit-animation-iteration-count: infinite;
   -moz-animation-iteration-count: infinite; }
 
-#view_new_convos {
-  width: 340px;
+#view_new {
   text-align: center;
   padding-top: 20px;
-  font-size: 20px;
-  background-color: #314d53;
+  background-color: #5e97a0;
   color: white;
   margin: -10px;
   cursor: pointer;
@@ -180,10 +178,13 @@ a {
 
 #compose {
   height: 75px; }
-  #compose input {
-    width: 100%; }
+  #compose textarea {
+    width: 200px;
+    float: left; }
   #compose .compose-controls {
-    width: 100%; }
+    float: left;
+    width: 40px;
+    padding-left: 10px; }
   #compose .red {
     color: red; }
 
@@ -220,7 +221,5 @@ a {
   .toggle-compose glyphicon-chevron-down {
     font-size: 10px; }
 
-.compose-controls-inner {
-  width: 90px;
-  margin-left: 180px;
-  padding: 3px; }
+.stat-action-taken {
+  color: gold; }
