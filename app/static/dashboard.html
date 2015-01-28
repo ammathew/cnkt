@@ -12,7 +12,7 @@
                             <li><a ng-click="authTwitter()">Authorize Twitter</a></li>
                         </ul>
                     </li>
-                    <li><a ng-controller="AuthCtrl" ng-click="logOut()">Logout</a></li>
+                    <li><a ng-click="logOut()">Logout</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -68,10 +68,11 @@
 	  </div>
 	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
-	    <div ng-show="!tweetsWithSearchTerm"> 
-	      <p>Step 1: Highlight any word or phrase in Your Timeline or Conversations Step </p> 
-	      <p>Step 2: CNKT </p>
-	      <p>Step 3: Repeat </p>
+	    <div class="instructions" ng-show="!tweetsWithSearchTerm"> 
+	      <p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
+	      <p>Step 2: Click </p>
+	      <p>Step 3: CNKT </p>
+	      <p>Step 4: Repeat </p>
 	    </div>
             <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
               <div animate-on-send ng-include="'cnkt_tweet.html'"></div>

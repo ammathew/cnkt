@@ -263,3 +263,7 @@ body {
     .register-submit .register-link a {
       color: #d2e2e3;
       text-decoration: underline; }
+
+.instructions {
+  padding: 20px;
+  color: #767676; }
