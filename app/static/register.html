@@ -1,26 +1,25 @@
-<div ng-controller="AuthCtrl"> 
-    <div class="login-form">
-        <div class="login-form-inner">
-            
-            <form action="" method=post class="form-horizontal">
-                <div class="form-group">
-                    <input ng-model="username" type="text" id="username" name="username" class="input-xlarge form-control" placeholder="username" required>
-                </div>
+<div class="login-form">
+  <div class="login-form-inner">
+    
+    <form action="" method=post class="form-horizontal">
+      <div class="form-group">
+        <input ng-model="username" type="text" id="username" name="username" class="input-xlarge form-control" placeholder="username" required>
+      </div>
 
-                <div class="form-group">
-                    <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
-                </div>
+      <div class="form-group">
+        <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
+      </div>
 
-                <div class="form-group">
-                    <input ng-model="email" type="email" id="email" name="email" class="input-xlarge form-control" placeholder="email" required>
-                </div>
+      <div class="form-group">
+        <input ng-model="email" type="email" id="email" name="email" class="input-xlarge form-control" placeholder="email" required>
+      </div>
 
-                <div class="form-group">
-                    <button type="submit" ng-click=signup() class="btn btn-success">Signup</button>
-                </div>
-            </form>
-        </div>
-    </div>
+      <div class="form-group">
+        <button type="submit" ng-click=signup() class="btn btn-success">Signup</button>
+      </div>
+    </form>
+  </div>
 </div>
+
 
 

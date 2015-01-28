@@ -5,11 +5,11 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
     $routeProvider
 	.when('/register',{
             templateUrl: 'register.html',
-            controller: 'AuthCtrl'
+            controller: 'DashboardCtrl'
         })
-	.when('/',{
+	.when('/',{   
             templateUrl: 'login.html',
-            controller: 'AuthCtrl'
+            controller: 'DashboardCtrl'
         })
 	.when('/dashboard',{
             templateUrl: 'dashboard.html',
@@ -21,6 +21,51 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 }]);
 
 aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter ) {
+
+    $scope.signup = function(){ 
+        var data = {}
+        data.username = $scope.username;
+        data.password = $scope.password;
+        data.email = $scope.email;
+        $http({ 
+            method: 'POST',
+	    url:"/api/register",
+            data: $.param(data),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success( function( data ) {
+            console.log( data );  
+	    $scope.login( true )
+        });
+    };
+
+    $scope.logOut = function () {
+        $http({ 
+            method: 'GET',
+	    url:"/api/logout",
+        }).success( function( data ) {
+            $scope.resetData();
+            console.log( data );  
+            $location.path( "/" );
+        });
+    }
+    
+    $scope.login = function( firstTime ) {
+        var data = {}
+        data.username = $scope.username;
+        data.password = $scope.password;
+        $http({ 
+            method: 'POST',
+	    url:"/api/login",
+            data: $.param(data),
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        }).success( function( data ) {
+            console.log( data );
+            $location.path("/dashboard");
+	    if ( firstTime ) {
+		$scope.authTwitter();
+	    }
+        });
+    }
     
     $scope.posts = [];
     $scope.conversations = [];
@@ -235,51 +280,6 @@ aa.directive( 'sentchart', function() {
 	}	
     }
 })
-
-aa.controller('AuthCtrl', ['$scope', '$http', '$location', '$window',  function ($scope, $http, $location, $window ) {
-    
-    $scope.signup = function(){ 
-        var data = {}
-        data.username = $scope.username;
-        data.password = $scope.password;
-        data.email = $scope.email;
-        $http({ 
-            method: 'POST',
-	    url:"/api/register",
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success( function( data ) {
-            console.log( data );  
-	    $scope.login()
-        });
-    };
-
-    $scope.logOut = function () {
-        $http({ 
-            method: 'GET',
-	    url:"/api/logout",
-        }).success( function( data ) {
-            $scope.resetData();
-            console.log( data );  
-            $location.path( "/" );
-        });
-    }
-  
-    $scope.login = function() {
-        var data = {}
-        data.username = $scope.username;
-        data.password = $scope.password;
-        $http({ 
-            method: 'POST',
-	    url:"/api/login",
-            data: $.param(data),
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-        }).success( function( data ) {
-            console.log( data );
-            $location.path("/dashboard");
-        });
-    }
-}])
 
 aa.service( 'twitter', function( $http ){
     return function( id_str ) {

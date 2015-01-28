@@ -138,8 +138,15 @@ def send_token():
 @app.route("/verify")
 def get_verification():
     
-    time.sleep(5) #wait for dictionary to be populated?
-    token = auth_twitter_session['request_token']
+    i = 0;
+    while i<20:
+        try:
+            token = auth_twitter_session['request_token']
+            break
+        except: 
+            time.sleep(1)
+            pass
+
     verifier= request.args['oauth_verifier']
     del auth_twitter_session['request_token']
 

@@ -68,6 +68,11 @@
 	  </div>
 	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
+	    <div ng-show="!tweetsWithSearchTerm"> 
+	      <p>Step 1: Highlight any word or phrase in Your Timeline or Conversations Step </p> 
+	      <p>Step 2: CNKT </p>
+	      <p>Step 3: Repeat </p>
+	    </div>
             <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
               <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
             </div>
