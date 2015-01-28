@@ -250,8 +250,7 @@ aa.controller('AuthCtrl', ['$scope', '$http', '$location', '$window',  function 
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
             console.log( data );  
-            $window.location.href = "/";
-
+	    $scope.login()
         });
     };
 
