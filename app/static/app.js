@@ -1,6 +1,6 @@
 aa = angular.module('myServiceModule', [ 'nvd3ChartDirectives', 'ngRoute' ]);
 
-aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', function ($interpolateProvider, $routeProvider, $locationProvider ) {
+aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', function ($interpolateProvider, $routeProvider, $locationProvider) {
 
     $routeProvider
 	.when('/register',{
@@ -11,6 +11,10 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
             templateUrl: 'login.html',
             controller: 'DashboardCtrl'
         })
+	.when('/pay',{   
+            templateUrl: 'pay.html',
+            controller: 'PayCtrl'
+        })
 	.when('/dashboard',{
             templateUrl: 'dashboard.html',
             controller: 'DashboardCtrl'
@@ -20,7 +24,7 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
     // was not able to get html5Mode to work. maybe look into History.js .. 
 }]);
 
-aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter ) {
+aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
 
     $scope.signup = function(){ 
         var data = {}
@@ -48,7 +52,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
             $location.path( "/" );
         });
     }
-    
+
+    $scope.loggedIn = false;
+  
     $scope.login = function( firstTime ) {
         var data = {}
         data.username = $scope.username;
@@ -64,8 +70,11 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    if ( firstTime ) {
 		$scope.authTwitter();
 	    }
+	    $scope.loggedIn = true;
+	    $rootScope.loggedInUser = data
         });
     }
+    console.log(   $rootScope.loggedInUser )
     
     $scope.posts = [];
     $scope.conversations = [];
@@ -75,8 +84,14 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	$scope.posts = []
     }
     $scope.count = 140;
-
-    $scope.resetData;
+    $scope.resetData();
+    
+    $scope.$watch( 'loggedIn', function( newValue ) {
+	if( newValue == true ) {
+	    $scope.getPosts();
+	    $scope.getConvos();
+	}
+    });
 
     /* calls to tweepy/twitter API */
     $scope.searchTwitter = function ( searchTerm ) {
@@ -152,8 +167,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	})
     }
     
-    $scope.getConvos();
-
     /* extract special words/phrases from post text */
 
     $scope.getTweetEnts = function ( tweetText ) {
@@ -207,8 +220,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         $scope.refreshTimeline = false;
         $scope.$apply();
     }
-
-    $scope.getPosts();
 
     $scope.twitterAuthed = false;
 

@@ -38,11 +38,11 @@ from flask.ext.login import login_user , logout_user , current_user , login_requ
 #from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app, db, login_manager, BASE_URL
-from app.models import User, Todo, TwitterAuth
+from app.models import User, TwitterAuth, StripeCustomer
 
 import json
 import copy
-
+import stripe
 
 @app.route('/')
 def index():
@@ -62,7 +62,7 @@ def register():
     return '{ "status" : 200 }'
 
 @app.route('/api/login',methods=['GET','POST'])
-def login():    
+def login():   
     username = request.form['username']
     password = request.form['password']
     remember_me = False
@@ -76,7 +76,10 @@ def login():
         flash('Password is invalid','error')
         return redirect(url_for('login'))
     login_user(registered_user, remember = remember_me)
-    return '{ "status" : 200 }'
+    user = {}
+    user['username'] = registered_user.username
+    user['email'] = registered_user.email
+    return json.dumps( user )
 
 @app.route('/api/logout')
 def logout():
@@ -147,6 +150,7 @@ def get_verification():
             time.sleep(1)
             pass
 
+            
     verifier= request.args['oauth_verifier']
     del auth_twitter_session['request_token']
 
@@ -288,6 +292,23 @@ def internal_error(exception):
     aa = str( type( exception ) )
     aa = traceback.format_exc()
     return aa
+
+### CHARGING THE USER ####
+
+@app.route("/api/stripe/createCustomer", methods=['GET', 'POST'])
+def create_customer():
+    token = request.form['stripeToken']
+    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    customer = stripe.Customer.create(
+        card=token,
+        description= g.user.email
+    )
+    
+    stripe_customer = StripeCustomer( customer.id, g.user.id )
+    db.session.add( stripe_customer )
+    db.session.commit()
+
+    return "ok"
 
 if __name__ == '__main__':
     app.run(debug=True)
