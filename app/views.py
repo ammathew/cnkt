@@ -150,7 +150,6 @@ def get_verification():
             time.sleep(1)
             pass
 
-            
     verifier= request.args['oauth_verifier']
     del auth_twitter_session['request_token']
 
@@ -162,13 +161,24 @@ def get_verification():
 
     try: #delete existing twitter auth, if exists
         twitter_auths  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).all() 
+        first_authorized_on = twitter_auths[0].first_authorized_on
         for item in twitter_auths:
             db.session.delete( item )
             db.session.commit()
     except:
         pass
 
-    twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id )
+    auth.set_access_token( auth.access_token, auth.access_token_secret)
+    TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
+    user_info = TWITTER_API.me()
+    twitter_user_id = user_info['id_str']
+
+    if first_authorized_on:
+        pass
+    else:
+        first_authorized_on = datetime.utcnow()
+
+    twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id, twitter_user_id, first_authorized_on )
 
     db.session.add( twitter_auth )
     db.session.commit()

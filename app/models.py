@@ -46,11 +46,15 @@ class TwitterAuth(db.Model):
     access_token_key = db.Column(db.String)
     access_token_secret = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    twitter_user_id = db.Column(db.String)
+    first_authorized_on =  db.Column( db.DateTime)
 
-    def __init__(self, access_token_key, access_token_secret, user_id):
+    def __init__(self, access_token_key, access_token_secret, user_id, twitter_user_id, first_authorized_on):
         self.access_token_key = access_token_key
         self.access_token_secret = access_token_secret
         self.user_id = user_id
+        self.twitter_user_id = twitter_user_id
+        self.first_authorized_on = first_authorized_on
 
 class StripeCustomer(db.Model):
     __tablename__ = 'stripe_customers'
