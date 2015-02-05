@@ -1,4 +1,26 @@
-aa = angular.module('myServiceModule', [ 'nvd3ChartDirectives', 'ngRoute' ]);
+angular.module('stripe', []).directive('stripeForm', ['$window',
+function($window) {
+
+  var directive = { restrict: 'A' };
+  directive.link = function(scope, element, attributes) {
+    var form = angular.element(element);
+    form.bind('submit', function() {
+      var button = form.find('button');
+      button.prop('disabled', true);
+      $window.Stripe.createToken(form[0], function() {
+        button.prop('disabled', false);
+        var args = arguments;
+        scope.$apply(function() {
+          scope[attributes.stripeForm].apply(scope, args);
+        });
+      });
+    });
+  };
+  return directive;
+
+}]);
+
+aa = angular.module('myServiceModule', [ 'nvd3ChartDirectives', 'ngRoute', 'stripe' ]);
 
 aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', function ($interpolateProvider, $routeProvider, $locationProvider) {
 
@@ -25,6 +47,10 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 }]);
 
 aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
+
+    $scope.saveCustomer = function(status, response) {
+	$http.post('/api/stripe/createCustomer', { token: response.id });
+    };
 
     $scope.signup = function(){ 
         var data = {}
@@ -483,3 +509,12 @@ aa.directive( 'highlightSearch', function() {
 	link: linker
     }
 })
+
+
+
+aa.config(function() {
+  Stripe.setPublishableKey('pk_test_IN2jd8C7BtBsoH7F4589mFyH');
+})
+
+
+

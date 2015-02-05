@@ -3,7 +3,17 @@ from flask import Flask, request, jsonify, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 #db = SQLAlchemy(app)
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import db
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.script import Manager
+from flask.ext.migrate import Migrate, MigrateCommand
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
 
 class User(db.Model):
     __tablename__ = "users"
@@ -61,7 +71,11 @@ class StripeCustomer(db.Model):
     id = db.Column('customer_id', db.Integer, primary_key=True)
     stripe_customer_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-    def __init__(self, stripe_customer_id, user_id):
+    
+    def __init__(self, stripe_customer_id, user_id  ):
         self.stripe_customer_id = stripe_customer_id
         self.user_id = user_id
+
+
+if __name__ == '__main__':
+    manager.run()

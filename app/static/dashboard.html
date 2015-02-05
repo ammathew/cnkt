@@ -9,7 +9,8 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a ng-click="authTwitter()">Authorize Twitter</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#myModal" >Account Settings</a></li>
+			    
                         </ul>
                     </li>
                     <li><a ng-click="logOut()">Logout</a></li>
@@ -99,3 +100,53 @@
     </div>
 </div>
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+	  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
+	  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
+	  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Billing History</a></li>
+	</ul>
+      </div>
+      <div class="modal-body">
+        <div role="tabpanel">
+
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+	    <div role="tabpanel" class="tab-pane active" id="home">
+	      <a ng-click="authTwitter()">Authorize Twitter</a>
+	    </div>
+	    <div role="tabpanel" class="tab-pane" id="profile">
+	      <form stripe:form="saveCustomer">
+		<fieldset>
+		  <input type="text" size="20" data-stripe="number"/> Number
+		  <input type="text" size="4" data-stripe="cvc"/> CVC
+		  <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
+		  <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
+		</fieldset>
+		<button type="submit">Save</button>
+	      </form>	      
+
+	    </div>
+	  </div>
+
+	</div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

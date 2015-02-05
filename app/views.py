@@ -159,6 +159,8 @@ def get_verification():
 
     auth.get_access_token(verifier)
 
+    first_authorized_on = None
+
     try: #delete existing twitter auth, if exists
         twitter_auths  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).all() 
         first_authorized_on = twitter_auths[0].first_authorized_on
@@ -194,7 +196,6 @@ def twitterApi():
 
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
-   # raise Exception( 'yo' )
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
 
@@ -304,10 +305,10 @@ def internal_error(exception):
     return aa
 
 ### CHARGING THE USER ####
-
 @app.route("/api/stripe/createCustomer", methods=['GET', 'POST'])
 def create_customer():
-    token = request.form['stripeToken']
+    req = request.get_json()
+    token = req['token']
     stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
     customer = stripe.Customer.create(
         card=token,
@@ -317,8 +318,9 @@ def create_customer():
     stripe_customer = StripeCustomer( customer.id, g.user.id )
     db.session.add( stripe_customer )
     db.session.commit()
-
     return "ok"
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
