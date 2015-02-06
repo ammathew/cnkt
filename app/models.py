@@ -65,10 +65,14 @@ class StripeCustomer(db.Model):
     id = db.Column('customer_id', db.Integer, primary_key=True)
     stripe_customer_id = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    card_brand = db.Column(db.String)
+    card_last4 = db.Column(db.String)
     
-    def __init__(self, stripe_customer_id, user_id ):
+    def __init__(self, stripe_customer_id, user_id, card_brand, card_last4 ):
         self.stripe_customer_id = stripe_customer_id
         self.user_id = user_id
+        self.card_brand = card_brand
+        self.card_last4 = card_last4
 
 if __name__ == '__main__':
     manager.run()

@@ -1,4 +1,4 @@
-<div id="app">
+<div id="app" ng-controller="DashboardCtrl">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -115,7 +115,6 @@
 	<ul class="nav nav-tabs" role="tablist">
 	  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
 	  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
-	  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Billing History</a></li>
 	</ul>
       </div>
       <div class="modal-body">
@@ -127,25 +126,23 @@
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
 	    <div role="tabpanel" class="tab-pane" id="profile">
-	      <form stripe:form="saveCustomer">
-		<fieldset>
-		  <input type="text" size="20" data-stripe="number"/> Number
-		  <input type="text" size="4" data-stripe="cvc"/> CVC
-		  <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
-		  <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
-		</fieldset>
-		<button type="submit">Save</button>
-	      </form>	      
-
+	      <div ng-show="stripeCustomerInfo">
+		{{ stripeCustomerInfo.card_brand }} **** **** ****{{ stripeCustomerInfo.card_last4 }} <span ng-init="updateCard = false" ng-click="updateCard=!updateCard">update card info</span>
+	      </div>
+	      <div ng-show="updateCard || !stripeCustomerInfo">
+		<form stripe:form="saveCustomer">
+		  <fieldset>
+		    <input type="text" size="20" data-stripe="number"/> Number
+		    <input type="text" size="4" data-stripe="cvc"/> CVC
+		    <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
+		    <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
+		  </fieldset>
+		  <button type="submit">Save</button>
+		</form>	      
+	      </div>
 	    </div>
 	  </div>
-
 	</div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>

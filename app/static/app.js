@@ -266,7 +266,16 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.twitterAuthed = false;
 	}
     })
-  
+
+    $scope.getStripeCustomerInfo = function() {
+	$http({
+	    method: 'GET',
+	    url: "/api/stripe/getCustomerInfo"
+	}).success( function( data ) {
+	    $scope.stripeCustomerInfo = data
+	});
+    }
+     $scope.getStripeCustomerInfo()
 }]);
   
 aa.factory('searchTwitterFactory', function($http) {

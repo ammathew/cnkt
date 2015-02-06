@@ -315,11 +315,20 @@ def create_customer():
         description= g.user.email
     )
     
-    stripe_customer = StripeCustomer( customer.id, g.user.id )
+    
+    stripe_customer = StripeCustomer( customer.id, g.user.id, customer.cards.data[0].brand, customer.cards.data[0].last4   )
     db.session.add( stripe_customer )
     db.session.commit()
     return "ok"
 
+@app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
+def get_customer_info():
+    stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
+    res = {}
+    res["card_last4"] = stripe_customer.card_last4
+    res["card_brand"] = stripe_customer.card_brand
+    res = json.dumps( res )
+    return res
 
 
 if __name__ == '__main__':
