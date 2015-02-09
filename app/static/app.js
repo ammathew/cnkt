@@ -47,7 +47,7 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 }]);
 
 
-aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
+aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope ) {
 
    $scope.signup = function(){ 
         var data = {}
@@ -94,14 +94,14 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		$scope.authTwitter();
 	    }
 	    $scope.loggedIn = true;
-	    $rootScope.loggedInUser = data
+	//    $rootScope.loggedInUser = data
         });
     }
     console.log(   $rootScope.loggedInUser )
 
 }])
 
-aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
+aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location','$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope ) {
 
     $scope.saveCustomer = function(status, response) {
 	$http.post('/api/stripe/createCustomer', { token: response.id });
@@ -248,14 +248,14 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.twitterAuthed = true;
         });
     }
-
+/*
     $scope.$watch( 'twitterAuthed', function(){
 	if ( $scope.twitterAuthed == true ) {
 	    $scope.getPosts() 
 	    $scope.twitterAuthed = false;
 	}
     })
-
+*/
     $scope.getStripeCustomerInfo = function() {
 	$http({
 	    method: 'GET',
@@ -391,14 +391,6 @@ aa.directive( 'animateOnSend', function() {
 	}
     }
 })
-
-
-aa.run(function($rootScope, $templateCache) {
-   $rootScope.$on('$viewContentLoaded', function() {
-      $templateCache.removeAll();
-   });
-});
-
 
 aa.directive('autolinker', function () {
     return {

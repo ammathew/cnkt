@@ -129,7 +129,8 @@ def send_token():
     try: 
 		#get the request tokens
         redirect_url= auth.get_authorization_url()
-        auth_twitter_session['request_token'] = auth.request_token
+        session['request_token'] = auth.request_token
+        #auth_twitter_session['request_token'] = auth.request_token
     except tweepy.TweepError:
         print 'Error! Failed to get request token'
 
@@ -141,17 +142,18 @@ def send_token():
 @app.route("/verify")
 def get_verification():
     
-    i = 0;
-    while i<20:
-        try:
-            token = auth_twitter_session['request_token']
-            break
-        except: 
-            time.sleep(1)
-            pass
+   # i = 0;
+   # while i<20:
+   #     try:
+   # token = auth_twitter_session['request_token']
+    token = session['request_token']
+    #        break
+     #   except: 
+      #      time.sleep(1)
+       #     pass
 
     verifier= request.args['oauth_verifier']
-    del auth_twitter_session['request_token']
+   # del auth_twitter_session['request_token']
 
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
