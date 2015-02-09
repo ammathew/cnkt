@@ -27,11 +27,11 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
     $routeProvider
 	.when('/register',{
             templateUrl: 'register.html',
-            controller: 'DashboardCtrl'
+            controller: 'AuthCtrl'
         })
 	.when('/',{   
             templateUrl: 'login.html',
-            controller: 'DashboardCtrl'
+            controller: 'AuthCtrl'
         })
 	.when('/pay',{   
             templateUrl: 'pay.html',
@@ -46,13 +46,10 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
     // was not able to get html5Mode to work. maybe look into History.js .. 
 }]);
 
-aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
 
-    $scope.saveCustomer = function(status, response) {
-	$http.post('/api/stripe/createCustomer', { token: response.id });
-    };
+aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
 
-    $scope.signup = function(){ 
+   $scope.signup = function(){ 
         var data = {}
         data.username = $scope.username;
         data.password = $scope.password;
@@ -101,8 +98,15 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         });
     }
     console.log(   $rootScope.loggedInUser )
-    
-    $scope.posts = [];
+
+}])
+
+aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$rootScope', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $rootScope, $window, twitter, $rootScope ) {
+
+    $scope.saveCustomer = function(status, response) {
+	$http.post('/api/stripe/createCustomer', { token: response.id });
+    };
+
     $scope.conversations = [];
     $scope.showResponseInput = false;
     $scope.resetData = function() {
@@ -111,13 +115,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }
     $scope.count = 140;
     $scope.resetData();
-    
-    $scope.$watch( 'loggedIn', function( newValue ) {
-	if( newValue == true ) {
-	    $scope.getPosts();
-	    $scope.getConvos();
-	}
-    });
 
     /* calls to tweepy/twitter API */
     $scope.searchTwitter = function ( searchTerm ) {
@@ -201,18 +198,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         });
     } 
 
-    $scope.getEntities = function ( text ) {
-	data = { text: text } 
-        return $http({ 
-            method: 'POST',
-	    headers: {
-		"Content-Type": "application/json"
-	    },
-	   data: data,
-	    url:"/api/extractEnts",
-        })
-    }
-
     $scope.$watch( 'selectedText', function( newValue ) {
 	$( ".col-body button" ).click( function() {
 	    $scope.$apply( function(){
@@ -246,6 +231,10 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         $scope.refreshTimeline = false;
         $scope.$apply();
     }
+
+    
+    $scope.getPosts();
+    $scope.getConvos();
 
     $scope.twitterAuthed = false;
 
