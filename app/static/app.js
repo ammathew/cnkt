@@ -80,7 +80,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
   
     $scope.login = function( firstTime ) {
         var data = {}
-        data.username = $scope.username;
+        data.email = $scope.email;
         data.password = $scope.password;
         $http({ 
             method: 'POST',
@@ -91,7 +91,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             console.log( data );
             $location.path("/dashboard");
 	    if ( firstTime ) {
-		$scope.authTwitter();
+		$rootScope.authTwitter();
 	    }
 	    $scope.loggedIn = true;
 	//    $rootScope.loggedInUser = data
@@ -238,7 +238,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 
     $scope.twitterAuthed = false;
 
-    $scope.authTwitter = function() {
+    $rootScope.authTwitter = function() {
         $http({ 
             method: 'GET',
 	    url:"/api/authtwitter",

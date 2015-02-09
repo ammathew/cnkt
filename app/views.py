@@ -56,19 +56,19 @@ def register():
     password = request.form['password']
     email = request.form['email']
 
-    user = User( username, password, email )
+    user = User( email, password )
     db.session.add(user)
     db.session.commit()
     return '{ "status" : 200 }'
 
 @app.route('/api/login',methods=['GET','POST'])
 def login():   
-    username = request.form['username']
+    email = request.form['email']
     password = request.form['password']
     remember_me = False
     if 'remember_me' in request.form:
         remember_me = True
-    registered_user = User.query.filter_by(username=username).first()
+    registered_user = User.query.filter_by(email=email).first()
     if registered_user is None:
         flash('Username is invalid' , 'error')
         return redirect(url_for('login'))
@@ -77,7 +77,6 @@ def login():
         return redirect(url_for('login'))
     login_user(registered_user, remember = remember_me)
     user = {}
-    user['username'] = registered_user.username
     user['email'] = registered_user.email
     return json.dumps( user )
 
