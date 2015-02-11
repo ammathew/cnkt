@@ -127,10 +127,26 @@
 	    </div>
 	    <div role="tabpanel" class="tab-pane" id="profile">
 	      <div ng-show="stripeCustomerInfo">
-		{{ stripeCustomerInfo.card_brand }} **** **** ****{{ stripeCustomerInfo.card_last4 }} <span ng-init="updateCard = false" ng-click="updateCard=!updateCard">update card info</span>
+		<div ng-show="stripeCustomerInfo.subscribed">{{ stripeCustomerInfo.card_brand }} **** **** ****{{ stripeCustomerInfo.card_last4 }} <span ng-click="cancelCustomerSubscription()">cancel subscription</span>
+		</div>
+		<div ng-show="!stripeCustomerInfo.subscribed">
+		  You have cancelled your subscription. click <span ng-click="subscribeCustomer()">here</span> to reactivate with your existing card. You will be charged $5 per month. Or <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
+		</div>
 	      </div>
-	      <div ng-show="updateCard || !stripeCustomerInfo">
+	      <div ng-show="!stripeCustomerInfo">
+		** put info about free trial status here ** 
 		<form stripe:form="saveCustomer">
+		  <fieldset>
+		    <input type="text" size="20" data-stripe="number"/> Number
+		    <input type="text" size="4" data-stripe="cvc"/> CVC
+		    <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
+		    <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
+		  </fieldset>
+		  <button type="submit">Save</button>
+		</form>	      
+	      </div>
+	      <div ng-show="showUpdateCard">
+		<form stripe:form="updateCard">
 		  <fieldset>
 		    <input type="text" size="20" data-stripe="number"/> Number
 		    <input type="text" size="4" data-stripe="cvc"/> CVC

@@ -315,19 +315,70 @@ def create_customer():
         card=token,
         description= g.user.email
     )
-    
-    
     stripe_customer = StripeCustomer( customer.id, g.user.id, customer.cards.data[0].brand, customer.cards.data[0].last4   )
     db.session.add( stripe_customer )
     db.session.commit()
+
+    customer = stripe.Customer.retrieve( customer.id )
+    customer.subscriptions.create(plan="basic")
+
+    return "ok"
+
+@app.route("/api/stripe/subscribeCustomer", methods=['GET', 'POST'])
+def subscribe_customer():
+    # suscribed existing customer to a plan ( this typically means resuscribing )
+    stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
+    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    customer = stripe.Customer.retrieve( stripe_customer_id )
+    if customer.subscriptions.total_count > 0:
+        customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
+
+    customer.subscriptions.create(plan="basic")
+    return "ok"
+
+
+@app.route("/api/stripe/updateCard", methods=['GET', 'POST'])
+def update_card():
+    req = request.get_json()
+    token = req['token']
+    stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
+    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    customer = stripe.Customer.retrieve( stripe_customer_id )
+    customer.card = token
+    customer.save()
+
+    stripe_customer = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
+    stripe_customer.card_last4 = customer.cards.data[0].last4 
+    stripe_customer.card_brand =  customer.cards.data[0].brand
+    db.session.commit()
+
+    return "ok"
+
+@app.route("/api/stripe/cancelSubscription", methods=['GET', 'POST'])
+def cancel_subscription():
+    stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
+    stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
+    customer = stripe.Customer.retrieve( stripe_customer_id )        
+    customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
     return "ok"
 
 @app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
 def get_customer_info():
     stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
+    stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
+    customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
+
+    subscribed = False
+    if customer.subscriptions.total_count > 0:
+        subscribed = True
     res = {}
-    res["card_last4"] = stripe_customer.card_last4
-    res["card_brand"] = stripe_customer.card_brand
+    if stripe_customer:
+        res['data'] = {}
+        res['data']["card_last4"] = stripe_customer.card_last4
+        res['data']["card_brand"] = stripe_customer.card_brand
+        res['data']['subscribed'] = subscribed;
+    else:
+        res['data'] = None; 
     res = json.dumps( res )
     return res
 

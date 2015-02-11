@@ -106,6 +106,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.saveCustomer = function(status, response) {
 	$http.post('/api/stripe/createCustomer', { token: response.id });
     };
+    $scope.updateCard = function(status, response) {
+	$http.post('/api/stripe/updateCard', { token: response.id });
+    };
 
     $scope.conversations = [];
     $scope.showResponseInput = false;
@@ -256,15 +259,39 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	}
     })
 */
+
     $scope.getStripeCustomerInfo = function() {
 	$http({
 	    method: 'GET',
 	    url: "/api/stripe/getCustomerInfo"
 	}).success( function( data ) {
+	    if (data.data) {
+		$scope.stripeCustomerInfo = data.data
+		console.log( 'stripe customer info' )
+	    }
+	});
+    }
+    $scope.getStripeCustomerInfo();
+
+    $scope.cancelCustomerSubscription = function() {
+	$http({
+	    method: 'GET',
+	    url: "/api/stripe/cancelSubscription"
+	}).success( function( data ) {
 	    $scope.stripeCustomerInfo = data
 	});
     }
-     $scope.getStripeCustomerInfo()
+
+
+    $scope.subscribeCustomer = function() {
+	$http({
+	    method: 'GET',
+	    url: "/api/stripe/subscribeCustomer"
+	}).success( function( data ) {
+	    $scope.stripeCustomerInfo.subscribed = true;
+	});
+    }
+
 }]);
   
 aa.factory('searchTwitterFactory', function($http) {
