@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, "/home2/thezeith/opt/python27/lib/python2.7/site-packages/" )
 
 from datetime import datetime
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, url_for
 
 from flask import make_response
 from functools import wraps, update_wrapper
@@ -39,10 +39,14 @@ from flask.ext.login import login_user , logout_user , current_user , login_requ
 
 from app import app, db, login_manager, BASE_URL
 from app.models import User, TwitterAuth, StripeCustomer
+from app import mail
 
 import json
 import copy
 import stripe
+
+from flask.ext.mail import Mail, Message
+from app import ts
 
 @app.route('/')
 def index():
@@ -55,10 +59,17 @@ def register():
     username = request.form['username']
     password = request.form['password']
     email = request.form['email']
-
     user = User( email, password )
     db.session.add(user)
     db.session.commit()
+
+    
+    subject = "Confirm your email"
+    token = ts.dumps( email, salt='email-confirm-key')
+    confirm_url = url_for( 'confirm_email',token=token, _external=True)
+    html = render_template( 'email/activate.html', confirm_url=confirm_url)
+    send_email(user.email, subject, html)
+
     return '{ "status" : 200 }'
 
 @app.route('/api/login',methods=['GET','POST'])
@@ -382,6 +393,34 @@ def get_customer_info():
     res = json.dumps( res )
     return res
 
+def send_email( email, subject, html):
+    msg = Message(
+        subject,
+        sender='info@cnkt.co',
+        recipients=
+        [ email ])
+    msg.body = html
+    mail.send(msg)
+    return "Sent"
+
+
+@app.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        email = ts.loads(token, salt="email-confirm-key", max_age=86400)
+    except:
+        abort(404)
+
+    user = User.query.filter_by(email=email).first_or_404()
+    user.email_confirmed = True
+
+    db.session.add(user)
+    db.session.commit()
+
+    data = {status:200 }
+    data = json.dumps( data )
+
+    return data
 
 if __name__ == '__main__':
     app.run(debug=True)

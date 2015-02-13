@@ -8,13 +8,17 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from app import db
+from app import app
+from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter
 
-class User(db.Model):
+
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column('user_id',db.Integer , primary_key=True)
     password = db.Column('password' , db.String(250))
     email = db.Column('email',db.String(50),unique=True , index=True)
     registered_on = db.Column('registered_on' , db.DateTime)
+    email_confirmed = db.Column('email_confirmed', db.Boolean, default=False)
 
     def __init__(self , email, password ):
         self.email = email
@@ -40,7 +44,10 @@ class User(db.Model):
         return unicode(self.id)
 
     def __repr__(self):
-        return '<User %r>' % (self.username)
+        return '<User %r>' % (self.email)
+
+db_adapter = SQLAlchemyAdapter(db, User)        # Register the User model
+user_manager = UserManager(db_adapter, app)     # Initialize Flask-User
 
 class TwitterAuth(db.Model):
     __tablename__ = 'twitter_auth'
