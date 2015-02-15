@@ -115,6 +115,7 @@
 	<ul class="nav nav-tabs" role="tablist">
 	  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
 	  <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
+	  <li role="presentation"><a href="#reset-password" aria-controls="profile" role="tab" data-toggle="tab">Reset Password</a></li>
 	</ul>
       </div>
       <div class="modal-body">
@@ -155,6 +156,24 @@
 		  </fieldset>
 		  <button type="submit">Save</button>
 		</form>	      
+	      </div>
+	    </div>
+            <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane active" id="home">
+              <div class="login-form">
+		<div class="login-form-inner">
+		  
+		  <form action="" method=post class="form-horizontal">
+		    <div class="form-group">
+		      <input ng-model="email" type="text" id="email" name="email" class="input-xlarge form-control" placeholder="email" required>
+		    </div>
+		    <div class="form-group">
+		      <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
+		    </div>
+		    <div class="form-group">
+		      <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn btn-success">ResetPassword</button>
+		    </div>
+		  </form>
+		</div>
 	      </div>
 	    </div>
 	  </div>

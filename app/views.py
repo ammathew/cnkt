@@ -79,12 +79,12 @@ def login():
     remember_me = False
     if 'remember_me' in request.form:
         remember_me = True
-    registered_user = User.query.filter_by(email=email).first()
+    registered_user = User.query.filter(User.email==email).first()
     if registered_user is None:
         flash('Username is invalid' , 'error')
         return redirect(url_for('login'))
     if not registered_user.check_password(password):
-        flash('Password is invalid','error')
+        raise Exception('Password is invalid','error')
         return redirect(url_for('login'))
     login_user(registered_user, remember = remember_me)
     user = {}
@@ -417,10 +417,50 @@ def confirm_email(token):
     db.session.add(user)
     db.session.commit()
 
-    data = {status:200 }
+    data = {'status':200 }
     data = json.dumps( data )
 
     return data
+
+
+@app.route('/reset', methods=["GET", "POST"])
+def reset():
+    email = request.args['email']
+    user = User.query.filter(User.email == email).first()
+    subject = "Password reset requested"
+    token = ts.dumps(email, salt='recover-key')
+    recover_url = url_for( 'reset_with_token', token=token, _external=True)        
+    html = render_template( 'email/recover.html', recover_url=recover_url)
+    send_email(user.email, subject, html)
+    return "ok"
+
+@app.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    req = request.get_json()
+    try:
+        email = ts.loads(token, salt="recover-key", max_age=86400)
+    except:
+        abort(404)
+
+    if req and req['from-reset-password-page']:
+        user = User.query.filter(User.email==email).first()
+        user.set_password( req['password'] )
+        db.session.commit()
+        return user.password
+        
+    data = {'status':200 }
+    data = json.dumps( data )
+        
+    return render_template('marketing.html', email=email, token=token)
+
+@app.route('/api/reset-password-logged-in', methods=["GET", "POST"])
+def reset_password_logged_in():
+    req = request.get_json()
+    email = req['email']
+    user = User.query.filter(User.email==email).first()
+    user.set_password( req['password'] )
+    db.session.commit()
+    return "ok"
 
 if __name__ == '__main__':
     app.run(debug=True)

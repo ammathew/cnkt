@@ -33,6 +33,14 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
             templateUrl: 'login.html',
             controller: 'AuthCtrl'
         })
+	.when('/forgot-password',{   
+            templateUrl: 'forgot-password.html',
+            controller: 'AuthCtrl'
+        })
+	.when('/reset-forgot-password',{   
+            templateUrl: 'reset-forgot-password.html',
+            controller: 'AuthCtrl'
+        })
 	.when('/pay',{   
             templateUrl: 'pay.html',
             controller: 'PayCtrl'
@@ -49,7 +57,11 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 
 aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope ) {
 
-   $scope.signup = function(){ 
+    if( $location.absUrl().split('/')[4] && $location.absUrl().split('/')[4] == 'reset' ) {
+	$location.path( '/reset-forgot-password' )
+    }
+
+    $scope.signup = function(){ 
         var data = {}
         data.username = $scope.username;
         data.password = $scope.password;
@@ -76,8 +88,40 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
         });
     }
 
+    $scope.sendResetEmail = function () {
+        $http({ 
+            method: 'POST',
+            params: { email: $scope.email_to_reset } ,
+	    url:"/reset",
+        }).success( function( data ) {
+            console.log( data );  
+        });
+    }
+
+    $scope.resetPassword = function() {
+	console.log( $location )
+	token = $location.absUrl().split('/')[5]
+	$http({
+	    method: 'POST',
+            data: { 'from-reset-password-page': true,
+		    'password': $scope.password
+		  } ,
+	    url:"/reset/"+token
+	})
+    }
+
+    $scope.resetPasswordLoggedIn = function() {
+	$http({
+	    method: 'POST',
+            data: { 'email': $scope.email,
+		    'password': $scope.password
+		  },
+	    url:"api/reset-password-logged-in"
+	})
+    }
+
     $scope.loggedIn = false;
-  
+    
     $scope.login = function( firstTime ) {
         var data = {}
         data.email = $scope.email;
@@ -94,7 +138,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		$rootScope.authTwitter();
 	    }
 	    $scope.loggedIn = true;
-	//    $rootScope.loggedInUser = data
+	    //    $rootScope.loggedInUser = data
         });
     }
     console.log(   $rootScope.loggedInUser )
