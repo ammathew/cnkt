@@ -113,10 +113,10 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
     $scope.resetPasswordLoggedIn = function() {
 	$http({
 	    method: 'POST',
-            data: { 'email': $scope.email,
+            data: {
 		    'password': $scope.password
 		  },
-	    url:"api/reset-password-logged-in"
+	    url:"/api/reset-password-logged-in"
 	})
     }
 

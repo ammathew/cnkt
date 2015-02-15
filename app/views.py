@@ -456,8 +456,7 @@ def reset_with_token(token):
 @app.route('/api/reset-password-logged-in', methods=["GET", "POST"])
 def reset_password_logged_in():
     req = request.get_json()
-    email = req['email']
-    user = User.query.filter(User.email==email).first()
+    user = User.query.filter(User.email==g.user.email).first()
     user.set_password( req['password'] )
     db.session.commit()
     return "ok"
