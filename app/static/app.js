@@ -299,13 +299,14 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    url:"/api/getUserData",
         }).success( function( data, status ) {
 	    $rootScope.userData = data
-	    if ( $rootScope.userData.days_left_in_free_trial == 0 ) {
+	    if ( $rootScope.userData.locked ) {
 		$('#myModal').modal('show');
 		$('.nav-tabs .payments-link').tab('show')
 		$('li[role="presentation"]' ).addClass( "disabled" )
 	    } else {
 		$scope.getPosts();
 		$scope.getConvos();
+		//$scope.getStripeCustomerInfo();
 	    }
         })
 
@@ -324,6 +325,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         });
     }
 
+/*
     $scope.getStripeCustomerInfo = function() {
 	$http({
 	    method: 'GET',
@@ -335,14 +337,13 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    }
 	});
     }
-    $scope.getStripeCustomerInfo();
-
+*/
     $scope.cancelCustomerSubscription = function() {
 	$http({
 	    method: 'GET',
 	    url: "/api/stripe/cancelSubscription"
 	}).success( function( data ) {
-	    $scope.stripeCustomerInfo = data
+	    $scope.userData.subscribed = false;
 	});
     }
 
@@ -352,7 +353,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    method: 'GET',
 	    url: "/api/stripe/subscribeCustomer"
 	}).success( function( data ) {
-	    $scope.stripeCustomerInfo.subscribed = true;
+	    $scope.userData.subscribed = true;
+	    $scope.showUpdateCard = false;
 	});
     }
 

@@ -97,10 +97,14 @@ def get_user_data():
     days_left_in_free_trial = max(0, 7 - abs( time_since_registration.days ) )
     if days_left_in_free_trial == 0:
         session['lock_account'] = True
+        user["locked"] = True
     else:
         session['lock_account'] = False
+        
     user['days_left_in_free_trial'] = days_left_in_free_trial
     user['email'] = registered_user.email
+    user = get_customer_info( user );
+
     return json.dumps( user )
 
 @app.route('/api/logout')
@@ -368,7 +372,7 @@ def cancel_subscription():
     return "ok"
 
 @app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
-def get_customer_info():
+def get_customer_info( userData ):
     stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
     stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
     customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
@@ -376,16 +380,23 @@ def get_customer_info():
     subscribed = False
     if customer.subscriptions.total_count > 0:
         subscribed = True
-    res = {}
+        session['lock_account'] = False
+  #  res = {}
     if stripe_customer:
-        res['data'] = {}
-        res['data']["card_last4"] = stripe_customer.card_last4
-        res['data']["card_brand"] = stripe_customer.card_brand
-        res['data']['subscribed'] = subscribed;
-    else:
-        res['data'] = None; 
-    res = json.dumps( res )
-    return res
+    #    res['data'] = {}
+    #    res['data']["card_last4"] = stripe_customer.card_last4
+    #    res['data']["card_brand"] = stripe_customer.card_brand
+    #    res['data']['subscribed'] = subscribed;
+   
+        userData["card_last4"] = stripe_customer.card_last4
+        userData["card_brand"] = stripe_customer.card_brand
+        userData['subscribed'] = subscribed; 
+        if userData['subscribed']:
+            userData["locked"] = False;
+  #  else:
+  #      res['data'] = None; 
+  #  res = json.dumps( res )
+    return userData
 
 def send_email( email, subject, html):
     msg = Message(

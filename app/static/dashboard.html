@@ -70,13 +70,13 @@
 	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
 	    <div class="instructions" ng-show="!tweetsWithSearchTerm"> 
-	      <div ng-show="userData.days_left_in_free_trial > 0">
+	      <div ng-show="!userData.locked">
 		<p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
 		<p>Step 2: Click </p>
 		<p>Step 3: CNKT </p>
 		<p>Step 4: Repeat </p>
 	      </div>
-	      <div ng-show="userData.days_left_in_free_trial == 0">
+	      <div ng-show="userData.locked">
 		<p>Your free trial has expired. Please subscribe to continue using CNKT</p>
 	      </div>
 	    </div>
@@ -132,15 +132,15 @@
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
 	    <div role="tabpanel" class="tab-pane" id="profile">
-	      <div ng-show="stripeCustomerInfo">
-		<div ng-show="stripeCustomerInfo.subscribed">{{ stripeCustomerInfo.card_brand }} **** **** ****{{ stripeCustomerInfo.card_last4 }} <span ng-click="cancelCustomerSubscription()">cancel subscription</span>
+	      <div ng-show="userData.card_last4">
+		<div ng-show="userData.subscribed">{{ userData.card_brand }} **** **** ****{{ userData.card_last4 }} <span ng-click="cancelCustomerSubscription()">cancel subscription</span>
 		</div>
-		<div ng-show="!stripeCustomerInfo.subscribed">
+		<div ng-show="!userData.subscribed">
 		  You have cancelled your subscription. click <span ng-click="subscribeCustomer()">here</span> to reactivate with your existing card. You will be charged $5 per month. Or <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
 		</div>
 	      </div>
-	      <div ng-show="!stripeCustomerInfo">
-		<span ng-show="userData.days_left_in_free_trial == 0">Your free trial has expired. Please subscribe to continue using CNKT</span>
+	      <div ng-show="!userData.card_last4">
+		<span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
 		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>		
 		<form stripe:form="saveCustomer">
 		  <fieldset>
