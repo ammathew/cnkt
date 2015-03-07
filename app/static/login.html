@@ -1,3 +1,7 @@
+<div class="alert alert-warning" ng-show="error_text">
+  <a href="#" class="close" data-dismiss="alert">&times;</a>
+  <strong>Error</strong> {{ error_text }}
+</div>
 <div class="login-form">
     <div class="login-form-inner">
         <form action="" method=post class="form-horizontal">
@@ -16,8 +20,8 @@
             </div>
             <div class="form-group register-submit">
                 <button type="submit" ng-click="login()" class="btn btn-default">cnkt!</button>         
-                <span class="register-link">or <a href="/#/register" >register</a></span>
-                <span class="register-link">or <a href="/#/forgot-password" >forgot password?</a></span>
+                <span class="link"><a href="/#/register" >register</a></span>
+                <span class="link forgot-password"><a href="/#/forgot-password" >forgot password?</a></span>
             </div>
         </form>
     </div>

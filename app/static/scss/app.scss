@@ -312,21 +312,27 @@ background-color: $cnkt_color_4;
 .register-submit {
     position: relative;
     padding-left: 10px;
-    .register-link {
+    .link {
         position: absolute;
         bottom: 0;
         left: 75px;
         color: $cnkt_color;
-
+	font-size: 10px;
         a {
             color: $cnkt_color;
             text-decoration: underline;
         }
-
     }
+    .forgot-password {
+	bottom: 20px	     
+    }   		     
 }
 
 .instructions {
 padding: 20px;
 color: #767676;
+}
+
+.register-link {
+
 }

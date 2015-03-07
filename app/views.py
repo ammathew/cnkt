@@ -63,7 +63,6 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    
     subject = "Confirm your email"
     token = ts.dumps( email, salt='email-confirm-key')
     confirm_url = url_for( 'confirm_email',token=token, _external=True)
@@ -84,10 +83,16 @@ def login():
         flash('Username is invalid' , 'error')
         return redirect(url_for('login'))
     if not registered_user.check_password(password):
-        raise Exception('Password is invalid','error')
         return redirect(url_for('login'))
     login_user(registered_user, remember = remember_me)
     user = {}
+    time_since_registration =  registered_user.registered_on - datetime.utcnow() 
+    days_left_in_free_trial = max(0, 7 - abs( time_since_registration.days ) )
+    if days_left_in_free_trial == 0:
+        session['lock_account'] = True
+    else:
+        session['lock_account'] = False
+    user['days_left_in_free_trial'] = days_left_in_free_trial
     user['email'] = registered_user.email
     return json.dumps( user )
 
@@ -151,49 +156,26 @@ def send_token():
  
 @app.route("/verify")
 def get_verification():
-    
-   # i = 0;
-   # while i<20:
-   #     try:
-   # token = auth_twitter_session['request_token']
     token = session['request_token']
-    #        break
-     #   except: 
-      #      time.sleep(1)
-       #     pass
-
     verifier= request.args['oauth_verifier']
-   # del auth_twitter_session['request_token']
-
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
     auth.request_token = token
-
     auth.get_access_token(verifier)
-
-    first_authorized_on = None
-
-    try: #delete existing twitter auth, if exists
-        twitter_auths  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).all() 
-        first_authorized_on = twitter_auths[0].first_authorized_on
-        for item in twitter_auths:
-            db.session.delete( item )
-            db.session.commit()
-    except:
-        pass
 
     auth.set_access_token( auth.access_token, auth.access_token_secret)
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     user_info = TWITTER_API.me()
     twitter_user_id = user_info['id_str']
+    
+    if len( User.query.filter( User.twitter_user_id == twitter_user_id ).all() ) > 0:
+        return '{ "error": "twitter user is already associated with another cnkt account" }'
 
-    if first_authorized_on:
-        pass
-    else:
-        first_authorized_on = datetime.utcnow()
-
-    twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id, twitter_user_id, first_authorized_on )
-
+    user = User.query.filter( User.id == g.user.id ).first()
+    user.twitter_user_id = twitter_user_id
+    db.session.commit()
+    
+    twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id, twitter_user_id )
     db.session.add( twitter_auth )
     db.session.commit()
     return redirect( BASE_URL + '/#/dashboard')
@@ -208,6 +190,9 @@ def twitterApi():
 
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
+    if session['lock_account'] == True:
+        return json.dumps( {} )
+
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
 
@@ -224,6 +209,8 @@ def twitterApiEndpoints(tweepy_endpoint):
 
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
+    if session['lock_account'] == True:
+        return json.dumps( {} )
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
@@ -242,7 +229,6 @@ def mentions():
         convos.append( itemWithTimestamp )
                     
     convos = sorted( convos, key=lambda aa:aa["timestamp"], reverse=True )
-
 
    # replyIdDict = build_dict( convos, key='in_reply_to_status_id_str' )
     idDict = build_dict( convos, key='id_str' )
@@ -427,12 +413,14 @@ def confirm_email(token):
 def reset():
     email = request.args['email']
     user = User.query.filter(User.email == email).first()
+    if not user:
+        return json.dumps( { 'error': 'user not found' } ) 
     subject = "Password reset requested"
     token = ts.dumps(email, salt='recover-key')
     recover_url = url_for( 'reset_with_token', token=token, _external=True)        
     html = render_template( 'email/recover.html', recover_url=recover_url)
     send_email(user.email, subject, html)
-    return "ok"
+    return json.dumps( { 'status': 'success' } )
 
 @app.route('/reset/<token>', methods=["GET", "POST"])
 def reset_with_token(token):

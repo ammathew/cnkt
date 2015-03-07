@@ -55,7 +55,7 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 }]);
 
 
-aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope ) {
+aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$window', 'twitter', '$rootScope', '$timeout',  function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope, $timeout ) {
 
     if( $location.absUrl().split('/')[4] && $location.absUrl().split('/')[4] == 'reset' ) {
 	$location.path( '/reset-forgot-password' )
@@ -94,10 +94,21 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             params: { email: $scope.email_to_reset } ,
 	    url:"/reset",
         }).success( function( data ) {
-            console.log( data );  
+            if( data.error ) {
+		$scope.error_text = data.error
+		$scope.flash_error();
+	    } 
         });
     }
 
+    $scope.show_error_bar = false;
+    $scope.flash_error = function( newValue) {
+	$scope.show_error_bar = true;
+	$timeout( function() {
+	    $scope.show_error_bar = false;
+	},2000 )
+    };
+   
     $scope.resetPassword = function() {
 	console.log( $location )
 	token = $location.absUrl().split('/')[5]
@@ -138,14 +149,17 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		$rootScope.authTwitter();
 	    }
 	    $scope.loggedIn = true;
-	    //    $rootScope.loggedInUser = data
-        });
+	    $rootScope.userData = data
+        }).error( function( data ) {
+	    console.log( 'there was an error' );
+	    $scope.error_text = "wrong email or password" 
+	})
     }
     console.log(   $rootScope.loggedInUser )
 
 }])
 
-aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location','$window', 'twitter', '$rootScope', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope ) {
+aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location','$window', 'twitter', '$rootScope', '$timeout', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope, $timeout ) {
 
     $scope.saveCustomer = function(status, response) {
 	$http.post('/api/stripe/createCustomer', { token: response.id });
@@ -279,9 +293,15 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         $scope.$apply();
     }
 
+    $scope.init = function() {
+	$timeout(  
+	    function(){
+		$scope.getPosts();
+		$scope.getConvos();
+	    }, 2000
+	)	
+    }
     
-    $scope.getPosts();
-    $scope.getConvos();
 
     $scope.twitterAuthed = false;
 
@@ -295,14 +315,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.twitterAuthed = true;
         });
     }
-/*
-    $scope.$watch( 'twitterAuthed', function(){
-	if ( $scope.twitterAuthed == true ) {
-	    $scope.getPosts() 
-	    $scope.twitterAuthed = false;
-	}
-    })
-*/
 
     $scope.getStripeCustomerInfo = function() {
 	$http({
@@ -336,6 +348,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	});
     }
 
+    $scope.init();
+    
 }]);
   
 aa.factory('searchTwitterFactory', function($http) {
@@ -571,7 +585,20 @@ aa.directive( 'highlightSearch', function() {
     }
 })
 
-
+aa.directive('pwCheck', [function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, elem, attrs, ctrl) {
+        var firstPassword = '#' + attrs.pwCheck;
+        elem.add(firstPassword).on('keyup', function () {
+          scope.$apply(function () {
+            var v = elem.val()===$(firstPassword).val();
+            ctrl.$setValidity('pwmatch', v);
+          });
+        });
+      }
+    }
+}])
 
 aa.config(function() {
   Stripe.setPublishableKey('pk_test_IN2jd8C7BtBsoH7F4589mFyH');

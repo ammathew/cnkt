@@ -255,14 +255,17 @@ body {
 .register-submit {
   position: relative;
   padding-left: 10px; }
-  .register-submit .register-link {
+  .register-submit .link {
     position: absolute;
     bottom: 0;
     left: 75px;
-    color: #d2e2e3; }
-    .register-submit .register-link a {
+    color: #d2e2e3;
+    font-size: 10px; }
+    .register-submit .link a {
       color: #d2e2e3;
       text-decoration: underline; }
+  .register-submit .forgot-password {
+    bottom: 20px; }
 
 .instructions {
   padding: 20px;

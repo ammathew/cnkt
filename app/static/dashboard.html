@@ -70,10 +70,15 @@
 	  <div class="col-body">
             <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
 	    <div class="instructions" ng-show="!tweetsWithSearchTerm"> 
-	      <p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
-	      <p>Step 2: Click </p>
-	      <p>Step 3: CNKT </p>
-	      <p>Step 4: Repeat </p>
+	      <div ng-show="userData.days_left_in_free_trial > 0">
+		<p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
+		<p>Step 2: Click </p>
+		<p>Step 3: CNKT </p>
+		<p>Step 4: Repeat </p>
+	      </div>
+	      <div ng-show="userData.days_left_in_free_trial == 0">
+		<p>Your free trial has expired. Please subscribe to continue using CNKT</p>
+	      </div>
 	    </div>
             <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
               <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
@@ -135,7 +140,8 @@
 		</div>
 	      </div>
 	      <div ng-show="!stripeCustomerInfo">
-		** put info about free trial status here ** 
+		<span ng-show="userData.days_left_in_free_trial == 0">Your free trial has expired. Please subscribe to continue using CNKT</span>
+		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>		
 		<form stripe:form="saveCustomer">
 		  <fieldset>
 		    <input type="text" size="20" data-stripe="number"/> Number
