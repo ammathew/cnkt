@@ -85,6 +85,13 @@ def login():
     if not registered_user.check_password(password):
         return redirect(url_for('login'))
     login_user(registered_user, remember = remember_me)
+    session['user_email'] = email
+    return "ok"
+
+@app.route('/api/getUserData', methods=['GET','POST'])
+def get_user_data():
+    email = session['user_email']
+    registered_user = User.query.filter(User.email==email).first()
     user = {}
     time_since_registration =  registered_user.registered_on - datetime.utcnow() 
     days_left_in_free_trial = max(0, 7 - abs( time_since_registration.days ) )
@@ -134,7 +141,8 @@ TWITTER_API = None
 
 @app.route("/api/authtwitter",  methods = ['POST', 'GET'] )
 def send_token():
-
+    if session['lock_account']:
+        session['lock_account'] = True
 
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )

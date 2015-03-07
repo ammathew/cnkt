@@ -275,13 +275,13 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
    // $scope.getHighlightedText();
     $scope.twitterUser = {}
     $scope.getPosts = function () {
-          $http({ 
-              method: 'POST',
-	      data: { count: 100, 
-		      exclude_replies: true, 
-		      include_rts: false
-		    },
-	      url:"/api/twitter/user_timeline",
+        $http({ 
+            method: 'POST',
+	    data: { count: 100, 
+		    exclude_replies: true, 
+		    include_rts: false
+		  },
+	    url:"/api/twitter/user_timeline",
         }).success( function( data, status ) {
 	    if ( status == 200 ){
 		$scope.posts = data;
@@ -294,15 +294,23 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }
 
     $scope.init = function() {
-	$timeout(  
-	    function(){
+	$http({ 
+            method: 'POST',
+	    url:"/api/getUserData",
+        }).success( function( data, status ) {
+	    $rootScope.userData = data
+	    if ( $rootScope.userData.days_left_in_free_trial == 0 ) {
+		$('#myModal').modal('show');
+		$('.nav-tabs .payments-link').tab('show')
+		$('li[role="presentation"]' ).addClass( "disabled" )
+	    } else {
 		$scope.getPosts();
 		$scope.getConvos();
-	    }, 2000
-	)	
+	    }
+        })
+
     }
     
-
     $scope.twitterAuthed = false;
 
     $rootScope.authTwitter = function() {
