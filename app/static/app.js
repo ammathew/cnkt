@@ -173,17 +173,15 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    function() {	
 		$scope.userData.subscribed = true;
 		$scope.showUpdateCard = false;
+		$scope.showUpdateCard = false;
 	    });
     };
 
-    $scope.conversations = [];
-    $scope.showResponseInput = false;
     $scope.resetData = function() {
 	$scope.conversations = []
 	$scope.posts = []
     }
-    $scope.count = 140;
-    $scope.resetData();
+
 
     /* calls to tweepy/twitter API */
     $scope.searchTwitter = function ( searchTerm ) {
@@ -312,6 +310,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		$('.nav-tabs .payments-link').tab('show')
 		$('li[role="presentation"]' ).addClass( "disabled" )
 	    } else {
+		$scope.showResponseInput = false;
+		$scope.count = 140;
+		$scope.resetData();
 		$scope.getPosts();
 		$scope.getConvos();
 		//$scope.getStripeCustomerInfo();
@@ -352,6 +353,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    url: "/api/stripe/cancelSubscription"
 	}).success( function( data ) {
 	    $scope.userData.subscribed = false;
+	    $scope.init();
+	    $scope.conversations = []
+	    $scope.posts = []
 	});
     }
 
@@ -363,7 +367,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	}).success( function( data ) {
 	    $scope.userData.subscribed = true;
 	    $scope.showUpdateCard = false;
-	    
+	    $scope.showUpdateCard = false;
+	    $scope.init();
 	});
     }
 
