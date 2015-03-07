@@ -374,8 +374,11 @@ def cancel_subscription():
 @app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
 def get_customer_info( userData ):
     stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
-    stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
-    customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
+    if stripe_customer:
+        stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
+        customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
+    else:
+        return userData
 
     subscribed = False
     if customer.subscriptions.total_count > 0:
