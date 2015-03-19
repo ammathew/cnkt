@@ -4,12 +4,12 @@
 </div>
 <div class="login-form">
     <div class="login-form-inner">
-        <form action="" method=post class="form-horizontal">
+        <form name="loginForm" action="" method=post class="form-horizontal">
             <div class="form-group">
-                <input ng-model="email" type="text" id="email" name="email" class="input-xlarge form-control" placeholder="Enter Email" required>
+                <input type="email" ng-model="email" type="text" id="email" name="email" class="input-xlarge form-control" placeholder="Enter Email" required>
             </div>
             <div class="form-group">
-                <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="Enter Password" required>
+                <input ng-MinLength="6" ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="Enter Password" required>
             </div>
             <div class="form-group">
                 <div class="checkbox">
@@ -18,8 +18,18 @@
                     </label>
                 </div>     
             </div>
+	    <span ng-show="loginForm.email.$dirty">
+	      <span class="error" ng-show="loginForm.email.$error.required">
+		email required</span>
+	      <span class="error" ng-show="!loginForm.email.$valid">
+		invalid email</span>
+	    </span>
+	    <span ng-show="loginForm.password.$dirty">
+	      <span class="error" ng-show="!loginForm.password.$valid">
+		password must be more that 5 charactors</span>
+	    </span>
             <div class="form-group register-submit">
-                <button type="submit" ng-click="login()" class="btn btn-default">cnkt!</button>         
+                <button  ng-disabled="loginForm.$invalid" type="submit" ng-click="login()" class="btn btn-default">cnkt!</button>         
                 <span class="link"><a href="/#/register" >register</a></span>
                 <span class="link forgot-password"><a href="/#/forgot-password" >forgot password?</a></span>
             </div>
