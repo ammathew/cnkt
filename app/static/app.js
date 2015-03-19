@@ -30,6 +30,10 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
             controller: 'AuthCtrl'
         })
 	.when('/',{   
+            templateUrl: 'marketing.html',
+            controller: 'AuthCtrl'
+        })
+	.when('/login',{   
             templateUrl: 'login.html',
             controller: 'AuthCtrl'
         })
