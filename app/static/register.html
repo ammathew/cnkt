@@ -1,18 +1,27 @@
 <div class="login-form">
   <div class="login-form-inner">    
-    <form novalidate action="" method=post class="form-horizontal">
-      <div class="form-group">
-        <input ng-model="email" type="text" id="email" name="email" class="input-xlarge form-control" placeholder="email" required>
+    <form name="registerForm" novalidate action="" method=post class="form-horizontal">
+      <div  class="form-group">
+        <input type="email" ng-model="email" id="email" name="email" class="input-xlarge form-control" placeholder="email" required>
       </div>
       <div class="form-group">
-        <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
+        <input ng-MinLength="6" type="password" ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
       </div>
       <div class="form-group">
-        <input type="password" id="password" name="password" class="input-xlarge form-control" ng-model="password_again" placeholder="re-enter password" required pw-check="password">
+        <input ng-MinLength="6" type="password" id="password" name="password_2" class="input-xlarge form-control" ng-model="password_again" placeholder="re-enter password" required pw-check="password">
       </div>
-
+      <span ng-show="registerForm.email.$dirty">
+	<span class="error" ng-show="registerForm.email.$error.required">
+	  email required</span>
+	<span class="error" ng-show="!registerForm.email.$valid">
+	  invalid email</span>
+      </span>
+      <span ng-show="registerForm.password.$dirty">
+	<span class="error" ng-show="!registerForm.password.$valid">
+	  password must be more that 5 charactors</span>
+      </span>
       <div class="form-group">
-        <button type="submit" ng-click="signup()" class="btn btn-success">Signup</button>
+        <button type="submit" ng-disabled="loginForm.$invalid" ng-click="signup()" class="btn">Signup</button>
       </div>
     </form>
   </div>
