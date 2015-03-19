@@ -61,6 +61,19 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 	$location.path( '/reset-forgot-password' )
     }
 
+
+    $rootScope.authTwitter = function() {
+        $http({ 
+            method: 'GET',
+	    url:"/api/authtwitter",
+        }).success( function( data ) {
+            console.log( data.redirect_url );  
+            $window.location.href = data.redirect_url;
+	    $scope.twitterAuthed = true;
+        });
+    }
+
+    $rootScope.isFirstLogin = false;
     $scope.signup = function(){ 
         var data = {}
         data.username = $scope.username;
@@ -73,6 +86,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
             console.log( data );  
+	    $rootScope.isFirstLogin = true;
 	    $scope.login( true )
         });
     };
@@ -144,12 +158,13 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
             console.log( data );
-            $location.path("/dashboard");
-	    if ( firstTime ) {
-		$rootScope.authTwitter();
-	    }
 	    $scope.loggedIn = true;
 	    $rootScope.userData = data
+	    if ( firstTime ) {
+		$rootScope.authTwitter();
+	    } else {
+		$location.path("/dashboard");
+	    }
         }).error( function( data ) {
 	    console.log( 'there was an error' );
 	    $scope.error_text = "wrong email or password" 
@@ -322,17 +337,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     }
     
     $scope.twitterAuthed = false;
-
-    $rootScope.authTwitter = function() {
-        $http({ 
-            method: 'GET',
-	    url:"/api/authtwitter",
-        }).success( function( data ) {
-            console.log( data.redirect_url );  
-            $window.location.href = data.redirect_url;
-	    $scope.twitterAuthed = true;
-        });
-    }
 
 /*
     $scope.getStripeCustomerInfo = function() {
