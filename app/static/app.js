@@ -98,7 +98,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
         }).success( function( data ) {
             console.log( data );  
 	    $rootScope.isFirstLogin = true;
-	    $scope.login( true )
+	    $scope.login()
         });
     };
 
@@ -158,7 +158,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 
     $scope.loggedIn = false;
     
-    $scope.login = function( firstTime ) {
+    $scope.login = function() {
         var data = {}
         data.email = $scope.email;
         data.password = $scope.password;
@@ -171,7 +171,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             console.log( data );
 	    $scope.loggedIn = true;
 	    $rootScope.userData = data
-	    if ( firstTime ) {
+	    if ( $rootScope.isFirstLogin ) {
 		$rootScope.authTwitter();
 	    } else {
 		$location.path("/dashboard");
