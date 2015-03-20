@@ -61,6 +61,13 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
 
 aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location', '$window', 'twitter', '$rootScope', '$timeout',  function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope, $timeout ) {
 
+    $scope.registerPage = function() {
+	$location.path( '/register' )
+    };
+    $scope.loginPage = function() {
+	$location.path( '/login' )
+    };
+
     if( $location.absUrl().split('/')[4] && $location.absUrl().split('/')[4] == 'reset' ) {
 	$location.path( '/reset-forgot-password' )
     }

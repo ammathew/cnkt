@@ -347,10 +347,13 @@ body {
   height: 100%;
   top: 0px;
   left: 0px;
-  z-index: 0; }
+  z-index: 0;
+  list-style-type: none; }
 
 .cb-slideshow:after {
-  content: ''; }
+  content: '';
+  background-color: #28c7e1;
+  opacity: 0.5; }
 
 .cb-slideshow li span {
   width: 100%;
@@ -386,11 +389,85 @@ body {
   line-height: 200px; }
 
 .cb-slideshow li:nth-child(1) span {
-  background-image: url("/static/images/man_looking_up.jpg");
-  opacity: .5; }
+  background-image: url("/static/images/man_looking_up.jpg"); }
 
 .cb-slideshow li:nth-child(2) span {
   background-image: url("/static/images/tourist_glasses.jpg");
   animation-delay: 6s;
-  -webkit-animation-delay: 6s;
-  opacity: .5; }
+  -webkit-animation-delay: 6s; }
+
+.cb-slideshow li:nth-child(3) span {
+  background-image: url("/static/images/tourist_glasses.jpg");
+  animation-delay: 12s;
+  -webkit-animation-delay: 12s; }
+
+.cb-slideshow li:nth-child(4) span {
+  background-image: url("/static/images/man_looking_up.jpg");
+  animation-delay: 18s;
+  -webkit-animation-delay: 18s; }
+
+.cb-slideshow li:nth-child(5) span {
+  background-image: url("/static/images/tourist_glasses.jpg");
+  animation-delay: 24s;
+  -webkit-animation-delay: 24s; }
+
+.cb-slideshow li:nth-child(6) span {
+  background-image: url("/static/images/man_looking_up.jpg");
+  animation-delay: 30s;
+  -webkit-animation-delay: 30s; }
+
+.cb-slideshow li:nth-child(2) div {
+  animation-delay: 6s;
+  -webkit-animation-delay: 6s; }
+
+.cb-slideshow li:nth-child(3) div {
+  animation-delay: 12s;
+  -webkit-animation-delay: 12s; }
+
+.cb-slideshow li:nth-child(4) div {
+  animation-delay: 18s;
+  -webkit-animation-delay: 18s; }
+
+.cb-slideshow li:nth-child(5) div {
+  animation-delay: 24s;
+  -webkit-animation-delay: 24s; }
+
+.cb-slideshow li:nth-child(6) div {
+  animation-delay: 30s;
+  -webkit-animation-delay: 30s; }
+
+.register {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #5e97a0;
+  color: white;
+  width: 80px;
+  z-index: 999;
+  width: 120px;
+  height: 40px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  cursor: hand; }
+
+.login {
+  top: 20px;
+  right: 150px;
+  position: absolute;
+  background-color: #5e97a0;
+  color: white;
+  width: 120px;
+  z-index: 999;
+  height: 40px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  cursor: hand; }
+
+.formError {
+  font-size: 10px;
+  background-color: black;
+  opacity: .3;
+  color: white;
+  height: 20px; }
