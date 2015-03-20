@@ -2,8 +2,14 @@
   <a href="#" class="close" data-dismiss="alert">&times;</a>
   <strong>Error</strong> {{ error_text }}
 </div>
-<div class="login-form">
+<div class="login-form login-register-form">
     <div class="login-form-inner">
+      <div class="cnkt-header">
+	cnkt
+      </div>
+      <div class="helper-text">
+	log in to cnkt
+      </div>
         <form name="loginForm" action="" method=post class="form-horizontal">
             <div class="form-group">
                 <input type="email" ng-model="email" type="text" id="email" name="email" class="input-xlarge form-control" placeholder="Enter Email" required>
@@ -18,18 +24,8 @@
                     </label>
                 </div>     
             </div>
-	    <span ng-show="loginForm.email.$dirty">
-	      <span class="error" ng-show="loginForm.email.$error.required">
-		email required</span>
-	      <span class="error" ng-show="!loginForm.email.$valid">
-		invalid email</span>
-	    </span>
-	    <span ng-show="loginForm.password.$dirty">
-	      <span class="error" ng-show="!loginForm.password.$valid">
-		password must be more that 5 charactors</span>
-	    </span>
             <div class="form-group register-submit">
-                <button ng-disabled="loginForm.$invalid" type="submit" ng-click="login()" class="btn btn-default">cnkt!</button>         
+                <button type="submit" ng-click="login()" class="btn btn-default">cnkt!</button>         
                 <span class="link"><a href="/#/register" >register</a></span>
                 <span class="link forgot-password"><a href="/#/forgot-password" >forgot password?</a></span>
             </div>
