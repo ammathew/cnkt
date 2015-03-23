@@ -37,7 +37,7 @@ from flask.ext.login import LoginManager
 from flask.ext.login import login_user , logout_user , current_user , login_required
 #from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import app, db, login_manager, BASE_URL
+from app import app, db, login_manager, BASE_URL,  CONSUMER_TOKEN, CONSUMER_SECRET
 from app.models import User, TwitterAuth, StripeCustomer
 from app import mail
 
@@ -132,14 +132,6 @@ def nocache(view):
     return update_wrapper(no_cache, view)
 
 ### TWITTER STUFF ###
-
-if ENV == 'dev':
-    CONSUMER_TOKEN = 'EqKZYwdQ9PldzkJDfPkEKFZTD'
-    CONSUMER_SECRET = '0N859fBDquLldM6HwBQ4R3bF5pmpuIrUpABH5svyqY3M9AkCIV'
-else if ENV == 'prod':
-    CONSUMER_TOKEN = '8hvCH7y43QAAnPrPaU4tQVE5q'
-    CONSUMER_SECRET = 'Xu07aHEVDlLbIHlPL8NQfkiwDB0K4jFH3de0UwGfSXjeZhT4dN'
-
 
 from flask import request
 import tweepy
