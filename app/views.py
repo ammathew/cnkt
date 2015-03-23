@@ -133,8 +133,13 @@ def nocache(view):
 
 ### TWITTER STUFF ###
 
-CONSUMER_TOKEN = '8hvCH7y43QAAnPrPaU4tQVE5q'
-CONSUMER_SECRET = 'Xu07aHEVDlLbIHlPL8NQfkiwDB0K4jFH3de0UwGfSXjeZhT4dN'
+if ENV == 'dev':
+    CONSUMER_TOKEN = 'EqKZYwdQ9PldzkJDfPkEKFZTD'
+    CONSUMER_SECRET = '0N859fBDquLldM6HwBQ4R3bF5pmpuIrUpABH5svyqY3M9AkCIV'
+else if ENV == 'prod':
+    CONSUMER_TOKEN = '8hvCH7y43QAAnPrPaU4tQVE5q'
+    CONSUMER_SECRET = 'Xu07aHEVDlLbIHlPL8NQfkiwDB0K4jFH3de0UwGfSXjeZhT4dN'
+
 
 from flask import request
 import tweepy

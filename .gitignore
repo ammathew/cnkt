@@ -4,3 +4,5 @@ db_repository/
 app/static/js/
 *~
 \#*
+.htaccess
+app/__init__.py

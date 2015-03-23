@@ -37,7 +37,7 @@ aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', functi
             templateUrl: 'login.html',
             controller: 'AuthCtrl'
         })
-	.when('/forgot-password',{   
+	.when('/forgot-password',{  
             templateUrl: 'forgot-password.html',
             controller: 'AuthCtrl'
         })
@@ -153,7 +153,10 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		    'password': $scope.password
 		  },
 	    url:"/api/reset-password-logged-in"
-	})
+	}).success( function(){
+	    $scope.error_text = "You have successfully reset your password";
+	    $scope.flash_error();
+        });
     }
 
     $scope.loggedIn = false;
