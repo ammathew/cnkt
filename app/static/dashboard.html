@@ -144,35 +144,64 @@
 		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>		
 		<form stripe:form="saveCustomer">
 		  <fieldset>
-		    <input type="text" size="20" data-stripe="number"/> Number
-		    <input type="text" size="4" data-stripe="cvc"/> CVC
-		    <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
-		    <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
+                      <div class="form-group">
+                          <label for="cc-number">Credit or Debit Card Number</label>
+		          <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                      </div>
+                      <div class="form-group">
+                          <label for="cvc-number">CVC Number</label>
+		          <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                      </div>
+                      <div class="form-group">
+                          <label for="exp-month">EXP-Month</label>
+		          <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                      </div>
+                      <div class="form-group">
+                          <label for="exp-year">EXP-Year</label>   
+		          <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                      </div>
 		  </fieldset>
 		  <button type="submit">Save</button>
 		</form>	      
 	      </div>
 	      <div ng-show="showUpdateCard">
-		<form stripe:form="updateCard">
-		  <fieldset>
-		    <input type="text" size="20" data-stripe="number"/> Number
-		    <input type="text" size="4" data-stripe="cvc"/> CVC
-		    <input type="text" size="2" data-stripe="exp-month"/> EXP-Month
-		    <input type="text" size="4" data-stripe="exp-year"/> EXP-Year
-		  </fieldset>
-		  <button type="submit">Save</button>
-		</form>	      
+		  <form stripe:form="updateCard">
+		      <fieldset>
+		          <div class="form-group">
+                              <label for="cc-number">Credit or Debit Card Number</label>
+		              <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="cvc-number">CVC Number</label>
+		              <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="exp-month">EXP-Month</label>
+		              <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                          </div>
+                          <div class="form-group">
+                              <label for="exp-year">EXP-Year</label>   
+		              <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                          </div>
+		      </fieldset>
+		      <button type="submit">Save</button>
+		  </form>	      
 	      </div>
 	    </div>
             <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane" id="reset-password">
-		  <form action="" method=post class="form-horizontal">
+		<form action="" method=post>
 		    <div class="form-group">
-		      <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
-		    </div>
+                        <label for="password">enter your new password</label>
+		        <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">please re-enter password</label>
+		        <input ng-model="password-again" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
+                    </div>
 		    <div class="form-group">
-		      <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn btn-success">ResetPassword</button>
+		        <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn">Reset Password</button>
 		    </div>
-		  </form>
+		</form>
 	    </div>
 	  </div>
 	</div>
