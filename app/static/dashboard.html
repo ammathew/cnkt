@@ -189,19 +189,17 @@
 	      </div>
 	    </div>
             <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane" id="reset-password">
-		<form action="" method=post>
-		    <div class="form-group">
-                        <label for="password">enter your new password</label>
-		        <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">please re-enter password</label>
-		        <input ng-model="password-again" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required>
-                    </div>
-		    <div class="form-group">
-		        <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn">Reset Password</button>
-		    </div>
-		</form>
+                <div class="form-group">
+                    <label for="password">enter your new password</label>
+		    <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required />
+                </div>
+                <div class="form-group">
+                    <label for="passwordAgain">please re-enter password</label>
+		    <input ng-model="passwordAgain" type="passwordAgain" id="passwordAgain" name="passwordAgain" class="input-xlarge form-control" placeholder="retype password" required />
+                </div>
+                <div class="form-group">
+		    <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn">Reset Password</button>
+                </div>
 	    </div>
 	  </div>
 	</div>
