@@ -135,75 +135,103 @@
 	    <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane active" id="home">
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
+            <!-- payments pane -->
 	    <div role="tabpanel" class="tab-pane" id="profile">
-	      <div ng-show="userData.card_last4">
-		<div ng-show="userData.subscribed" class="row">
-		  <div class="span8">
-		    You are currently subscribed to CNKT, and being charged $5 per month.
-		    {{ userData.card_brand }} **** **** ****{{ userData.card_last4 }}
-		  </div>
-		  <div class="span4">
-		    <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
-		  </div>
-		</div>
-		<div ng-show="!userData.subscribed">
-		  You have cancelled your subscription. click <span ng-click="subscribeCustomer()">here</span> to reactivate with your existing card. You will be charged $5 per month. Or <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
-		</div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Status
+                    </div>
+
+                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.days_left_in_free_trial > 0">
+                        Free Trial
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==true">
+                        subscribed
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.days_left_in_free_trial == 0 && userData.days_left_in_free_trial.card_last4">
+                        subscription cancelled
+                    </div>
+
+                    <div class="col-md-4" ng-show="userData.subscribed==false && !userData.card_last4">
+                        subscribe
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==true" ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">
+                        update card
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.card_last4">
+                        <span ng-click="subscribeCustomer()">re-subscribe</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        Card
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==true" >
+                        {{ userData.card_last4 }}
+                    </div>
+                    <div class="col-md-4" ng-show="!userData.card_last4" >
+                        no card on file
+                    </div>
+                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.card_last4" >
+                        N/A
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+	        <div ng-show="!userData.card_last4">
+		    <span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
+		    <span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>	
+		    <div ng-hide="userData.subscribed">	
+		        <form stripe:form="saveCustomer">
+		            <fieldset>
+                                <div class="form-group">
+                                    <label for="cc-number">Credit or Debit Card Number</label>
+		                    <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvc-number">CVC Number</label>
+		                    <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exp-month">EXP-Month</label>
+		                    <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exp-year">EXP-Year</label>   
+		                    <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                                </div>
+		            </fieldset>
+		            <button type="submit">Save</button>
+		        </form>	    
+		    </div>  
+	        </div>
+	        <div ng-show="showUpdateCard">
+		    <form stripe:form="updateCard">
+		        <fieldset>
+		            <div class="form-group">
+                                <label for="cc-number">Credit or Debit Card Number</label>
+		                <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvc-number">CVC Number</label>
+		                <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="exp-month">EXP-Month</label>
+		                <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="exp-year">EXP-Year</label>   
+		                <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                            </div>
+		        </fieldset>
+		        <div ng-show="formError">
+			    
+		        </div>
+		        <button type="submit">Save</button>
+		    </form>	      
+	        </div>
 		<span ng-click="cancelCustomerSubscription()">cancel subscription</span>
-	      </div>
-	      <div ng-show="!userData.card_last4">
-		<span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
-		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>	
-		<div ng-hide="userData.subscribed">	
-		  <form stripe:form="saveCustomer">
-		    <fieldset>
-                      <div class="form-group">
-                        <label for="cc-number">Credit or Debit Card Number</label>
-		        <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
-                      </div>
-                      <div class="form-group">
-                        <label for="cvc-number">CVC Number</label>
-		        <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
-                      </div>
-                      <div class="form-group">
-                        <label for="exp-month">EXP-Month</label>
-		        <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
-                      </div>
-                      <div class="form-group">
-                        <label for="exp-year">EXP-Year</label>   
-		        <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
-                      </div>
-		    </fieldset>
-		    <button type="submit">Save</button>
-		  </form>	    
-		</div>  
-	      </div>
-	      <div ng-show="showUpdateCard">
-		  <form stripe:form="updateCard">
-		      <fieldset>
-		          <div class="form-group">
-                              <label for="cc-number">Credit or Debit Card Number</label>
-		              <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
-                          </div>
-                          <div class="form-group">
-                              <label for="cvc-number">CVC Number</label>
-		              <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
-                          </div>
-                          <div class="form-group">
-                              <label for="exp-month">EXP-Month</label>
-		              <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
-                          </div>
-                          <div class="form-group">
-                              <label for="exp-year">EXP-Year</label>   
-		              <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
-                          </div>
-		      </fieldset>
-		      <div ng-show="formError">
-			
-		      </div>
-		      <button type="submit">Save</button>
-		  </form>	      
-	      </div>
 	    </div>
             <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane" id="reset-password">
                 <div class="form-group">

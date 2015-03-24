@@ -193,14 +193,18 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
     $scope.saveCustomer = function(status, response) {
 	$http.post('/api/stripe/createCustomer', { token: response.id }).success( 
 	    function( data ) {
-		$scope.userData.card_last4 = data.cards[0].last4;
+		$scope.userData.card_brand = data.cards.data[0].last4;
+		$scope.userData.card_brand = data.cards.data[0].brand;
+
 		$scope.userData.subscribed = true;
 		$scope.showUpdateCard = false;
 	    });
     };
     $scope.updateCard = function(status, response) {
 	$http.post('/api/stripe/updateCard', { token: response.id }).success( 
-	    function() {	
+	    function( data ) {
+		$scope.userData.card_last4 = data.cards.data[0].last4;
+		$scope.userData.card_brand = data.cards.data[0].brand;
 		$scope.userData.subscribed = true;
 		$scope.showUpdateCard = false;
 	    });

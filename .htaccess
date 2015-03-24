@@ -1,5 +1,0 @@
-Options +ExecCGI
-AddHandler fcgid-script .fcgi
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !=/home2/thezeith/public_html/cnkt/app.fcgi
-RewriteRule ^(.*)$ app.fcgi/$1 [QSA,L]
