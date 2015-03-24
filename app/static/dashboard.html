@@ -37,6 +37,10 @@
         </div>
     </nav>
 -->
+    <div class="alert alert-warning" ng-show="error_text">
+      <a href="#" class="close" data-dismiss="alert">&times;</a>
+      <strong>Error</strong> {{ error_text }}
+    </div>
 
     <div id="columnns">
         <div id="user_tweets" class="cnkt-col" cnkt-col>	 
@@ -141,28 +145,30 @@
 	      </div>
 	      <div ng-show="!userData.card_last4">
 		<span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
-		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>		
-		<form stripe:form="saveCustomer">
-		  <fieldset>
+		<span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>	
+		<div ng-hide="userData.subscribed">	
+		  <form stripe:form="saveCustomer">
+		    <fieldset>
                       <div class="form-group">
-                          <label for="cc-number">Credit or Debit Card Number</label>
-		          <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                        <label for="cc-number">Credit or Debit Card Number</label>
+		        <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
                       </div>
                       <div class="form-group">
-                          <label for="cvc-number">CVC Number</label>
-		          <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                        <label for="cvc-number">CVC Number</label>
+		        <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
                       </div>
                       <div class="form-group">
-                          <label for="exp-month">EXP-Month</label>
-		          <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                        <label for="exp-month">EXP-Month</label>
+		        <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
                       </div>
                       <div class="form-group">
-                          <label for="exp-year">EXP-Year</label>   
-		          <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                        <label for="exp-year">EXP-Year</label>   
+		        <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
                       </div>
-		  </fieldset>
-		  <button type="submit">Save</button>
-		</form>	      
+		    </fieldset>
+		    <button type="submit">Save</button>
+		  </form>	    
+		</div>  
 	      </div>
 	      <div ng-show="showUpdateCard">
 		  <form stripe:form="updateCard">
@@ -184,6 +190,9 @@
 		              <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
                           </div>
 		      </fieldset>
+		      <div ng-show="formError">
+			
+		      </div>
 		      <button type="submit">Save</button>
 		  </form>	      
 	      </div>

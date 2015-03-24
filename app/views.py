@@ -162,7 +162,7 @@ def send_token():
     data = json.dumps( data )
 
     return data
- 
+    
 @app.route("/verify")
 def get_verification():
     token = session['request_token']
@@ -328,7 +328,7 @@ def create_customer():
     customer = stripe.Customer.retrieve( customer.id )
     customer.subscriptions.create(plan="basic")
 
-    return "ok"
+    return json.dumps( customer )
 
 @app.route("/api/stripe/subscribeCustomer", methods=['GET', 'POST'])
 def subscribe_customer():
@@ -340,7 +340,7 @@ def subscribe_customer():
         customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
 
     customer.subscriptions.create(plan="basic")
-    return "ok"
+    return json.dumps( customer )
 
 
 @app.route("/api/stripe/updateCard", methods=['GET', 'POST'])
@@ -358,7 +358,7 @@ def update_card():
     stripe_customer.card_brand =  customer.cards.data[0].brand
     db.session.commit()
 
-    return "ok"
+    return json.dumps( customer )
 
 @app.route("/api/stripe/cancelSubscription", methods=['GET', 'POST'])
 def cancel_subscription():
