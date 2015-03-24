@@ -137,11 +137,19 @@
 	    </div>
 	    <div role="tabpanel" class="tab-pane" id="profile">
 	      <div ng-show="userData.card_last4">
-		<div ng-show="userData.subscribed">{{ userData.card_brand }} **** **** ****{{ userData.card_last4 }} <span ng-click="cancelCustomerSubscription()">cancel subscription</span>
+		<div ng-show="userData.subscribed" class="row">
+		  <div class="span8">
+		    You are currently subscribed to CNKT, and being charged $5 per month.
+		    {{ userData.card_brand }} **** **** ****{{ userData.card_last4 }}
+		  </div>
+		  <div class="span4">
+		    <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
+		  </div>
 		</div>
 		<div ng-show="!userData.subscribed">
 		  You have cancelled your subscription. click <span ng-click="subscribeCustomer()">here</span> to reactivate with your existing card. You will be charged $5 per month. Or <span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">update your card</span> 
 		</div>
+		<span ng-click="cancelCustomerSubscription()">cancel subscription</span>
 	      </div>
 	      <div ng-show="!userData.card_last4">
 		<span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
