@@ -1,112 +1,112 @@
 <div id="app" ng-controller="DashboardCtrl">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#" data-toggle="modal" data-target="#myModal" >Account Settings</a></li>
-			    
-                        </ul>
-                    </li>
-                    <li ng-controller="AuthCtrl"><a ng-click="logOut()">Logout</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-
-
-    <!--  
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <ul class="nav">
-                <li ng-controller="AuthCtrl" ng-click="logOut()">logout</li>
-                <li role="presentation" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
-      My Account<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li ng-click="authTwitter()">Authorize Twitter</li>
-                    </ul>
-                </li>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">My Account <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" data-toggle="modal" data-target="#myModal" >Account Settings</a></li>
+	      
             </ul>
+          </li>
+          <li ng-controller="AuthCtrl"><a ng-click="logOut()">Logout</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+
+  <!--  
+	<nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <ul class="nav">
+              <li ng-controller="AuthCtrl" ng-click="logOut()">logout</li>
+              <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+		  My Account<span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                  <li ng-click="authTwitter()">Authorize Twitter</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+	</nav>
+	-->
+  <div class="alert alert-warning" ng-show="error_text">
+    <a href="#" class="close" data-dismiss="alert">&times;</a>
+    <strong>Error</strong> {{ error_text }}
+  </div>
+
+  <div id="columnns">
+    <div id="user_tweets" class="cnkt-col" cnkt-col>	 
+      <div count-chars class="col-top">
+	<div class="col-header">
+	  Your Timeline 
+	  <span class="toggle-control right toggle-compose">compose<i class="glyphicon glyphicon-chevron-down compose-toggle-icon"></i></span>
+	</div>
+	<div count-chars id="compose" class="col-controls" ng-show="showControls">
+	  <textarea ng-model="newTweet"></textarea>
+	  <div class="compose-controls">
+	    <div class="compose-controls-inner">
+	      <span ng-class"{ red: count < 0 }">{{ count }} </span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default compose-button">tweet</button>
+	    </div>
+	  </div>
+	</div>
+      </div>
+      <div highlight-search class="col-body">
+        <div ng-show="refreshTimeline" id="view_new" class="animated bounceInTop" ng-click="getPosts()">new tweets. click here to view.</div>
+        <div class="tweet-unit" ng-repeat="tweet in posts"> 
+          <div ng-include="'tweet.html'"></div>
         </div>
-    </nav>
--->
-    <div class="alert alert-warning" ng-show="error_text">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Error</strong> {{ error_text }}
+      </div>
+    </div>
+    <div class="cnkt-col offset-1">
+      <div class="col-top">
+	<div class="col-header">
+	  Search Results
+	</div>
+      </div>
+      <div class="col-body">
+        <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
+	<div class="instructions" ng-show="!tweetsWithSearchTerm"> 
+	  <div ng-show="!userData.locked">
+	    <p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
+	    <p>Step 2: Click </p>
+	    <p>Step 3: CNKT </p>
+	    <p>Step 4: Repeat </p>
+	  </div>
+	  <div ng-show="userData.locked">
+	    <p>Your free trial has expired. Please subscribe to continue using CNKT</p>
+	  </div>
+	</div>
+        <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
+          <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
+        </div>
+      </div>
     </div>
 
-    <div id="columnns">
-        <div id="user_tweets" class="cnkt-col" cnkt-col>	 
-	  <div count-chars class="col-top">
-	    <div class="col-header">
-	    Your Timeline 
-	    <span class="toggle-control right toggle-compose">compose<i class="glyphicon glyphicon-chevron-down compose-toggle-icon"></i></span>
-	    </div>
-	    <div count-chars id="compose" class="col-controls" ng-show="showControls">
-	        <textarea ng-model="newTweet"></textarea>
-	      <div class="compose-controls">
-		<div class="compose-controls-inner">
-		  <span ng-class"{ red: count < 0 }">{{ count }} </span><button ng-click="postStatus( newTweet )" type="submit" class="btn btn-default compose-button">tweet</button>
-		</div>
-	      </div>
-	    </div>
-	  </div>
-	  <div highlight-search class="col-body">
-               <div ng-show="refreshTimeline" id="view_new" class="animated bounceInTop" ng-click="getPosts()">new tweets. click here to view.</div>
-            <div class="tweet-unit" ng-repeat="tweet in posts"> 
-              <div ng-include="'tweet.html'"></div>
-            </div>
-	  </div>
+    <div class="cnkt-col offset-2 convo-col">
+      <div class="col-top">
+	<div class="col-header">
+	  Conversations
+	</div>
+      </div>
+      <div highlight-search class="col-body">
+        <div ng-show="loading_conversations" id="loading-conversations" class="animated pulse">loading conversations</div>
+        <div ng-show="refreshConvos" id="view_new" class="animated bounceInLeft" ng-click="getConvos()">new conversations. click here to view.</div>
+        <div class="convo tweet-unit" ng-repeat="convo in conversations" > 
+          <div ng-repeat="tweet in convo">
+	    <div ng-include="'convo_tweet.html'"></div>
+          </div>
         </div>
-        <div class="cnkt-col offset-1">
-	  <div class="col-top">
-	    <div class="col-header">
-	      Search Results
-	    </div>
-	  </div>
-	  <div class="col-body">
-            <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
-	    <div class="instructions" ng-show="!tweetsWithSearchTerm"> 
-	      <div ng-show="!userData.locked">
-		<p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
-		<p>Step 2: Click </p>
-		<p>Step 3: CNKT </p>
-		<p>Step 4: Repeat </p>
-	      </div>
-	      <div ng-show="userData.locked">
-		<p>Your free trial has expired. Please subscribe to continue using CNKT</p>
-	      </div>
-	    </div>
-            <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
-              <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
-            </div>
-	  </div>
-        </div>
-
-        <div class="cnkt-col offset-2 convo-col">
-	  <div class="col-top">
-	    <div class="col-header">
-	      Conversations
-	    </div>
-	  </div>
-	  <div highlight-search class="col-body">
-            <div ng-show="loading_conversations" id="loading-conversations" class="animated pulse">loading conversations</div>
-            <div ng-show="refreshConvos" id="view_new" class="animated bounceInLeft" ng-click="getConvos()">new conversations. click here to view.</div>
-            <div class="convo tweet-unit" ng-repeat="convo in conversations" > 
-              <div ng-repeat="tweet in convo">
-	        <div ng-include="'convo_tweet.html'"></div>
-              </div>
-            </div>
-	  </div>
-        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Button trigger modal -->
@@ -136,119 +136,103 @@
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
             <!-- payments pane -->
-	    <div role="tabpanel" class="tab-pane" id="profile">
-                <div class="row">
-                    <div class="col-md-4">
-                        Status
-                    </div>
-
-                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.days_left_in_free_trial > 0">
-                        Free Trial
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==true">
-                        subscribed
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.days_left_in_free_trial == 0 && userData.days_left_in_free_trial.card_last4">
-                        subscription cancelled
-                    </div>
-
-                    <div class="col-md-4" ng-show="userData.subscribed==false && !userData.card_last4">
-                        subscribe
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==true" ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard">
-                        update card
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.card_last4">
-                        <span ng-click="subscribeCustomer()">re-subscribe</span>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        Card
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==true" >
-                        {{ userData.card_last4 }}
-                    </div>
-                    <div class="col-md-4" ng-show="!userData.card_last4" >
-                        no card on file
-                    </div>
-                    <div class="col-md-4" ng-show="userData.subscribed==false && userData.card_last4" >
-                        N/A
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
-	        <div ng-show="!userData.card_last4">
-		    <span ng-show="userData.locked">Your free trial has expired. Please subscribe to continue using CNKT</span>
-		    <span ng-show="userData.days_left_in_free_trial > 0">You have  {{userData.days_left_in_free_trial}} days left in you free trial </span>	
-		    <div ng-hide="userData.subscribed">	
-		        <form stripe:form="saveCustomer">
-		            <fieldset>
-                                <div class="form-group">
-                                    <label for="cc-number">Credit or Debit Card Number</label>
-		                    <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cvc-number">CVC Number</label>
-		                    <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exp-month">EXP-Month</label>
-		                    <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
-                                </div>
-                                <div class="form-group">
-                                    <label for="exp-year">EXP-Year</label>   
-		                    <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
-                                </div>
-		            </fieldset>
-		            <button type="submit">Save</button>
-		        </form>	    
-		    </div>  
-	        </div>
-	        <div ng-show="showUpdateCard">
-		    <form stripe:form="updateCard">
-		        <fieldset>
-		            <div class="form-group">
-                                <label for="cc-number">Credit or Debit Card Number</label>
-		                <input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="cvc-number">CVC Number</label>
-		                <input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="exp-month">EXP-Month</label>
-		                <input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="exp-year">EXP-Year</label>   
-		                <input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
-                            </div>
-		        </fieldset>
-		        <div ng-show="formError">
-			    
-		        </div>
-		        <button type="submit">Save</button>
-		    </form>	      
-	        </div>
-		<span ng-click="cancelCustomerSubscription()">cancel subscription</span>
+	    <div role="tabpanel" class="tab-pane payments" id="profile">
+	      <div class="payments-table" payments-table>
+		<div class="row">
+		  <div class="col-md-12 header">
+		    Subscription Summary
+		  </div>
+		</div>
+		<div class="row payments-row">
+		  <div class="col-md-4 subheader">
+                    Status:
+                  </div>
+		  <div class="col-md-4 statusText">
+		  </div>
+		  <div class="col-md-4 statusAction">
+		  </div>
+		</div>
+		<div class="row payments-row">
+		  <div class="col-md-4 subheader">
+                    Card:
+                  </div>
+		  <div class="col-md-4 cardText">
+		  </div>
+		  <div class="col-md-4 cardAction">
+		  </div>
+		</div>
+		<div ng-show="showSubscribeFirstTime" class="row">
+		  <form stripe:form="saveCustomer">
+		    <fieldset>
+                      <div class="form-group">
+			<label for="cc-number">Credit or Debit Card Number</label>
+			<input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                      </div>
+                      <div class="form-group">
+			<label for="cvc-number">CVC Number</label>
+			<input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                      </div>
+                      <div class="form-group">
+			<label for="exp-month">EXP-Month</label>
+			<input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                      </div>
+                      <div class="form-group">
+			<label for="exp-year">EXP-Year</label>   
+			<input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                      </div>
+		    </fieldset>
+		    <button type="submit">Save</button>
+		  </form>	    
+		</div>
+		<div ng-show="showUpdateCard" class="row">
+		  <form stripe:form="updateCard">
+		    <fieldset>
+		      <div class="form-group">
+			<label for="cc-number">Credit or Debit Card Number</label>
+			<input id="cc-number" class="form-control" type="text" size="20" data-stripe="number"/>
+                      </div>
+                      <div class="form-group">
+			<label for="cvc-number">CVC Number</label>
+			<input id="cvc-number" class="form-control" type="text" size="4" data-stripe="cvc"/>
+                      </div>
+                      <div class="form-group">
+			<label for="exp-month">EXP-Month</label>
+			<input id="exp-month" class="form-control" type="text" size="2" data-stripe="exp-month"/>
+                      </div>
+                      <div class="form-group">
+			<label for="exp-year">EXP-Year</label>   
+			<input id="exp-year" class="form-control" type="text" size="4" data-stripe="exp-year"/> 
+                      </div>
+		    </fieldset>
+		    <div ng-show="formError">  
+		    </div>
+		    <button type="submit">Save</button>
+		  </form>	      
+		</div>
+		<div class="row payments-row">
+		  <div class="col-md-12">
+		    <span ng-click="cancelCustomerSubscription()"><a>cancel subscription</a></span>
+		  </div>
+		</div>
+	      </div>
 	    </div>
             <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane" id="reset-password">
-                <div class="form-group">
-                    <label for="password">enter your new password</label>
-		    <input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required />
-                </div>
-                <div class="form-group">
-                    <label for="passwordAgain">please re-enter password</label>
-		    <input ng-model="passwordAgain" type="passwordAgain" id="passwordAgain" name="passwordAgain" class="input-xlarge form-control" placeholder="retype password" required />
-                </div>
-                <div class="form-group">
-		    <button type="submit" ng-click="resetPasswordLoggedIn()" class="btn">Reset Password</button>
-                </div>
+	      <div class="form-group">
+		<label for="password">enter your new password</label>
+		<input ng-model="password" type="password" id="password" name="password" class="input-xlarge form-control" placeholder="password" required />
+	      </div>
+	      <div class="form-group">
+		<label for="passwordAgain">please re-enter password</label>
+		<input ng-model="passwordAgain" type="passwordAgain" id="passwordAgain" name="passwordAgain" class="input-xlarge form-control" placeholder="retype password" required />
+	      </div>
+	      <div class="form-group">
+		<button type="submit" ng-click="resetPasswordLoggedIn()" class="btn">Reset Password</button>
+	      </div>
 	    </div>
 	  </div>
 	</div>
       </div>
     </div>
   </div>
+</div>
 </div>

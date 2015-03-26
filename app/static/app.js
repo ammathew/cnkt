@@ -78,7 +78,6 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             method: 'GET',
 	    url:"/api/authtwitter",
         }).success( function( data ) {
-            console.log( data.redirect_url );  
             $window.location.href = data.redirect_url;
 	    $scope.twitterAuthed = true;
         });
@@ -96,7 +95,6 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
-            console.log( data );  
 	    $rootScope.isFirstLogin = true;
 	    $scope.login()
         });
@@ -108,7 +106,6 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 	    url:"/api/logout",
         }).success( function( data ) {
             $scope.resetData();
-            console.log( data );  
             $location.path( "/" );
         });
     }
@@ -135,7 +132,6 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
     };
    
     $scope.resetPassword = function() {
-	console.log( $location )
 	token = $location.absUrl().split('/')[5]
 	$http({
 	    method: 'POST',
@@ -171,7 +167,6 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
-            console.log( data );
 	    $scope.loggedIn = true;
 	    $rootScope.userData = data
 	    if ( $rootScope.isFirstLogin ) {
@@ -180,12 +175,9 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		$location.path("/dashboard");
 	    }
         }).error( function( data ) {
-	    console.log( 'there was an error' );
 	    $scope.error_text = "wrong email or password" 
 	})
     }
-    console.log(   $rootScope.loggedInUser )
-
 }])
 
 aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location','$window', 'twitter', '$rootScope', '$timeout', function ($scope, searchTwitterFactory, $http, $location, $window, twitter, $rootScope, $timeout ) {
@@ -239,7 +231,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    data: { status : newTweet }
 	}
 	twitter( options ).success( function( data ) {
-	    console.log( data )
             newTweet = "";
 	});
     }
@@ -285,7 +276,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	$scope.loading_conversations = true;
 	twitter( options ).success( function( data ) {
 	    $scope.conversations =  data;
-	    console.log( $scope.conversations );
 	    $scope.loading_conversations = false;	
 	})
     }
@@ -324,7 +314,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
         }).success( function( data, status ) {
 	    if ( status == 200 ){
 		$scope.posts = data;
-		console.log( $scope.posts );
 		$scope.twitterUser = data[0].user
 	    }
         })
@@ -338,6 +327,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    url:"/api/getUserData",
         }).success( function( data, status ) {
 	    $rootScope.userData = data
+	    if( !$rootScope.userData.subscribed ) {
+		$rootScope.userData.subscribed = false;
+	    }
 	    if ( $rootScope.userData.locked ) {
 		$('#myModal').modal('show');
 		$('.nav-tabs .payments-link').tab('show')
@@ -428,9 +420,6 @@ aa.directive( 'sentchart', function() {
 			obj['y'] = parseInt( data[i].pos * 100 );
 			arr.push( obj );
 		    }
-
-		    console.log( arr );
-
 		    var graph = new Rickshaw.Graph( {
 			element: document.querySelector("#chart"), 
 			width: 300, 
@@ -449,7 +438,6 @@ aa.directive( 'sentchart', function() {
 
 aa.service( 'twitter', function( $http ){
     return function( id_str ) {
-	console.log( options );
 	return $http( options )
     }
 });
@@ -479,7 +467,6 @@ aa.directive( 'countChars', function() {
 		    var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 		    var matchUrls = newValue.match( urlRegex )
 		    if ( matchUrls ) {
-			console.log( matchUrls )
 			for( i=0; i<matchUrls.length; i++ ) {
 			    var aa = matchUrls[i].length 
 			    scope.count = scope.count - aa
@@ -501,7 +488,6 @@ aa.directive( 'animateOnSend', function() {
 	    elem.find( 'button' ).on( 'click', function() {           
 		elem.addClass( "animated" );
 		elem.addClass( "bounceOutRight" )
-		console.log( "reply to post" )
 		elem.parent(".tweet-unit").css( "height", "0" );
 		scope.$apply();
 
@@ -547,13 +533,11 @@ aa.directive( 'cnktCol', function() {
 	    elem.find(".toggle-control").on( 'click', function() {
 		scope.showControls = !scope.showControls
 		scope.$apply()
-		console.log( scope.showControls )
 	    })
 	    scope.$watch( 'showControls', function( newValue ) {
 		elem.find( ".col-body").height( '100%')
 		if ( newValue == true ){
 		    var controlsHeight = elem.find(".col-controls").height()
-		    console.log( controlsHeight )
 		    var currentColBodyHeight = elem.find(".col-body").height()
 		    elem.find(".col-body").height( currentColBodyHeight - controlsHeight - 40 )
 		}
@@ -597,7 +581,6 @@ aa.directive( 'tweetStat', function() {
 
 aa.directive( 'highlightSearch', function() {
     var linker = function( scope, elem, attr ) {
-	console.log( scope )
 	elem.mouseup(function (e){
 	    var text = "";
 	    if (window.getSelection ) {
@@ -645,6 +628,105 @@ aa.directive('pwCheck', [function () {
       }
     }
 }])
+
+
+aa.directive('payments', [function () {
+    return {
+      require: 'ngModel',
+      link: function (scope, elem, attrs, ctrl) {
+        var firstPassword = '#' + attrs.pwCheck;
+        elem.add(firstPassword).on('keyup', function () {
+          scope.$apply(function () {
+            var v = elem.val()===$(firstPassword).val();
+            ctrl.$setValidity('pwmatch', v);
+          });
+        });
+      }
+    }
+}])
+
+aa.directive('paymentsTable', [ '$compile', function ($compile) {
+    return {
+        link: function (scope, elem, attrs, ctrl) {
+	    scope.userMap = function() {
+	        var userData = scope.userData;
+                if ( !userData ) {
+                    return "aa";
+                }
+                else if ( userData.subscribed==false && userData.days_left_in_free_trial == 0 && !userData.card_last4 ) {
+                    return "never_subscribed"
+                }
+                else if ( userData.subscribed==false && userData.days_left_in_free_trial == 0 && userData.card_last4 ) {
+                    return "canceled"
+                }
+                else if ( userData.subscribed==true && userData.days_left_in_free_trial == 0 && userData.card_last4 ) {
+                    return "subscribed"
+                }
+                else if ( userData.subscribed==false && userData.days_left_in_free_trial > 0 && userData.card_last4 ) {
+                    return "free_trial_subscribe_but_canceled"
+                }
+                else if ( userData.subscribed==true && userData.days_left_in_free_trial > 0 && userData.card_last4 ) {
+                    return "free_trial_subscribed"
+                }
+                else if ( userData.subscribed==false && userData.days_left_in_free_trial > 0 && !userData.card_last4 ) {
+                    return "free_trial"
+                } else {
+                    return "blah"
+                }
+	    }
+	    
+	    var getUserTableCells = function ( userType ) {
+		var userTableCells = {};
+		if (  userType == "free_trial" ) {
+                    userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";
+		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
+		    userTableCells.cardText = 'N/A';
+		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
+		} 
+		else if ( userType == "free_trial_subscribe_but_canceled" ) {
+                    userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";
+		    userTableCells.statusAction = '<span ng-click="subscribeCustomer()"><a>re-subscribe</a></span>';
+		    userTableCells.cardText = 'N/A';
+		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
+		} 		
+		else if ( $.inArray( userType, [ 'free_tral_subscribed', 'subscribed' ] ) ) {
+		    userTableCells.statusText = 'subscribed';
+		    userTableCells.statusAction = '';
+		    userTableCells.cardText = '{{ userData.card_last4 }}';
+		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>re-subscribe with new card</a></div>';
+		}
+		else if ( $.inArray( userType, [ 'canceled' ] ) ) {
+		    userTableCells.statusText = 'subscription canceled';
+		    userTableCells.statusAction = '<span ng-click="subscribeCustomer()"><a>re-subscribe</a></span>';
+		    userTableCells.cardText = 'N/A';
+		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>resubscribe with new card</a></div>';
+		}
+		else if ( $.inArray( userType, [ 'never_subscribed' ] ) ) {
+		    userTableCells.statusText = "Your free trial has expired . Please subscribe to continue using cnkt";
+		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
+		    userTableCells.cardText = 'N/A';
+		    userTableCells.cardAction = '';
+		}
+		return userTableCells;
+	    }
+	    
+	    scope.$watch( 'userData', function() {
+		var userType = scope.userMap();
+		var userTableCells = getUserTableCells( userType );
+		for ( var key in userTableCells ) {
+		    var aa = elem.find( "." + key);
+		    console.log( aa );
+		    console.log( 'in directive' );
+		    console.log(  userTableCells[key] );
+		    aa.html( userTableCells[key] );
+		    $compile(aa.contents())(scope);
+		}
+	
+	    })
+        }
+    };				
+}])
+
 
 aa.config(function() {
   Stripe.setPublishableKey('pk_test_IN2jd8C7BtBsoH7F4589mFyH');
