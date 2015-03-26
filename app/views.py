@@ -59,6 +59,9 @@ def register():
     username = request.form['username']
     password = request.form['password']
     email = request.form['email']
+    registered_user = User.query.filter(User.email==email).first()
+    if registered_user:
+        return json.dumps( { 'status' : 401, 'message': 'this email is already registered' })
     user = User( email, password )
     db.session.add(user)
     db.session.commit()
@@ -178,7 +181,7 @@ def get_verification():
     twitter_user_id = user_info['id_str']
     
     if len( User.query.filter( User.twitter_user_id == twitter_user_id ).all() ) > 0:
-        return '{ "error": "twitter user is already associated with another cnkt account" }'
+        return json.dumps( '{ "status": "501", "error": "twitter user is already associated with another cnkt account" }' )
 
     user = User.query.filter( User.id == g.user.id ).first()
     user.twitter_user_id = twitter_user_id

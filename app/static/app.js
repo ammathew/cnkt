@@ -95,8 +95,12 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
             data: $.param(data),
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         }).success( function( data ) {
-	    $rootScope.isFirstLogin = true;
-	    $scope.login()
+	    if ( data.status == 401 ) {
+		$scope.error_text = data.message;
+	    } else {
+		$rootScope.isFirstLogin = true;
+		$scope.login()
+	    }
         });
     };
 
@@ -150,8 +154,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 		  },
 	    url:"/api/reset-password-logged-in"
 	}).success( function(){
-	    $scope.error_text = "You have successfully reset your password";
-	    $scope.flash_error();
+	    $scope.pwReset = true; 
         });
     }
 
@@ -369,7 +372,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.userData.subscribed = false;
 	    $scope.init();
 	    $scope.conversations = []
-	    $scope.posts = []
+	    $scope.posts = [];
 	});
     }
 
@@ -693,7 +696,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 		    userTableCells.statusText = 'subscribed';
 		    userTableCells.statusAction = '';
 		    userTableCells.cardText = '{{ userData.card_last4 }}';
-		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>re-subscribe with new card</a></div>';
+		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></div>';
 		}
 		else if ( $.inArray( userType, [ 'canceled' ] ) ) {
 		    userTableCells.statusText = 'subscription canceled';
@@ -715,9 +718,6 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 		var userTableCells = getUserTableCells( userType );
 		for ( var key in userTableCells ) {
 		    var aa = elem.find( "." + key);
-		    console.log( aa );
-		    console.log( 'in directive' );
-		    console.log(  userTableCells[key] );
 		    aa.html( userTableCells[key] );
 		    $compile(aa.contents())(scope);
 		}
