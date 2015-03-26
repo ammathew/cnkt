@@ -325,7 +325,6 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    }
 	});
         $scope.refreshTimeline = false;
-        $scope.$apply();
     }
 
     $scope.init = function() {
