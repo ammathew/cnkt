@@ -20,7 +20,7 @@ function($window) {
 
 }]);
 
-aa = angular.module('myServiceModule', [ 'nvd3ChartDirectives', 'ngRoute', 'stripe' ]);
+aa = angular.module('myServiceModule', [ 'ngRoute', 'stripe' ]);
 
 aa.config(['$interpolateProvider', '$routeProvider', '$locationProvider', function ($interpolateProvider, $routeProvider, $locationProvider) {
 
@@ -315,11 +315,15 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		  },
 	    url:"/api/twitter/user_timeline",
         }).success( function( data, status ) {
-	    if ( status == 200 ){
+	    if ( typeof( data ) == "string" ) { // tweepy error hack
+		$('#myModal').modal('show');
+		$('.nav-tabs .auth-twitter').tab('show')
+		$scope.settingsModalError = "something went wrong retrieving your information from Twitter. Please reauthorize your Twitter account.";
+	    } else {
 		$scope.posts = data;
 		$scope.twitterUser = data[0].user
 	    }
-        })
+	});
         $scope.refreshTimeline = false;
         $scope.$apply();
     }
@@ -330,6 +334,11 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    url:"/api/getUserData",
         }).success( function( data, status ) {
 	    $rootScope.userData = data
+
+	    if ( location.hash.split('?').length > 1 ) {
+		$scope.queryParams = _.object(_.compact(_.map(location.hash.split('?')[1].split('&'), function(item) {  if (item) return item.split('='); })));
+	    }
+	    
 	    if( !$rootScope.userData.subscribed ) {
 		$rootScope.userData.subscribed = false;
 	    }
@@ -337,7 +346,13 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		$('#myModal').modal('show');
 		$('.nav-tabs .payments-link').tab('show')
 		$('li[role="presentation"]' ).addClass( "disabled" )
-	    } else {
+	    }
+	    if ( !$.isEmptyObject( $scope.queryParams ) ) {
+		$('#myModal').modal('show');
+		$('.nav-tabs .auth-twitter').tab('show')
+		$scope.settingsModalError = "this twitter handle is already registered to another user";
+	    }
+	    else {
 		$scope.showResponseInput = false;
 		$scope.count = 140;
 		$scope.resetData();
@@ -407,55 +422,12 @@ aa.factory('searchTwitterFactory', function($http) {
 });
 
 
-
-
-aa.directive( 'sentchart', function() {
-    return {
-	restrict: 'E',
-	link: function( scope, elem, attr ) {
-	    scope.$watch( 'timeAndSent', function(newValue, attr) {
-		if ( newValue ) {
-		    data = newValue;
-		    arr = [];
-		    for( i=0; i<data.length; i++ ) {
-			obj ={};
-			obj['x'] = i;
-			obj['y'] = parseInt( data[i].pos * 100 );
-			arr.push( obj );
-		    }
-		    var graph = new Rickshaw.Graph( {
-			element: document.querySelector("#chart"), 
-			width: 300, 
-			height: 200, 
-			series: [{
-			    color: 'steelblue',
-			    data: arr
-			}]
-		    });		
-		    graph.render();
-		}
-	    });
-	}	
-    }
-})
-
 aa.service( 'twitter', function( $http ){
     return function( id_str ) {
 	return $http( options )
     }
 });
 
-aa.directive( 'reservation', function() {
-    return {
-	restrict: 'A',
-	link: function( scope, elem, attr ) {
-	    elem.daterangepicker(null, function(start, end, label) {
-                scope.start = start.toISOString();
-		scope.end = end.toISOString();
-            });
-	}	
-    }
-})
 
 aa.directive( 'countChars', function() {
     return {

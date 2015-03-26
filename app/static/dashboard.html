@@ -123,7 +123,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
-	  <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
+	  <li role="presentation" class="active auth-twitter"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
 	  <li role="presentation"><a class="payments-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
 	  <li role="presentation"><a href="#reset-password" aria-controls="profile" role="tab" data-toggle="tab">Reset Password</a></li>
 	</ul>
@@ -134,6 +134,7 @@
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane active" id="home">
+	      <div class="alert alert-danger" role="alert" ng-shw="settingsModalError" ng-bind="settingsModalError"></div>
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
             <!-- payments pane -->
