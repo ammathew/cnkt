@@ -466,23 +466,10 @@ aa.directive( 'animateOnSend', function() {
 	    scope.replied = false;
 	    elem.find( 'button' ).on( 'click', function() {           
 		elem.addClass( "animated" );
-		elem.addClass( "bounceOutRight" )
+		elem.addClass( "bounceOutRight" );
 		elem.parent(".tweet-unit").css( "height", "0" );
+                elem.parent(".tweet-unit").css( "display", "none" );
 		scope.$apply();
-
-		/* in case replying to a tweet in an existing conversationalready replied to ... unlikely
-		   _.each( scope.conversations, function( convo ) { 
-		   _.each( convo, function( twt, index) { 
-		   console.log( twt )
-		   
-		   if ( twt.id_str == scope.tweet.id_str ) {
-		   console.log( "this is index" );
-		   console.log( index );
-		   }
-		   });   
-		   });
-		*/
-
 	    });		 
 	}
     }
