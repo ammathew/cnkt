@@ -559,7 +559,7 @@ text-align: center;
     .pic {
 	height: 100%;
 	width:100%;
-	opacity: 0.4;
+	opacity: 0.6;
 	background-size: cover;
 	background-position: 50% 50%;
 	background-repeat: none;
@@ -577,8 +577,8 @@ text-align: center;
 	background-image: url( '/static/images/spiderweb.jpg' );
     }
     .carousel-caption {
-        top: 33%;
-        bottom: auto;
-    }                  
-
+        top: 50%;
+        margin-top: -75px;
+        bottom:auto;
+    }                 
 }

@@ -489,7 +489,7 @@ body {
   #carousel-example-generic .pic {
     height: 100%;
     width: 100%;
-    opacity: 0.4;
+    opacity: 0.6;
     background-size: cover;
     background-position: 50% 50%;
     background-repeat: none; }
@@ -502,5 +502,6 @@ body {
   #carousel-example-generic .c4 {
     background-image: url("/static/images/spiderweb.jpg"); }
   #carousel-example-generic .carousel-caption {
-    top: 33%;
+    top: 50%;
+    margin-top: -75px;
     bottom: auto; }
