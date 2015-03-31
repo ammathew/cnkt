@@ -79,6 +79,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 	    url:"/api/authtwitter",
         }).success( function( data ) {
             $window.location.href = data.redirect_url;
+
 	    $scope.twitterAuthed = true;
         });
     }
@@ -190,9 +191,10 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    function( data ) {
 		$scope.userData.card_brand = data.cards.data[0].last4;
 		$scope.userData.card_brand = data.cards.data[0].brand;
-
 		$scope.userData.subscribed = true;
 		$scope.showUpdateCard = false;
+                $scope.showSubscribeFirstTime = false;
+                $scope.subscribedSuccess = true;
 	    });
     };
     $scope.updateCard = function(status, response) {
@@ -202,6 +204,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		$scope.userData.card_brand = data.cards.data[0].brand;
 		$scope.userData.subscribed = true;
 		$scope.showUpdateCard = false;
+                $scope.updatedCardSuccess = true;
 	    });
     };
 
@@ -387,6 +390,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.init();
 	    $scope.conversations = []
 	    $scope.posts = [];
+            $scope.cancelledSuccess = true;
 	});
     }
 
@@ -400,6 +404,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.showUpdateCard = false;
 	    $scope.showUpdateCard = false;
 	    $scope.init();
+            $scope.subscribedSuccess = true;
 	});
     }
 
@@ -655,7 +660,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
                     userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";
 		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
 		    userTableCells.cardText = 'N/A';
-		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
+		    userTableCells.cardAction = '';
 		} 
 		else if ( userType == "free_trial_subscribe_but_canceled" ) {
                     userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";

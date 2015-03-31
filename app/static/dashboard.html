@@ -138,6 +138,9 @@
 	    </div>
             <!-- payments pane -->
 	    <div role="tabpanel" class="tab-pane payments" id="profile">
+                <div ng-show="subscribedSuccess" class="alert alert-success" role="alert">You have successfully subscribed to cnkt. You will be billed $5 every month.</div>
+                <div ng-show="cancelledSuccess" class="alert alert-success" role="alert">You have successfully cancelled your subscription to cnkt. You will no longer be billed. Resubscribe at any any time.</div>
+                <div ng-show="updatedCardSuccess" class="alert alert-success" role="alert">You have sucessfully updated your card.</div>
 	      <div class="payments-table" payments-table>
 		<div class="row">
 		  <div class="col-md-12 header">
