@@ -429,8 +429,7 @@ def confirm_email(token):
     data = {'status':200 }
     data = json.dumps( data )
 
-    return data
-
+    return redirect( BASE_URL + '/#/dashboard')
 
 @app.route('/reset', methods=["GET", "POST"])
 def reset():
