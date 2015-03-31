@@ -28,6 +28,9 @@
       <div class="formError" ng-show="registerForm.password.$dirty  && !registerForm.password.$valid">
 	  password must be more that 5 charactors
       </div>
+       <div class="formError" ng-show="registerForm.password_2.$dirty  && !registerForm.password_2.$valid">
+           passwords do not match
+       </div>
       <div class="form-group">
         <button data-loading-text="Loading..." type="submit" ng-disabled="registerForm.$invalid" ng-click="signup()" class="btn">Signup</button>
       </div>
