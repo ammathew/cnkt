@@ -37,7 +37,7 @@ from flask.ext.login import LoginManager
 from flask.ext.login import login_user , logout_user , current_user , login_required
 #from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import app, db, login_manager, BASE_URL,  CONSUMER_TOKEN, CONSUMER_SECRET
+from app import app, db, login_manager, BASE_URL,  CONSUMER_TOKEN, CONSUMER_SECRET, STRIPE_API_KEY
 from app.models import User, TwitterAuth, StripeCustomer
 from app import mail
 
@@ -320,7 +320,7 @@ def internal_error(exception):
 def create_customer():
     req = request.get_json()
     token = req['token']
-    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    stripe.api_key = STRIPE_API_KEY
     customer = stripe.Customer.create(
         card=token,
         description= g.user.email
@@ -338,7 +338,7 @@ def create_customer():
 def subscribe_customer():
     # suscribed existing customer to a plan ( this typically means resuscribing )
     stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
-    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    stripe.api_key = STRIPE_API_KEY
     customer = stripe.Customer.retrieve( stripe_customer_id )
     if customer.subscriptions.total_count > 0:
         customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
@@ -352,7 +352,7 @@ def update_card():
     req = request.get_json()
     token = req['token']
     stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
-    stripe.api_key = 'sk_test_F4XR1cnPuvLDX5nDk4VbjIhX'
+    stripe.api_key = STRIPE_API_KEY
     customer = stripe.Customer.retrieve( stripe_customer_id )
     customer.card = token
     customer.save()
