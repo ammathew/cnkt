@@ -489,11 +489,18 @@ body {
   #carousel-example-generic .pic {
     height: 100%;
     width: 100%;
-    opacity: 0.5;
+    opacity: 0.4;
     background-size: cover;
     background-position: 50% 50%;
     background-repeat: none; }
   #carousel-example-generic .c1 {
     background-image: url("/static/images/man_looking_up.jpg"); }
-  #carousel-example-generic .c2 {
+  #carousel-example-generic .c3 {
     background-image: url("/static/images/tourist_glasses.jpg"); }
+  #carousel-example-generic .c2 {
+    background-image: url("/static/images/payphone.jpg"); }
+  #carousel-example-generic .c4 {
+    background-image: url("/static/images/spiderweb.jpg"); }
+  #carousel-example-generic .carousel-caption {
+    top: 33%;
+    bottom: auto; }
