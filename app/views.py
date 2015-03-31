@@ -366,7 +366,7 @@ def update_card():
 
 @app.route("/api/stripe/cancelSubscription", methods=['GET', 'POST'])
 def cancel_subscription():
-    stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
+    stripe.api_key = STRIPE_API_KEY
     stripe_customer_id  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first().stripe_customer_id
     customer = stripe.Customer.retrieve( stripe_customer_id )        
     customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
@@ -376,7 +376,7 @@ def cancel_subscription():
 def get_customer_info( userData ):
     stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
     if stripe_customer:
-        stripe.api_key = "sk_test_F4XR1cnPuvLDX5nDk4VbjIhX"
+        stripe.api_key = STRIPE_API_KEY
         customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
     else:
         return userData
