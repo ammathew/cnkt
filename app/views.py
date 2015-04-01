@@ -181,7 +181,7 @@ def get_verification():
     twitter_user_id = user_info['id_str']
     
     if len( User.query.filter( User.twitter_user_id == twitter_user_id ).all() ) > 0:
-        return redirect( BASE_URL + '/#/dashboard?error=tw_user_already_registered')
+        return redirect( BASE_URL + '/#/dashboard?param=tw_user_already_registered')
 
 
     user = User.query.filter( User.id == g.user.id ).first()

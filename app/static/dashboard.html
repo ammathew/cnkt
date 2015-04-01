@@ -109,11 +109,6 @@
   </div>
 </div>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -133,7 +128,9 @@
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div ng-controller="AuthCtrl" role="tabpanel" class="tab-pane active" id="home">
-	      <div class="alert alert-danger" role="alert" ng-show="settingsModalError" ng-bind="settingsModalError"></div>
+	        <div class="alert alert-danger" role="alert" ng-show="settingsModalError" ng-bind="settingsModalError"></div>
+                <div class="alert alert-warning" role="alert" ng-show="firstLoginAuthTwitter" ng-bind="firstLoginAuthTwitter"></div>
+                
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
             <!-- payments pane -->

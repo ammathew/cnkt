@@ -174,7 +174,7 @@ aa.controller('AuthCtrl', ['$scope', 'searchTwitterFactory', '$http', '$location
 	    $scope.loggedIn = true;
 	    $rootScope.userData = data
 	    if ( $rootScope.isFirstLogin ) {
-		$rootScope.authTwitter();
+		$location.path("/dashboard").search( { param: 'first_login' } );
 	    } else {
 		$location.path("/dashboard");
 	    }
@@ -349,10 +349,15 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 		$('.nav-tabs .payments-link').tab('show')
 		$('li[role="presentation"]' ).addClass( "disabled" )
 	    }
-	    if ( !$.isEmptyObject( $scope.queryParams ) ) {
+	    if ( !$.isEmptyObject( $scope.queryParams ) && $scope.queryParams.param == 'tw_user_already_registered' ) {
 		$('#myModal').modal('show');
 		$('.nav-tabs .auth-twitter').tab('show')
 		$scope.settingsModalError = "this twitter handle is already registered to another user";
+	    }
+            if ( !$.isEmptyObject( $scope.queryParams ) && $scope.queryParams.param == 'first_login') {
+		$('#myModal').modal('show');
+		$('.nav-tabs .auth-twitter').tab('show')
+		$scope.firstLoginAuthTwitter = "please authorize your twitter account to start using cnkt";
 	    }
 	    else {
 		$scope.showResponseInput = false;
