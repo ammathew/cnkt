@@ -37,7 +37,7 @@ from flask.ext.login import LoginManager
 from flask.ext.login import login_user , logout_user , current_user , login_required
 #from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import app, db, login_manager, BASE_URL,  CONSUMER_TOKEN, CONSUMER_SECRET, STRIPE_API_KEY
+from app import app, db, login_manager, BASE_URL, CONSUMER_TOKEN, CONSUMER_SECRET, STRIPE_API_KEY
 from app.models import User, TwitterAuth, StripeCustomer
 from app import mail
 
@@ -387,11 +387,6 @@ def get_customer_info( userData ):
         session['lock_account'] = False
   #  res = {}
     if stripe_customer:
-    #    res['data'] = {}
-    #    res['data']["card_last4"] = stripe_customer.card_last4
-    #    res['data']["card_brand"] = stripe_customer.card_brand
-    #    res['data']['subscribed'] = subscribed;
-   
         userData["card_last4"] = stripe_customer.card_last4
         userData["card_brand"] = stripe_customer.card_brand
         userData['subscribed'] = subscribed; 
