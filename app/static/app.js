@@ -697,7 +697,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 
 
 aa.config(function() {
-  Stripe.setPublishableKey('pk_test_IN2jd8C7BtBsoH7F4589mFyH');
+  Stripe.setPublishableKey( cnkt.stripePublishableKey );
 })
 
 
