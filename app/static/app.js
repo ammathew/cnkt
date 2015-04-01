@@ -649,7 +649,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 	    var getUserTableCells = function ( userType ) {
 		var userTableCells = {};
 		if (  userType == "free_trial" ) {
-                    userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";
+                    userTableCells.statusText = "<p>Free Trial</p><p>( {{userData.days_left_in_free_trial}} days left )</p>";
 		    userTableCells.statusAction = '<p ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></p><p>$5/month</p>';
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction = '';
