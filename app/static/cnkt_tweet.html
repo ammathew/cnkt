@@ -3,7 +3,7 @@
     <img class="profile-img avatar" src="{{tweet.user.profile_image_url}}">
   </div>
   <div class="body-col">
-    <span class="twitter-name">{{ tweet.user.name}}</span><span class="twitter-screen-name">@{{tweet.user.screen_name}}</span>
+      <span class="twitter-name">{{ tweet.user.name}}</span><span class="twitter-screen-name"><a href="http://www.twitter.com/{{tweet.user.screen_name}}" target="_blank">@{{tweet.user.screen_name}}</a></span>
     <div autolinker text="tweet.text">
     </div>
     <span class="tweet-stat" tweet-stat="retweet" ng-class="{ 'stat-action-taken': actionTaken == true }">
@@ -13,6 +13,10 @@
     <span class="tweet-stat" tweet-stat="favorite" ng-class="{ 'stat-action-taken': actionTaken == true }">
       <span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{ statcount }}
     </span>
+    <span class="tweet-stat" tweet-stat="followers" ng-class="{ 'stat-action-taken': actionTaken == true }">
+      <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ statcount }}
+    </span>
+
     <div class="reply" count-chars>
       <input ng-model="currentResponse">
       <button type="submit" ng-click="replyToPost( tweet, currentResponse )"  class="btn btn-default">reply</button> {{ count }} 

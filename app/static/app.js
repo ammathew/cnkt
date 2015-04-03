@@ -520,7 +520,7 @@ aa.directive( 'cnktCol', function() {
 //		}
 	    //})
 	}
-    }
+    };
 });
 
 aa.directive( 'tweetStat', function() {
@@ -536,9 +536,24 @@ aa.directive( 'tweetStat', function() {
                 favorite: {
                     f: scope.favoritePost,
                     countParam: 'favorite_count'
+                },
+                followers: {
+                    f: scope.followUser,
+                    countParam: 'user.followers_count'
                 }
-            }
-            scope.statcount = scope.tweet[ statMap[attrs.tweetStat]['countParam'] ];
+            };
+            var getStat = function() {
+                // refactor this. fails if key more than 2 deep. tho maybe okay.
+                var countParam = statMap[attrs.tweetStat]['countParam'];
+                var splitCountParam = countParam.split('.');
+                console.log( splitCountParam );
+                if ( splitCountParam.length == 2 ) {
+                    return scope.tweet[ splitCountParam[0] ][ splitCountParam[1] ];
+                } else {
+                    return scope.tweet[ countParam ];
+                }
+            };
+            scope.statcount = getStat();
             elem.on( 'click', function() {
                 var f =  statMap[attrs.tweetStat]['f']
                 f( scope.tweet ).success( function() {
