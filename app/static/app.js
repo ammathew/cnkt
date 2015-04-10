@@ -246,9 +246,9 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    method: 'POST',
 	    url: "/api/twitter/create_favorite",
 	    data: { id : tweet.id_str }
-	}
+	};
 	return twitter( options )
-    }
+    };
 
     $scope.retweetPost = function( tweet ) {
 	options = {   
@@ -271,6 +271,16 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	}
 	twitter( options );
     }
+
+    $scope.followUser = function( tweet ) {
+	options = {   
+	    method: 'POST',
+	    url: "/api/twitter/create_friendship",
+	    data: { id : tweet.user.id_str }
+	};
+	return twitter( options )
+    };
+
 
     /* construct conversations from multiple api endpoints */
 
