@@ -685,19 +685,19 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
 		} 		
-		else if ( $.inArray( userType, [ 'free_tral_subscribed', 'subscribed' ] ) ) {
+		else if ( _.contains( [ 'free_tral_subscribed', 'subscribed' ], userType ) ) {
 		    userTableCells.statusText = 'subscribed';
 		    userTableCells.statusAction = '';
 		    userTableCells.cardText = '{{ userData.card_last4 }}';
 		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></div>';
 		}
-		else if ( $.inArray( userType, [ 'canceled' ] ) ) {
+		else if ( userType == 'canceled' ) {
 		    userTableCells.statusText = 'subscription canceled';
 		    userTableCells.statusAction = '<span ng-click="subscribeCustomer()"><a>re-subscribe</a></span>';
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>resubscribe with new card</a></div>';
 		}
-		else if ( $.inArray( userType, [ 'never_subscribed' ] ) ) {
+		else if ( userType ==  'never_subscribed' ) {
 		    userTableCells.statusText = "Your free trial has expired . Please subscribe to continue using cnkt";
 		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
 		    userTableCells.cardText = 'N/A';

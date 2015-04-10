@@ -382,6 +382,7 @@ def get_customer_info( userData ):
         return userData
 
     subscribed = False
+
     if customer.subscriptions.total_count > 0:
         subscribed = True
         session['lock_account'] = False
