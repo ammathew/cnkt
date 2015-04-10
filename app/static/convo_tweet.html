@@ -11,10 +11,10 @@
     <span class="tweet-stat" tweet-stat="favorite" ng-class="{ 'stat-action-taken': actionTaken == true }">
         <span class="glyphicon glyphicon-star" aria-hidden="true"></span><span class="tweet-stat"> {{ statcount }}</span>
     </span>
-    <span class="follow-reply-box">
-        <span class="glyphicon glyphicon-user" aria-hidden="true"></span><span class="tweet-stat"> {{ statcount }}</span>
-        <span ng-click="reply=!reply" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
+    <span class="tweet-stat" tweet-stat="followers" ng-class="{ 'stat-action-taken': actionTaken == true }">
+      <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ statcount }}
     </span>
+    <span ng-click="reply=!reply" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
     
     <div class="reply" ng-show="reply" count-chars>
       <input ng-model="currentResponse">
