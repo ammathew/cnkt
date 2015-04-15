@@ -179,6 +179,10 @@ def get_verification():
     TWITTER_API = tweepy.API(auth, parser=tweepy.parsers.JSONParser() )
     user_info = TWITTER_API.me()
     twitter_user_id = user_info['id_str']
+
+    user = User.query.filter( User.id == g.user.id ).first()
+    if user.twitter_user_id:
+        user.twitter_user_id = 0;
     
     if len( User.query.filter( User.twitter_user_id == twitter_user_id ).all() ) > 0:
         return redirect( BASE_URL + '/#/dashboard?param=tw_user_already_registered')
@@ -188,7 +192,6 @@ def get_verification():
         db.session.delete( formerTwitterAccountAuthed )
         db.session.commit()
 
-    user = User.query.filter( User.id == g.user.id ).first()
     user.twitter_user_id = twitter_user_id
     db.session.commit()
 
