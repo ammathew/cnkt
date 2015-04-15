@@ -183,11 +183,15 @@ def get_verification():
     if len( User.query.filter( User.twitter_user_id == twitter_user_id ).all() ) > 0:
         return redirect( BASE_URL + '/#/dashboard?param=tw_user_already_registered')
 
+    formerTwitterAccountAuthed = TwitterAuth.query.filter( TwitterAuth.user_id ==  g.user.id ).first()
+    if formerTwitterAccountAuthed:
+        db.session.delete( formerTwitterAccountAuthed )
+        db.session.commit()
 
     user = User.query.filter( User.id == g.user.id ).first()
     user.twitter_user_id = twitter_user_id
     db.session.commit()
-    
+
     twitter_auth = TwitterAuth( auth.access_token, auth.access_token_secret, g.user.id, twitter_user_id )
     db.session.add( twitter_auth )
     db.session.commit()
