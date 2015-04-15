@@ -685,7 +685,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
 		} 		
-		else if ( _.contains( [ 'free_tral_subscribed', 'subscribed' ], userType ) ) {
+		else if ( _.contains( [ 'free_trial_subscribed', 'subscribed' ], userType ) ) {
 		    userTableCells.statusText = 'subscribed';
 		    userTableCells.statusAction = '';
 		    userTableCells.cardText = '{{ userData.card_last4 }}';
@@ -698,7 +698,7 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
 		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>resubscribe with new card</a></div>';
 		}
 		else if ( userType ==  'never_subscribed' ) {
-		    userTableCells.statusText = "Your free trial has expired . Please subscribe to continue using cnkt";
+		    userTableCells.statusText = "Your free trial has expired . Please subscribe to continue using cnkt. You will be charged $5.00 each month";
 		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction = '';
