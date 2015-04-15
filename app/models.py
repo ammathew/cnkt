@@ -60,6 +60,9 @@ class TwitterAuth(db.Model):
         self.user_id = user_id
         self.twitter_user_id = twitter_user_id
 
+    def __repr__(self):
+        return '<User %r>' % ( self.twitter_user_id )
+
 class StripeCustomer(db.Model):
     __tablename__ = 'stripe_customers'
     id = db.Column('customer_id', db.Integer, primary_key=True)
