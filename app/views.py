@@ -96,15 +96,6 @@ def get_user_data():
     email = session['user_email']
     registered_user = User.query.filter(User.email==email).first()
     user = {}
-    time_since_registration =  registered_user.registered_on - datetime.utcnow() 
-    days_left_in_free_trial = max(0, 7 - abs( time_since_registration.days ) )
-    if days_left_in_free_trial == 0:
-        session['lock_account'] = True
-        user["locked"] = True
-    else:
-        session['lock_account'] = False
-        
-    user['days_left_in_free_trial'] = days_left_in_free_trial
     user['email'] = registered_user.email
     user = get_customer_info( user );
 

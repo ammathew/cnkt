@@ -366,7 +366,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    }
             if ( !$.isEmptyObject( $scope.queryParams ) && $scope.queryParams.param == 'first_login') {
 		$('#myModal').modal('show');
-		$('.nav-tabs .auth-twitter').tab('show')
+		$('.nav-tabs .payments-link').tab('show')
 		$scope.firstLoginAuthTwitter = "please authorize your twitter account to start using cnkt";
 	    }
 	    else {
@@ -420,6 +420,8 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    $scope.showUpdateCard = false;
 	    $scope.init();
             $scope.subscribedSuccess = true;
+	    $('.nav-tabs .auth-twitter').tab('show')
+	    $scope.firstLoginAuthTwitter = "please authorize your twitter account to start using cnkt";
 	});
     }
 
@@ -646,59 +648,24 @@ aa.directive('paymentsTable', [ '$compile', function ($compile) {
         link: function (scope, elem, attrs, ctrl) {
 	    scope.userMap = function() {
 	        var userData = scope.userData;
-                if ( !userData ) {
-                    return "aa";
-                }
-                else if ( userData.subscribed==false && userData.days_left_in_free_trial == 0 && !userData.card_last4 ) {
-                    return "never_subscribed"
-                }
-                else if ( userData.subscribed==false && userData.days_left_in_free_trial == 0 && userData.card_last4 ) {
-                    return "canceled"
-                }
-                else if ( userData.subscribed==true && userData.days_left_in_free_trial == 0 && userData.card_last4 ) {
-                    return "subscribed"
-                }
-                else if ( userData.subscribed==false && userData.days_left_in_free_trial > 0 && userData.card_last4 ) {
-                    return "free_trial_subscribe_but_canceled"
-                }
-                else if ( userData.subscribed==true && userData.days_left_in_free_trial > 0 && userData.card_last4 ) {
-                    return "free_trial_subscribed"
-                }
-                else if ( userData.subscribed==false && userData.days_left_in_free_trial > 0 && !userData.card_last4 ) {
-                    return "free_trial"
-                } else {
-                    return "blah"
+		if ( userData.subscribed==false ) {
+                    return "never_subscribed";
+                }       
+                else {
+                    return "subscribed";
                 }
 	    }
 	    
 	    var getUserTableCells = function ( userType ) {
 		var userTableCells = {};
-		if (  userType == "free_trial" ) {
-                    userTableCells.statusText = "<p>Free Trial</p><p>( {{userData.days_left_in_free_trial}} days left )</p>";
-		    userTableCells.statusAction = '<p ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></p><p>$5/month</p>';
-		    userTableCells.cardText = 'N/A';
-		    userTableCells.cardAction = '';
-		} 
-		else if ( userType == "free_trial_subscribe_but_canceled" ) {
-                    userTableCells.statusText = "Free Trial <p>( {{userData.days_left_in_free_trial}} days left )</p>";
-		    userTableCells.statusAction = '<span ng-click="subscribeCustomer()"><a>re-subscribe</a></span>';
-		    userTableCells.cardText = 'N/A';
-		    userTableCells.cardAction = '<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></span>';
-		} 		
-		else if ( _.contains( [ 'free_trial_subscribed', 'subscribed' ], userType ) ) {
+		if (  userType == 'subscribed' ) {
 		    userTableCells.statusText = 'subscribed';
 		    userTableCells.statusAction = '';
 		    userTableCells.cardText = '{{ userData.card_last4 }}';
 		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></div>';
 		}
-		else if ( userType == 'canceled' ) {
-		    userTableCells.statusText = 'subscription canceled';
-		    userTableCells.statusAction = '<span ng-click="subscribeCustomer()"><a>re-subscribe</a></span>';
-		    userTableCells.cardText = 'N/A';
-		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>resubscribe with new card</a></div>';
-		}
 		else if ( userType ==  'never_subscribed' ) {
-		    userTableCells.statusText = "Your free trial has expired . Please subscribe to continue using cnkt. You will be charged $5.00 each month";
+		    userTableCells.statusText = "not subscribed";
 		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
 		    userTableCells.cardText = 'N/A';
 		    userTableCells.cardAction = '';
