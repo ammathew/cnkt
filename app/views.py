@@ -50,7 +50,6 @@ from app import ts
 
 @app.route('/')
 def index():
- #   return 'yo'
     return render_template('marketing.html')
 
 
@@ -96,15 +95,6 @@ def get_user_data():
     email = session['user_email']
     registered_user = User.query.filter(User.email==email).first()
     user = {}
-    time_since_registration =  registered_user.registered_on - datetime.utcnow() 
-    days_left_in_free_trial = max(0, 7 - abs( time_since_registration.days ) )
-    if days_left_in_free_trial == 0:
-        session['lock_account'] = True
-        user["locked"] = True
-    else:
-        session['lock_account'] = False
-        
-    user['days_left_in_free_trial'] = days_left_in_free_trial
     user['email'] = registered_user.email
     user = get_customer_info( user );
 
@@ -145,8 +135,6 @@ TWITTER_API = None
 
 @app.route("/api/authtwitter",  methods = ['POST', 'GET'] )
 def send_token():
-    if session['lock_account']:
-        session['lock_account'] = True
 
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
@@ -210,8 +198,6 @@ def twitterApi():
 
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
-    if session['lock_account'] == True:
-        return json.dumps( {} )
 
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
@@ -229,8 +215,8 @@ def twitterApiEndpoints(tweepy_endpoint):
 
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
-    if session['lock_account'] == True:
-        return json.dumps( {} )
+
+
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
@@ -337,7 +323,7 @@ def create_customer():
     db.session.commit()
 
     customer = stripe.Customer.retrieve( customer.id )
-    customer.subscriptions.create(plan="cnkt_basic")
+    customer.subscriptions.create(plan="cnkt_2_trial")
 
     return json.dumps( customer )
 
@@ -350,7 +336,7 @@ def subscribe_customer():
     if customer.subscriptions.total_count > 0:
         customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
 
-    customer.subscriptions.create(plan="cnkt_basic")
+    customer.subscriptions.create(plan="cnkt_2_trial")
     return json.dumps( customer )
 
 
@@ -381,25 +367,29 @@ def cancel_subscription():
 
 @app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
 def get_customer_info( userData ):
-    stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
-    if stripe_customer:
-        stripe.api_key = STRIPE_API_KEY
-        customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
-    else:
-        return userData
+  #  stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
+  #  if stripe_customer:
+  #      stripe.api_key = STRIPE_API_KEY
+  #      customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
+  #  else:
+  #      session['lock_account'] = True
+  #      userData["locked"] = True
+  #      return userData
 
-    subscribed = False
+  #  subscribed = False
 
-    if customer.subscriptions.total_count > 0:
-        subscribed = True
-        session['lock_account'] = False
+  #  if customer.subscriptions.total_count > 0:
+  #      subscribed = True
+  #      session['lock_account'] = False
+  #  else:
+  #      session['lock_account'] = True
   #  res = {}
-    if stripe_customer:
-        userData["card_last4"] = stripe_customer.card_last4
-        userData["card_brand"] = stripe_customer.card_brand
-        userData['subscribed'] = subscribed; 
-        if userData['subscribed']:
-            userData["locked"] = False;
+  #  if stripe_customer:
+  #      userData["card_last4"] = stripe_customer.card_last4
+  #      userData["card_brand"] = stripe_customer.card_brand
+  #      userData['subscribed'] = subscribed; 
+  #      if userData['subscribed']:
+  #          userData["locked"] = False;
   #  else:
   #      res['data'] = None; 
   #  res = json.dumps( res )
