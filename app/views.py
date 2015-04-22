@@ -328,7 +328,7 @@ def create_customer():
     db.session.commit()
 
     customer = stripe.Customer.retrieve( customer.id )
-    customer.subscriptions.create(plan="cnkt_basic")
+    customer.subscriptions.create(plan="cnkt_2_trial")
 
     return json.dumps( customer )
 
@@ -341,7 +341,7 @@ def subscribe_customer():
     if customer.subscriptions.total_count > 0:
         customer.subscriptions.retrieve( customer.subscriptions.data[0].id ).delete()
 
-    customer.subscriptions.create(plan="cnkt_basic")
+    customer.subscriptions.create(plan="cnkt_2_trial")
     return json.dumps( customer )
 
 
