@@ -74,15 +74,17 @@
       <div class="col-body">
         <div ng-show="loading_tweets" id="loading-tweets" class="animated pulse">loading tweets</div>
 	<div class="instructions" ng-show="!tweetsWithSearchTerm"> 
-	  <div ng-show="!userData.locked">
+	  <div>
 	    <p>Step 1: Highlight any word or phrase in Your Timeline or in Conversations </p> 
 	    <p>Step 2: Click </p>
 	    <p>Step 3: CNKT </p>
 	    <p>Step 4: Repeat </p>
 	  </div>
+<!-- 
 	  <div ng-show="userData.locked">
-	    <p>Your free trial has expired. Please subscribe to continue using CNKT</p>
+	    <p>Please enter your payment information to use cnkt</p>
 	  </div>
+-->
 	</div>
         <div class="tweet-unit" ng-repeat="tweet in tweetsWithSearchTerm"> 
           <div animate-on-send ng-include="'cnkt_tweet.html'"></div>
@@ -118,7 +120,7 @@
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
 	  <li role="presentation" class="active auth-twitter"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
-	  <li role="presentation"><a class="payments-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
+	  <li role="presentation" class="payments"><a class="payments-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
 	  <li role="presentation"><a href="#reset-password" aria-controls="profile" role="tab" data-toggle="tab">Reset Password</a></li>
 	</ul>
       </div>

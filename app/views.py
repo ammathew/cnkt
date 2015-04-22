@@ -50,7 +50,6 @@ from app import ts
 
 @app.route('/')
 def index():
- #   return 'yo'
     return render_template('marketing.html')
 
 
@@ -137,7 +136,7 @@ TWITTER_API = None
 @app.route("/api/authtwitter",  methods = ['POST', 'GET'] )
 def send_token():
     if session['lock_account']:
-        session['lock_account'] = True
+        return redirect( BASE_URL + '/#/dashboard?param=first_login')
 
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
@@ -202,7 +201,7 @@ def twitterApi():
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
     if session['lock_account'] == True:
-        return json.dumps( {} )
+        return redirect( BASE_URL + '/#/dashboard?param=first_login')
 
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
@@ -377,6 +376,8 @@ def get_customer_info( userData ):
         stripe.api_key = STRIPE_API_KEY
         customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
     else:
+        session['lock_account'] = True
+        userData["locked"] = True
         return userData
 
     subscribed = False
@@ -384,6 +385,8 @@ def get_customer_info( userData ):
     if customer.subscriptions.total_count > 0:
         subscribed = True
         session['lock_account'] = False
+    else:
+        session['lock_account'] = True
   #  res = {}
     if stripe_customer:
         userData["card_last4"] = stripe_customer.card_last4
