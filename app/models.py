@@ -9,6 +9,7 @@ from flask.ext.script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 from app import db
 from app import app
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = "users"
@@ -63,6 +64,20 @@ class TwitterAuth(db.Model):
     def __repr__(self):
         return '<User %r>' % ( self.twitter_user_id )
 
+class UserTerm(db.Model):
+    __tablename__ = 'user_terms'
+    id = db.Column('user_term_id', db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    term = db.Column(db.String )
+
+    def __init__(self, user_id, term ):
+        self.user_id = user_id
+        self.term = term
+
+    def __repr__(self):
+        return '<UserTerm %r>' % ( self.term )
+    
+
 class StripeCustomer(db.Model):
     __tablename__ = 'stripe_customers'
     id = db.Column('customer_id', db.Integer, primary_key=True)
@@ -76,6 +91,36 @@ class StripeCustomer(db.Model):
         self.user_id = user_id
         self.card_brand = card_brand
         self.card_last4 = card_last4
+
+
+class FavoritedTweet(db.Model):
+    __tablename__ = 'favorited_tweets'
+    id = db.Column('fav_term_id', db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    favorited_tweet_id = db.Column( db.String )
+    favorited_time = db.Column( db.Date )
+
+    def __init__(self, user_id, favorited_tweet_id ):
+        self.user_id = user_id
+        self.favorited_tweet_id = favorited_tweet_id
+        self.favorited_time = datetime.now()
+
+    def __repr__(self):
+        return '<FavoritedTweet %r>' % ( self.favorited_tweet_id )
+
+
+class UserFavoritesLastRateLimited( db.Model ):
+    __tablename__ = 'user_favorites_last_rate_limited'
+    id = db.Column('user_favorites_last_rate_limited_id', db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    last_rate_limited = db.Column( db.DateTime )
+
+    def __init__(self, user_id ):
+        self.user_id = user_id
+        self.last_rate_limited = datetime.now()
+
+    def __repr__(self):
+        return '<LastRateLimited %r>' % ( self.last_rate_limited )
 
 if __name__ == '__main__':
     manager.run()

@@ -38,7 +38,7 @@ from flask.ext.login import login_user , logout_user , current_user , login_requ
 #from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import app, db, login_manager, BASE_URL, CONSUMER_TOKEN, CONSUMER_SECRET, STRIPE_API_KEY
-from app.models import User, TwitterAuth, StripeCustomer
+from app.models import User, TwitterAuth, StripeCustomer, UserTerm
 from app import mail
 
 import json
@@ -47,6 +47,8 @@ import stripe
 
 from flask.ext.mail import Mail, Message
 from app import ts
+
+
 
 @app.route('/')
 def index():
@@ -206,6 +208,12 @@ def twitterApiEndpoints(tweepy_endpoint):
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
 
+    if tweepy_endpoint == 'search':
+        data = json.loads( request.data )
+        term  = UserTerm( g.user.id, data['q'] )
+        db.session.add( term )
+        db.session.commit()
+    
     try:
         blah = getattr( twitterAPI, tweepy_endpoint )
         data = blah( **req )
