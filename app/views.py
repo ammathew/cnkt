@@ -135,8 +135,6 @@ TWITTER_API = None
 
 @app.route("/api/authtwitter",  methods = ['POST', 'GET'] )
 def send_token():
-    if session['lock_account']:
-        return redirect( BASE_URL + '/#/dashboard?param=first_login')
 
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
                                CONSUMER_SECRET )
@@ -200,8 +198,6 @@ def twitterApi():
 
 @app.route("/api/twitter/<tweepy_endpoint>", methods=['GET', 'POST'])
 def twitterApiEndpoints(tweepy_endpoint):
-    if session['lock_account'] == True:
-        return redirect( BASE_URL + '/#/dashboard?param=first_login')
 
     req = request.get_json() #GET request    
     twitterAPI = twitterApi()
@@ -219,8 +215,8 @@ def twitterApiEndpoints(tweepy_endpoint):
 
 @app.route("/api/twitter/convos", methods=['GET', 'POST'])
 def mentions():
-    if session['lock_account'] == True:
-        return json.dumps( {} )
+
+
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     twitter_auth  = TwitterAuth.query.filter( TwitterAuth.user_id == g.user.id ).first() 
     auth.set_access_token( twitter_auth.access_token_key, twitter_auth.access_token_secret)
