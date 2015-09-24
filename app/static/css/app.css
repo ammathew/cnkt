@@ -7,14 +7,11 @@ a {
   padding-bottom: 20px;
   border-bottom: 1px solid #ccc; }
 
-.navbar-default .navbar-nav > li > a {
-  color: #d2e2e3; }
+nav, .navbar {
+  background-color: #5e97a0; }
 
-.navbar {
-  background-color: #5e97a0;
-  border: 0px solid transparent;
-  border-radius: 0px;
-  margin-bottom: 30px; }
+.jumbotron {
+  margin-top: 50px; }
 
 .cnkt-col {
   margin-right: 10px;
@@ -522,36 +519,6 @@ body {
   padding-bottom: 40px;
   color: #5a5a5a; }
 
-/* CUSTOMIZE THE NAVBAR
--------------------------------------------------- */
-/* Special class on .container surrounding .navbar, used for positioning it into place. */
-.navbar-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10; }
-
-/* CUSTOMIZE THE CAROUSEL
--------------------------------------------------- */
-/* Carousel base class */
-.carousel {
-  margin-bottom: 60px; }
-
-/* Since positioning the image, we need to help out the caption */
-.carousel-caption {
-  z-index: 1; }
-
-/* Declare heights because of positioning of img element */
-.carousel .item {
-  height: 400px; }
-
-.carousel img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-height: 400px; }
-
 /* MARKETING CONTENT
 -------------------------------------------------- */
 /* Pad the edges of the mobile views a bit */
@@ -604,29 +571,6 @@ body {
   line-height: 1;
   letter-spacing: -1px; }
 
-/* RESPONSIVE CSS
--------------------------------------------------- */
-@media (min-width: 768px) {
-  /* Remve the edge padding needed for mobile */
-  .marketing {
-    padding-left: 0;
-    padding-right: 0; }
-
-  /* Navbar positioning foo */
-  .navbar-wrapper {
-    margin-top: 20px;
-    margin-bottom: -90px;
-    /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */ }
-
-  /* The navbar becomes detached from the top, so we round the corners */
-  .navbar-wrapper .navbar {
-    border-radius: 4px; }
-
-  /* Bump up size of carousel content */
-  .carousel-caption p {
-    margin-bottom: 20px;
-    font-size: 21px;
-    line-height: 1.4; } }
 #marketing_video {
   width: 100%; }
 

@@ -368,7 +368,7 @@ aa.controller('DashboardCtrl', ['$scope', 'searchTwitterFactory', '$http', '$loc
 	    }
             else if ( !$.isEmptyObject( $scope.queryParams ) && $scope.queryParams.param == 'first_login') {
 		$('#myModal').modal('show');
-		$('.nav-tabs .payments-link').tab('show')
+		$('.nav-tabs .auth-twitter').tab('show')
 		$scope.firstLoginAuthTwitter = "please authorize your twitter account to start using cnkt";
 	    }
 	    else {

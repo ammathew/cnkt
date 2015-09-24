@@ -379,29 +379,29 @@ def cancel_subscription():
 
 @app.route("/api/stripe/getCustomerInfo", methods=['GET', 'POST'])
 def get_customer_info( userData ):
-    stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
-    if stripe_customer:
-        stripe.api_key = STRIPE_API_KEY
-        customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
-    else:
-        session['lock_account'] = True
-        userData["locked"] = True
-        return userData
+  #  stripe_customer  = StripeCustomer.query.filter( StripeCustomer.user_id == g.user.id ).first()
+  #  if stripe_customer:
+  #      stripe.api_key = STRIPE_API_KEY
+  #      customer = stripe.Customer.retrieve( stripe_customer.stripe_customer_id )
+  #  else:
+  #      session['lock_account'] = True
+  #      userData["locked"] = True
+  #      return userData
 
-    subscribed = False
+  #  subscribed = False
 
-    if customer.subscriptions.total_count > 0:
-        subscribed = True
-        session['lock_account'] = False
-    else:
-        session['lock_account'] = True
+  #  if customer.subscriptions.total_count > 0:
+  #      subscribed = True
+  #      session['lock_account'] = False
+  #  else:
+  #      session['lock_account'] = True
   #  res = {}
-    if stripe_customer:
-        userData["card_last4"] = stripe_customer.card_last4
-        userData["card_brand"] = stripe_customer.card_brand
-        userData['subscribed'] = subscribed; 
-        if userData['subscribed']:
-            userData["locked"] = False;
+  #  if stripe_customer:
+  #      userData["card_last4"] = stripe_customer.card_last4
+  #      userData["card_brand"] = stripe_customer.card_brand
+  #      userData['subscribed'] = subscribed; 
+  #      if userData['subscribed']:
+  #          userData["locked"] = False;
   #  else:
   #      res['data'] = None; 
   #  res = json.dumps( res )

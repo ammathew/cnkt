@@ -120,7 +120,7 @@
 	<!-- Nav tabs -->
 	<ul class="nav nav-tabs" role="tablist">
 	  <li role="presentation" class="active auth-twitter"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Authorize Twitter</a></li>
-	  <li role="presentation" class="payments"><a class="payments-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
+	  <li ng-hide="true" role="presentation" class="payments"><a class="payments-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Payments</a></li>
 	  <li role="presentation"><a href="#reset-password" aria-controls="profile" role="tab" data-toggle="tab">Reset Password</a></li>
 	</ul>
       </div>
@@ -136,7 +136,7 @@
 	      <a ng-click="authTwitter()">Authorize Twitter</a>
 	    </div>
             <!-- payments pane -->
-	    <div role="tabpanel" class="tab-pane payments" id="profile">
+	    <div role="tabpanel" class="tab-pane payments" id="profile" ng-hide="true">
                 <div ng-show="subscribedSuccess" class="alert alert-success" role="alert">You have successfully subscribed to cnkt. You will be billed $2 each month. The next thing to do is <span ng-click="authTwitter()"><a>authorize your twitter account</a></span></div>
                 <div ng-show="cancelledSuccess" class="alert alert-success" role="alert">You have successfully cancelled your subscription to cnkt. You will no longer be billed. Resubscribe at any any time.</div>
                 <div ng-show="updatedCardSuccess" class="alert alert-success" role="alert">You have sucessfully updated your card.</div>
