@@ -630,64 +630,64 @@ aa.directive('pwCheck', [function () {
 }])
 
 
-aa.directive('payments', [function () {
-    return {
-      require: 'ngModel',
-      link: function (scope, elem, attrs, ctrl) {
-        var firstPassword = '#' + attrs.pwCheck;
-        elem.add(firstPassword).on('keyup', function () {
-          scope.$apply(function () {
-            var v = elem.val()===$(firstPassword).val();
-            ctrl.$setValidity('pwmatch', v);
-          });
-        });
-      }
-    }
-}])
+// aa.directive('payments', [function () {
+//     return {
+//       require: 'ngModel',
+//       link: function (scope, elem, attrs, ctrl) {
+//         var firstPassword = '#' + attrs.pwCheck;
+//         elem.add(firstPassword).on('keyup', function () {
+//           scope.$apply(function () {
+//             var v = elem.val()===$(firstPassword).val();
+//             ctrl.$setValidity('pwmatch', v);
+//           });
+//         });
+//       }
+//     }
+// }])
 
-aa.directive('paymentsTable', [ '$compile', function ($compile) {
-    return {
-        link: function (scope, elem, attrs, ctrl) {
-	    scope.userMap = function() {
-	        var userData = scope.userData;
-		if ( userData.subscribed==false ) {
-                    return "never_subscribed";
-                }       
-                else {
-                    return "subscribed";
-                }
-	    }
+// aa.directive('paymentsTable', [ '$compile', function ($compile) {
+//     return {
+//         link: function (scope, elem, attrs, ctrl) {
+// 	    scope.userMap = function() {
+// 	        var userData = scope.userData;
+// 		if ( userData.subscribed==false ) {
+//                     return "never_subscribed";
+//                 }       
+//                 else {
+//                     return "subscribed";
+//                 }
+// 	    }
 	    
-	    var getUserTableCells = function ( userType ) {
-		var userTableCells = {};
-		if (  userType == 'subscribed' ) {
-		    userTableCells.statusText = 'subscribed';
-		    userTableCells.statusAction = '';
-		    userTableCells.cardText = '{{ userData.card_last4 }}';
-		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></div>';
-		}
-		else if ( userType ==  'never_subscribed' ) {
-		    userTableCells.statusText = "not subscribed";
-		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
-		    userTableCells.cardText = 'N/A';
-		    userTableCells.cardAction = '';
-		}
-		return userTableCells;
-	    }
+// 	    var getUserTableCells = function ( userType ) {
+// 		var userTableCells = {};
+// 		if (  userType == 'subscribed' ) {
+// 		    userTableCells.statusText = 'subscribed';
+// 		    userTableCells.statusAction = '';
+// 		    userTableCells.cardText = '{{ userData.card_last4 }}';
+// 		    userTableCells.cardAction ='<span ng-init="showUpdateCard = false" ng-click="showUpdateCard = !showUpdateCard"><a>update card</a></div>';
+// 		}
+// 		else if ( userType ==  'never_subscribed' ) {
+// 		    userTableCells.statusText = "not subscribed";
+// 		    userTableCells.statusAction = '<span ng-init="showSubscribeFirstTime = false" ng-click="showSubscribeFirstTime = true"><a>subscribe</a></span>';
+// 		    userTableCells.cardText = 'N/A';
+// 		    userTableCells.cardAction = '';
+// 		}
+// 		return userTableCells;
+// 	    }
 	    
-	    scope.$watch( 'userData', function() {
-		var userType = scope.userMap();
-		var userTableCells = getUserTableCells( userType );
-		for ( var key in userTableCells ) {
-		    var aa = elem.find( "." + key);
-		    aa.html( userTableCells[key] );
-		    $compile(aa.contents())(scope);
-		}
+// 	    scope.$watch( 'userData', function() {
+// 		var userType = scope.userMap();
+// 		var userTableCells = getUserTableCells( userType );
+// 		for ( var key in userTableCells ) {
+// 		    var aa = elem.find( "." + key);
+// 		    aa.html( userTableCells[key] );
+// 		    $compile(aa.contents())(scope);
+// 		}
 	
-	    })
-        }
-    };				
-}])
+// 	    })
+//         }
+//     };				
+// }])
 
 
 aa.config(function() {
